@@ -1,0 +1,3 @@
+preset: psr2
+enabled:
+  - phpdoc_annotation_without_dot
