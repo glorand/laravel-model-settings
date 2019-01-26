@@ -17,13 +17,11 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 trait HasSettingsTable
 {
     /**
-     * @param string|null $path
-     * @param null $default
      * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
      */
-    public function settings(string $path = null, $default = null): SettingsManagerContract
+    public function settings(): SettingsManagerContract
     {
-        return $path ? $this->settings()->get($path, $default) : new TableSettingsManager($this);
+        return new TableSettingsManager($this);
     }
 
     protected function getSettingsAttribute()

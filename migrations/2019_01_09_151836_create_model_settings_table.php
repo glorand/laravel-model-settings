@@ -8,13 +8,15 @@ class CreateModelSettingsTable extends Migration
 {
     public function up()
     {
-        Schema::create('model_settings', function (Blueprint $table) {
-            $table->increments('id');
-            $table->bigInteger('model_id');
-            $table->string('model_type');
-            $table->json('settings');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('model_settings')) {
+            Schema::create('model_settings', function (Blueprint $table) {
+                $table->increments('id');
+                $table->bigInteger('model_id');
+                $table->string('model_type');
+                $table->json('settings');
+                $table->timestamps();
+            });
+        }
     }
 
     public function down()

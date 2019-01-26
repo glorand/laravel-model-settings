@@ -57,15 +57,11 @@ $ composer require glorand/laravel-model-settings
 }
 ```
 
-after run:
-```
-$ php artisan migrate
-```
-
 ## Updating your Eloquent Models <a name="update_models"></a>
 Your models should use the `HasSettingsField` or `HasSettingsTable` trait.
 
 #### Option 1 - `HasSettingsField` trait <a name="update_models_1"></a>
+Run the `php artisan model-settings:model-settings-field` in order to create a migration file for a specified table. This command will create a json field (`settings`) for the mentioned table.
 You must also add `settings` to your fillable array as shown in the example below
 ```php
 use Glorand\Model\Settings\Traits\HasSettingsField;
@@ -86,6 +82,7 @@ class User extends Model
 }
 ```
 #### Option 2 - `HasSettingsTable` trait <a name="update_models_2"></a>
+Run before the command `php artisan model-settings:copy-migrations`; the command will copy for you the migration class to create the table ('model_settings').
 ```php
 use Glorand\Model\Settings\Traits\HasSettingsTable;
 
@@ -111,7 +108,6 @@ $user = App\User::first();
 
 $user->settings()->get('some.setting');
 $user->settings()->get('some.setting', 'default value');
-$user->settings('some.setting');
 ```
 
 #### Add / Update setting <a name="add_update"></a>
