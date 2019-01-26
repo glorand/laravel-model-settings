@@ -16,7 +16,6 @@ class CreateModelSettingsTable extends Migration
                 $table->json('settings');
                 $table->timestamps();
             });
-
         }
     }
 
