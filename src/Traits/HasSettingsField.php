@@ -13,13 +13,11 @@ use Glorand\Model\Settings\Managers\FieldSettingsManager;
 trait HasSettingsField
 {
     /**
-     * @param string $path
-     * @param null $default
      * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
      */
-    public function settings(string $path = null, $default = null): SettingsManagerContract
+    public function settings(): SettingsManagerContract
     {
-        return $path ? $this->settings()->get($path, $default) : new FieldSettingsManager($this);
+        return new FieldSettingsManager($this);
     }
 
     protected function getSettingsAttribute()
