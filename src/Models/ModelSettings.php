@@ -12,12 +12,24 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  */
 class ModelSettings extends Model
 {
-    protected $table = 'model_settings';
+    /**
+     * ModelSettings constructor.
+     * @param array $attributes
+     */
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->setTable(config('model_settings.settings_table_name', 'model_settings'));
+    }
 
     protected $casts = [
         'settings' => 'json',
     ];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     */
     public function model(): MorphTo
     {
         return $this->morphTo();

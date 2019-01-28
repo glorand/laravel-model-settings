@@ -57,6 +57,10 @@ $ composer require glorand/laravel-model-settings
 }
 ```
 
+## Env (config) variables **(.env file)**
+`MODEL_SETTINGS_FIELD_NAME=settings`
+`MODEL_SETTINGS_TABLE_NAME=model_settings`
+
 ## Updating your Eloquent Models <a name="update_models"></a>
 Your models should use the `HasSettingsField` or `HasSettingsTable` trait.
 
@@ -82,7 +86,7 @@ class User extends Model
 }
 ```
 #### Option 2 - `HasSettingsTable` trait <a name="update_models_2"></a>
-Run before the command `php artisan model-settings:copy-migrations`; the command will copy for you the migration class to create the table ('model_settings').
+Run before the command `php artisan model-settings:model-settings-table`; the command will copy for you the migration class to create the table where the setting values will be stored. The default name of the table is `model_settings`; change the config or env value `MODEL_SETTINGS_TABLE_NAME` if you want to rewrite the default name (**before you run the command!**)
 ```php
 use Glorand\Model\Settings\Traits\HasSettingsTable;
 
