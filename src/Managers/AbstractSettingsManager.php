@@ -3,8 +3,14 @@
 namespace Glorand\Model\Settings\Managers;
 
 use Glorand\Model\Settings\Contracts\SettingsManagerContract;
+use Glorand\Model\Settings\Exceptions\ModelSettingsException;
+use Glorand\Model\Settings\Traits\HasSettings;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class AbstractSettingsManager
+ * @package Glorand\Model\Settings\Managers
+ */
 abstract class AbstractSettingsManager implements SettingsManagerContract
 {
     /** @var \Illuminate\Database\Eloquent\Model */
@@ -13,10 +19,14 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
     /**
      * AbstractSettingsManager constructor.
      * @param \Illuminate\Database\Eloquent\Model $model
+     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
      */
     public function __construct(Model $model)
     {
         $this->model = $model;
+        if (!in_array(HasSettings::class, class_uses_recursive($this->model))) {
+            throw new ModelSettingsException('Wrong model, missing HasSettings trait.');
+        }
     }
 
     /**
@@ -24,11 +34,7 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
      */
     public function all(): array
     {
-        if (!is_null($this->model->settings)) {
-            return $this->model->settings;
-        } else {
-            return [];
-        }
+        return $this->model->getSettingsValue();
     }
 
     /**

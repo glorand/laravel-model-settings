@@ -15,7 +15,7 @@ class DummyClass extends Migration
     {
         if (!Schema::hasColumn('DummyTable', 'settingsFieldName')) {
             Schema::table('DummyTable', function (Blueprint $table) {
-                $table->json('settingsFieldName');
+                $table->json('settingsFieldName')->nullable();
             });
         }
     }

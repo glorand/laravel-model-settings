@@ -16,24 +16,33 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
  */
 trait HasSettingsTable
 {
+    use HasSettings;
+
     /**
      * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
+     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
      */
     public function settings(): SettingsManagerContract
     {
         return new TableSettingsManager($this);
     }
 
-    protected function getSettingsAttribute()
+    /**
+     * @return array
+     */
+    public function getSettingsValue(): array
     {
-        if ($this->modelSettings) {
-            return $this->modelSettings->settings;
+        if ($modelSettings = $this->modelSettings()->first()) {
+            return $modelSettings->settings;
         } else {
             return [];
         }
     }
 
-    protected function modelSettings(): MorphOne
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
+    public function modelSettings(): MorphOne
     {
         return $this->morphOne(ModelSettings::class, 'model');
     }

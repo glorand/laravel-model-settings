@@ -46,7 +46,6 @@ class CreateSettingsTable extends Command
         $stub = str_replace('DummyTable', $table, $stub);
 
         $file->put($path, $stub);
-
         $this->line("<info>Created Migration:</info> {$fileName}");
 
         return true;

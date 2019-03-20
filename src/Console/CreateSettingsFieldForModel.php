@@ -22,19 +22,26 @@ class CreateSettingsFieldForModel extends Command
      */
     public function handle(Filesystem $file)
     {
-        $table = strtolower($this->ask('What is the name of the table?'));
-        $table = Str::snake(trim($table));
+        $table = $this->ask('What is the name of the table?');
+        $table = strtolower(Str::snake(trim($table)));
         if (empty($table)) {
             $this->error('The name of the table is required!');
 
             return false;
         }
-        $fieldName = 'settings';
         if (!Schema::hasTable($table)) {
             $this->error('Unable to find table "' . $table . '" on the current DB!');
 
             return false;
         }
+
+        $defaultFieldName = config('model_settings.settings_field_name');
+        $fieldName = $this->ask(
+            'What is the name of the settings field name?',
+            $defaultFieldName
+        );
+        $fieldName = strtolower(Str::snake(trim($fieldName)));
+
         if (Schema::hasColumn($table, $fieldName)) {
             $this->error('Field "' . $fieldName . '" already exists on table "' . $table . '"');
 
@@ -43,7 +50,7 @@ class CreateSettingsFieldForModel extends Command
 
         $fileName = date('Y_m_d_His') . '_update_' . $table . '_table_add_' . $fieldName . '.php';
         $path = database_path('migrations') . '/' . $fileName;
-        $className = 'Update' . ucfirst($table) . 'TableAddSettings';
+        $className = 'Update' . ucfirst($table) . 'TableAdd' . ucfirst(Str::camel($fieldName));
 
 
         $stub = $file->get(__DIR__ . '/../../stubs/create_settings_field.stub');
