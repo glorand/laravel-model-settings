@@ -10,6 +10,7 @@ use Glorand\Model\Settings\Managers\FieldSettingsManager;
  * Trait HasSettingsField
  * @package Glorand\Model\Settings\Traits
  * @property array $settings
+ * @property string $settingsFieldName
  */
 trait HasSettingsField
 {
@@ -45,4 +46,8 @@ trait HasSettingsField
     {
         return $this->settingsFieldName ?? config('model_settings.settings_field_name');
     }
+
+    abstract public function getTable();
+    abstract public function getAttributes();
+    abstract public function getAttributeValue($key);
 }
