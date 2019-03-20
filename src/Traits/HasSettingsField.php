@@ -3,30 +3,51 @@
 namespace Glorand\Model\Settings\Traits;
 
 use Glorand\Model\Settings\Contracts\SettingsManagerContract;
+use Glorand\Model\Settings\Exceptions\ModelSettingsException;
 use Glorand\Model\Settings\Managers\FieldSettingsManager;
 
 /**
  * Trait HasSettingsField
  * @package Glorand\Model\Settings\Traits
  * @property array $settings
+ * @property string $settingsFieldName
  */
 trait HasSettingsField
 {
+    use HasSettings;
+
     /**
      * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
+     * @throws ModelSettingsException
      */
     public function settings(): SettingsManagerContract
     {
         return new FieldSettingsManager($this);
     }
 
-    protected function getSettingsAttribute()
+    /**
+     * @return array
+     * @throws ModelSettingsException
+     */
+    public function getSettingsValue(): array
     {
-        return json_decode($this->getAttributes()['settings'], true);
+        $settingsFieldName = $this->getSettingsFieldName();
+        $attributes = $this->getAttributes();
+        if (!array_has($attributes, $settingsFieldName)) {
+            throw new ModelSettingsException("Unknown field ($settingsFieldName) on table {$this->getTable()}");
+        }
+        return json_decode($this->getAttributeValue($settingsFieldName) ?? '[]', true);
     }
 
-    public function setSettingsAttribute($settings)
+    /**
+     * @return string
+     */
+    public function getSettingsFieldName(): string
     {
-        $this->attributes['settings'] = json_encode($settings);
+        return $this->settingsFieldName ?? config('model_settings.settings_field_name');
     }
+
+    abstract public function getTable();
+    abstract public function getAttributes();
+    abstract public function getAttributeValue($key);
 }

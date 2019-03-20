@@ -52,17 +52,34 @@ $ composer require glorand/laravel-model-settings
 ```
 {
     "require": {
-        "glorand/laravel-model-settings": "^1.0"
+        "glorand/laravel-model-settings": "^3.0"
     }
 }
 ```
+
+## Env (config) variables **(.env file)**
+
+Default name for the settings field - when you use the `HasSettingsField`
+
+`MODEL_SETTINGS_FIELD_NAME=settings`
+
+Default name for the settings table - when you use the `HasSettingsTable`
+
+`MODEL_SETTINGS_TABLE_NAME=model_settings`
 
 ## Updating your Eloquent Models <a name="update_models"></a>
 Your models should use the `HasSettingsField` or `HasSettingsTable` trait.
 
 #### Option 1 - `HasSettingsField` trait <a name="update_models_1"></a>
-Run the `php artisan model-settings:model-settings-field` in order to create a migration file for a specified table. This command will create a json field (`settings`) for the mentioned table.
-You must also add `settings` to your fillable array as shown in the example below
+Run the `php artisan model-settings:model-settings-field` in order to create a migration file for a table.\
+This command will create a json field (default name `settings`, from config) for the mentioned table.
+
+You can choose another than default, in this case you have to specify it in you model.
+```php
+public $settingsFieldName = 'user_settings';
+```
+
+Complete example:
 ```php
 use Glorand\Model\Settings\Traits\HasSettingsField;
 
@@ -70,19 +87,15 @@ class User extends Model
 {
     use HasSettingsField;
     
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name', 'email', 'settings'
-    ];
+    //define only if you select a dirrerent name from the default
+    public $settingsFieldName = 'user_settings';  
 
 }
 ```
 #### Option 2 - `HasSettingsTable` trait <a name="update_models_2"></a>
-Run before the command `php artisan model-settings:copy-migrations`; the command will copy for you the migration class to create the table ('model_settings').
+Run before the command `php artisan model-settings:model-settings-table`.\
+The command will copy for you the migration class to create the table where the setting values will be stored.\
+The default name of the table is `model_settings`; change the config or env value `MODEL_SETTINGS_TABLE_NAME` if you want to rewrite the default name (**before you run the command!**)
 ```php
 use Glorand\Model\Settings\Traits\HasSettingsTable;
 
@@ -94,26 +107,24 @@ class User extends Model
 
 ## Usage <a name="usage"></a>
 
-#### Get all model's settings <a name="get_all"></a>
 ```php
 $user = App\User::first();
+```
 
+#### Get all model's settings <a name="get_all"></a>
+```php
 $user->settings()->all();
 $user->settings()->get();
 ```
 
 #### Get a specific setting <a name="get"></a>
 ```php
-$user = App\User::first();
-
 $user->settings()->get('some.setting');
 $user->settings()->get('some.setting', 'default value');
 ```
 
 #### Add / Update setting <a name="add_update"></a>
 ```php
-$user = App\User::first();
-
 $user->settings()->apply((array)$settings);
 $user->settings()->set('some.setting', 'new value');
 $user->settings()->update('some.setting', 'new value');
@@ -121,15 +132,11 @@ $user->settings()->update('some.setting', 'new value');
 
 #### Check if the model has a specific setting <a name="check"></a>
 ```php
-$user = App\User::first();
-
 $user->settings()->has('some.setting');
 ```
 
 #### Remove a setting from a model <a name="remove"></a>
 ```php
-$user = App\User::first();
-
 $user->settings()->delete('some.setting');
 ```
 

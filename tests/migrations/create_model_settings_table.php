@@ -15,6 +15,8 @@ class CreateModelSettingsTable extends Migration
                 $table->string('model_type');
                 $table->json('settings');
                 $table->timestamps();
+
+                $table->unique(['model_id', 'model_type']);
             });
         }
     }
