@@ -22,6 +22,9 @@
  <a href="https://scrutinizer-ci.com/g/glorand/laravel-model-settings/">
  <img src="https://scrutinizer-ci.com/g/glorand/laravel-model-settings/badges/quality-score.png?b=master" alt="Scrutinizer Code Quality">
  </a>
+ <a href="https://scrutinizer-ci.com/g/glorand/laravel-model-settings/?branch=master">
+ <img src="https://scrutinizer-ci.com/g/glorand/laravel-model-settings/badges/coverage.png?b=master" alt="Scrutinizer Code Coverage"/>
+ </a>
 </p>
 
 The package requires PHP 7.1.3+ and follows the FIG standards PSR-1, PSR-2 and PSR-4 
