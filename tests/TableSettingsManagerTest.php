@@ -18,7 +18,7 @@ class TableSettingsManagerTest extends TestCase
     /** @var \Glorand\Model\Settings\Tests\Models\UsersWithTable */
     private $model;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->model = User::first();

@@ -3,7 +3,6 @@
 namespace Glorand\Model\Settings\Tests;
 
 use Glorand\Model\Settings\Tests\Models\UserWithField as User;
-use Glorand\Model\Settings\Tests\Models\WrongUser;
 use Glorand\Model\Settings\Traits\HasSettingsField;
 
 class FieldSettingsManagerTest extends TestCase
@@ -18,7 +17,7 @@ class FieldSettingsManagerTest extends TestCase
         ],
     ];
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->model = User::first();
