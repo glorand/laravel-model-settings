@@ -9,6 +9,8 @@ class UserWithField extends Model
 {
     use HasSettingsField;
 
+    //protected $persistSettings = true;
+
     protected $table = 'users_with_field';
 
     protected $guarded = [];

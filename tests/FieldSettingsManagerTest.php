@@ -76,7 +76,18 @@ class FieldSettingsManagerTest extends TestCase
     public function testApply()
     {
         $this->model->settings()->apply($this->testArray);
-        $this->assertEquals($this->model->settings()->all(), $this->testArray);
+        $this->assertEquals($this->model->fresh()->settings()->all(), $this->testArray);
+
+        $this->model->settings()->delete();
+
+        $this->model->setPersistSettings(false);
+        $this->model->settings()->apply($this->testArray);
+        $this->assertEquals($this->model->fresh()->settings()->all(), []);
+
+        $this->model->fresh();
+        $this->model->setPersistSettings(true);
+        $this->model->settings()->apply($this->testArray);
+        $this->assertEquals($this->model->fresh()->settings()->all(), $this->testArray);
     }
 
     /**

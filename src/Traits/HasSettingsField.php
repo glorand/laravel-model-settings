@@ -11,10 +11,13 @@ use Glorand\Model\Settings\Managers\FieldSettingsManager;
  * @package Glorand\Model\Settings\Traits
  * @property array $settings
  * @property string $settingsFieldName
+ * @property boolean $persistSettings
  */
 trait HasSettingsField
 {
     use HasSettings;
+
+    private $persistSettings = null;
 
     /**
      * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
@@ -36,6 +39,7 @@ trait HasSettingsField
         if (!array_has($attributes, $settingsFieldName)) {
             throw new ModelSettingsException("Unknown field ($settingsFieldName) on table {$this->getTable()}");
         }
+
         return json_decode($this->getAttributeValue($settingsFieldName) ?? '[]', true);
     }
 
@@ -47,7 +51,25 @@ trait HasSettingsField
         return $this->settingsFieldName ?? config('model_settings.settings_field_name');
     }
 
+    /**
+     * @return bool
+     */
+    public function isPersistSettings(): bool
+    {
+        return boolval($this->persistSettings ?? config('model_settings.settings_persistent'));
+    }
+
+    /**
+     * @param bool $val
+     */
+    public function setPersistSettings(bool $val = true)
+    {
+        $this->persistSettings = $val;
+    }
+
     abstract public function getTable();
+
     abstract public function getAttributes();
+
     abstract public function getAttributeValue($key);
 }

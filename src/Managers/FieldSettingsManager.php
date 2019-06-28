@@ -18,7 +18,9 @@ class FieldSettingsManager extends AbstractSettingsManager
     public function apply(array $settings = []): SettingsManagerContract
     {
         $this->model->{$this->model->getSettingsFieldName()} = json_encode($settings);
-        $this->model->save();
+        if ($this->model->isPersistSettings()) {
+            $this->model->save();
+        }
 
         return $this;
     }
