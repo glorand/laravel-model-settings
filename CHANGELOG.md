@@ -2,6 +2,10 @@
 
 All notable changes to `glorand/laravel-model-settings` will be documented in this file
 
+## 3.1.0 - 2019-06-28
+### Added
+- Configure persistence for settings in case of Field Type (HasSettingsField)
+
 ## 3.0.0 - 2019-03-21
 ### Added
 - Command to create the table for settings

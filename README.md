@@ -43,6 +43,7 @@ Bug reports, feature requests, and pull requests can be submitted by following o
     - [Add / Update setting](#add_update)
     - [Check if the model has a specific setting](#check)
     - [Remove a setting from a model](#remove)
+    - [Persistence](#persistence)
  - [Changelog](#changelog)
  - [Contributing](#contributing)
 - [License](#license)
@@ -142,6 +143,23 @@ $user->settings()->has('some.setting');
 ```php
 $user->settings()->delete('some.setting');
 ```
+
+#### Persistence for settings field <a name="persistence"></a>
+In case of field settings the auto-save is configurable
+
+ - Use an attribute on model
+```php
+protected $persistSettings = true; //boolean
+```
+ - Environment (.env) variable
+ ```dotenv
+MODEL_SETTINGS_PERSISTENT=true
+```
+- Config value - model settings config file
+ ```php
+'settings_persistent' => env('MODEL_SETTINGS_PERSISTENT', false),
+```
+If the persistence is `false` you have to save the model after the operation.
 
 ## Changelog <a name="changelog"></a>
 Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.

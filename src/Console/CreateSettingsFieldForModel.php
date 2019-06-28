@@ -5,7 +5,7 @@ namespace Glorand\Model\Settings\Console;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
-use Schema;
+use Illuminate\Support\Facades\Schema;
 
 class CreateSettingsFieldForModel extends Command
 {
