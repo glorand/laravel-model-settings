@@ -1,5 +1,5 @@
 <p align="center">
-<img height="90px" alt="laravel" src="https://user-images.githubusercontent.com/883989/50478539-685da980-09da-11e9-8251-18003e023ac9.png">
+<img height="100px" alt="laravel" src="https://user-images.githubusercontent.com/883989/60343130-f5021800-99bb-11e9-8a03-fe11746a86c2.png">
 </p>
 
 <h6 align="center">
