@@ -20,6 +20,7 @@ class ConsoleCommandTest extends TestCase
         $this->artisan('model-settings:model-settings-table')
             ->assertExitCode(0);
     }
+
     public function testModelSettingsFieldCommand()
     {
         $this->artisan('model-settings:model-settings-field')
@@ -39,7 +40,7 @@ class ConsoleCommandTest extends TestCase
             ->assertExitCode(0);
 
         $this->artisan('model-settings:model-settings-field')
-            ->expectsQuestion('What is the name of the table?', $table .'_wrong')
+            ->expectsQuestion('What is the name of the table?', $table . '_wrong')
             ->assertExitCode(0);
     }
 }
