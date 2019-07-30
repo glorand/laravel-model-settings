@@ -5,6 +5,7 @@ namespace Glorand\Model\Settings\Tests;
 use Glorand\Model\Settings\Models\ModelSettings;
 use Glorand\Model\Settings\Tests\Models\UsersWithTable as User;
 use Glorand\Model\Settings\Traits\HasSettingsTable;
+use Illuminate\Support\Facades\DB;
 
 class TableSettingsManagerTest extends TestCase
 {
@@ -52,6 +53,18 @@ class TableSettingsManagerTest extends TestCase
         $this->assertEquals(1, ModelSettings::all()->count());
         $this->model->settings()->apply($this->testArray);
         $this->assertEquals(1, ModelSettings::all()->count());
+
+        $countJohnUsers = User::whereHas('modelSettings', function ($builder) {
+            $builder->where(DB::raw("json_extract(settings, '$.user.first_name')"), 'John');
+        }
+        )->count();
+        $this->assertEquals(1, $countJohnUsers);
+
+        $countJohnUsers = User::whereHas('modelSettings', function ($builder) {
+            $builder->where(DB::raw("json_extract(settings, '$.user.first_name')"), 'JohnL');
+        }
+        )->count();
+        $this->assertEquals(0, $countJohnUsers);
     }
 
     /**
