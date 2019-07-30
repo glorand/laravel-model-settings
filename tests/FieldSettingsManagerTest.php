@@ -73,6 +73,36 @@ class FieldSettingsManagerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testGetMultiple()
+    {
+        $this->assertEquals($this->model->settings()->all(), []);
+        $values = $this->model->settings()->getMultiple(['user.first_name', 'user.last_name'], 'def_val');
+        $this->assertEquals(
+            $values,
+            [
+                'user.first_name' => 'def_val',
+                'user.last_name'  => 'def_val',
+            ]
+        );
+
+        $this->model->settings()->apply($this->testArray);
+        $values = $this->model->settings()->getMultiple(
+            ['user.first_name', 'user.last_name', 'user.middle_name'],
+            'def_val'
+        );
+        $this->assertEquals(
+            $values,
+            [
+                'user.first_name' => 'John',
+                'user.last_name'  => 'Doe',
+                'user.middle_name'  => 'def_val',
+            ]
+        );
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testApply()
     {
         $this->model->settings()->apply($this->testArray);

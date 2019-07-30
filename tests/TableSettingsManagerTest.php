@@ -5,6 +5,7 @@ namespace Glorand\Model\Settings\Tests;
 use Glorand\Model\Settings\Models\ModelSettings;
 use Glorand\Model\Settings\Tests\Models\UsersWithTable as User;
 use Glorand\Model\Settings\Traits\HasSettingsTable;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\DB;
 
 class TableSettingsManagerTest extends TestCase
@@ -54,6 +55,17 @@ class TableSettingsManagerTest extends TestCase
         $this->model->settings()->apply($this->testArray);
         $this->assertEquals(1, ModelSettings::all()->count());
 
+        $testData = User::with(['modelSettings' => function (MorphOne $builder) {
+            $builder->where(DB::raw("json_extract(settings, '$.user.first_name')"), 'JohnL');
+        }])->whereHas('modelSettings')->first();
+        $this->assertNull($testData->modelSettings);
+
+        $testData = User::with(['modelSettings' => function (MorphOne $builder) {
+            $builder->where(DB::raw("json_extract(settings, '$.user.first_name')"), 'John');
+        }])->whereHas('modelSettings')->first();
+        $this->assertNotNull($testData->modelSettings);
+
+
         $countJohnUsers = User::whereHas('modelSettings', function ($builder) {
             $builder->where(DB::raw("json_extract(settings, '$.user.first_name')"), 'John');
         }
@@ -76,6 +88,36 @@ class TableSettingsManagerTest extends TestCase
         $this->assertEquals($this->model->settings()->get('user'), null);
         $this->model->settings()->apply($this->testArray);
         $this->assertEquals($this->model->settings()->get('user.first_name'), 'John');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testGetMultiple()
+    {
+        $this->assertEquals($this->model->settings()->all(), []);
+        $values = $this->model->settings()->getMultiple(['user.first_name', 'user.last_name'], 'def_val');
+        $this->assertEquals(
+            $values,
+            [
+                'user.first_name' => 'def_val',
+                'user.last_name'  => 'def_val',
+            ]
+        );
+
+        $this->model->settings()->apply($this->testArray);
+        $values = $this->model->settings()->getMultiple(
+            ['user.first_name', 'user.last_name', 'user.middle_name'],
+            'def_val'
+        );
+        $this->assertEquals(
+            $values,
+            [
+                'user.first_name'  => 'John',
+                'user.last_name'   => 'Doe',
+                'user.middle_name' => 'def_val',
+            ]
+        );
     }
 
     /**

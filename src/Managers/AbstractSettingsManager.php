@@ -56,6 +56,16 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
         return $path ? array_get($this->all(), $path, $default) : $this->all();
     }
 
+    public function getMultiple(iterable $paths = null, $default = null): iterable
+    {
+        $values = [];
+        foreach ($paths as $path) {
+            $values[$path] = $this->get($path, $default);
+        }
+
+        return $values;
+    }
+
     /**
      * @param string $path
      * @param mixed $value
