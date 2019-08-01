@@ -125,6 +125,14 @@ $user->settings()->get();
 ```php
 $user->settings()->get('some.setting');
 $user->settings()->get('some.setting', 'default value');
+//multiple
+$user->settings()->getMultiple(
+	[
+		'some.setting_1',
+		'some.setting_2',
+	],
+	'default value'
+);
 ```
 
 #### Add / Update setting <a name="add_update"></a>
@@ -132,6 +140,11 @@ $user->settings()->get('some.setting', 'default value');
 $user->settings()->apply((array)$settings);
 $user->settings()->set('some.setting', 'new value');
 $user->settings()->update('some.setting', 'new value');
+//multiple
+$user->settings()->setMultiple([
+	'some.setting_1' => 'new value 1',
+	'some.setting_2' => 'new value 2',
+]);
 ```
 
 #### Check if the model has a specific setting <a name="check"></a>
@@ -142,6 +155,13 @@ $user->settings()->has('some.setting');
 #### Remove a setting from a model <a name="remove"></a>
 ```php
 $user->settings()->delete('some.setting');
+//multiple
+$user->settings()->delete([
+	'some.setting_1',
+	'some.setting_2',
+]);
+//all
+$user->settings()->clear();
 ```
 
 #### Persistence for settings field <a name="persistence"></a>
