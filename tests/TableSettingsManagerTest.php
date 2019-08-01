@@ -15,6 +15,7 @@ class TableSettingsManagerTest extends TestCase
         'user' => [
             'first_name' => "John",
             'last_name'  => "Doe",
+            'email'  => "john@doe.com",
         ],
     ];
     /** @var \Glorand\Model\Settings\Tests\Models\UsersWithTable */
@@ -130,7 +131,7 @@ class TableSettingsManagerTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
      */
     public function testDelete()
     {
@@ -144,6 +145,21 @@ class TableSettingsManagerTest extends TestCase
 
         $this->model->settings()->delete();
         $this->assertEquals($this->model->settings()->all(), []);
+    }
+
+    /**
+     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     */
+    public function testDeleteMultiple()
+    {
+        $this->model->settings()->apply($this->testArray);
+        $this->assertEquals($this->model->settings()->all(), $this->testArray);
+
+        $this->model->settings()->deleteMultiple(['user.first_name', 'user.last_name']);
+        $testData = $this->model->settings()->get('user');
+        $this->assertArrayNotHasKey('first_name', $testData);
+        $this->assertArrayNotHasKey('last_name', $testData);
+        $this->assertArrayHasKey('email', $testData);
     }
 
     /**

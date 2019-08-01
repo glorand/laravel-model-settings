@@ -28,19 +28,25 @@ interface SettingsManagerContract
 
     public function set(string $path, $value): self;
 
-    //public function setMultiple(iterable $paths, $value): self;
+    //public function setMultiple(iterable $values): self;
 
     public function update(string $path, $value): self;
 
+    /**
+     * Delete an item by its unique path.
+     *
+     * @param string|null $path
+     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
+     */
     public function delete(string $path = null): self;
 
     /**
      * Deletes multiple setting items in a single operation.
      *
-     * @param iterable|null $paths A list of string-based paths to be deleted.
+     * @param iterable $paths A list of string-based paths to be deleted.
      * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
      */
-    //public function deleteMultiple(iterable $paths = null): self;
+    public function deleteMultiple(iterable $paths): self;
 
     //public function clear(): self;
 }

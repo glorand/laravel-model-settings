@@ -14,6 +14,7 @@ class FieldSettingsManagerTest extends TestCase
         'user' => [
             'first_name' => "John",
             'last_name'  => "Doe",
+            'email'  => "john@doe.com",
         ],
     ];
 
@@ -93,9 +94,9 @@ class FieldSettingsManagerTest extends TestCase
         $this->assertEquals(
             $values,
             [
-                'user.first_name' => 'John',
-                'user.last_name'  => 'Doe',
-                'user.middle_name'  => 'def_val',
+                'user.first_name'  => 'John',
+                'user.last_name'   => 'Doe',
+                'user.middle_name' => 'def_val',
             ]
         );
     }
@@ -134,7 +135,7 @@ class FieldSettingsManagerTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
      */
     public function testDelete()
     {
@@ -148,6 +149,21 @@ class FieldSettingsManagerTest extends TestCase
 
         $this->model->settings()->delete();
         $this->assertEquals($this->model->settings()->all(), []);
+    }
+
+    /**
+     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     */
+    public function testDeleteMultiple()
+    {
+        $this->model->settings()->apply($this->testArray);
+        $this->assertEquals($this->model->settings()->all(), $this->testArray);
+
+        $this->model->settings()->deleteMultiple(['user.first_name', 'user.last_name']);
+        $testData = $this->model->settings()->get('user');
+        $this->assertArrayNotHasKey('first_name', $testData);
+        $this->assertArrayNotHasKey('last_name', $testData);
+        $this->assertArrayHasKey('email', $testData);
     }
 
     /**

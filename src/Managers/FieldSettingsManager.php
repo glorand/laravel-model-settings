@@ -44,6 +44,22 @@ class FieldSettingsManager extends AbstractSettingsManager
     }
 
     /**
+     * @param iterable $paths
+     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
+     */
+    public function deleteMultiple(iterable $paths): SettingsManagerContract
+    {
+        $settings = $this->all();
+        foreach ($paths as $path) {
+            array_forget($settings, $path);
+        }
+
+        $this->apply($settings);
+
+        return $this;
+    }
+
+    /**
      * @param string $path
      * @param mixed $value
      * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
