@@ -145,7 +145,9 @@ $user->settings()->delete('some.setting');
 ```
 
 #### Persistence for settings field <a name="persistence"></a>
-In case of field settings the auto-save is configurable
+In case of field settings the auto-save is configurable.
+
+**The ``default`` value is ``true``**
 
  - Use an attribute on model
 ```php
@@ -157,7 +159,7 @@ MODEL_SETTINGS_PERSISTENT=true
 ```
 - Config value - model settings config file
  ```php
-'settings_persistent' => env('MODEL_SETTINGS_PERSISTENT', false),
+'settings_persistent' => env('MODEL_SETTINGS_PERSISTENT', true),
 ```
 If the persistence is `false` you have to save the model after the operation.
 
@@ -169,3 +171,6 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ## License <a name="license"></a>
 The MIT License (MIT). Please see [LICENSE](LICENSE) for more information.
+
+## Related Stuff
+- [LaraNews - Laravel Model Settings](https://laravel-news.com/laravel-model-settings)
