@@ -56,7 +56,7 @@ class TableSettingsManagerTest extends TestCase
         $this->model->settings()->apply($this->testArray);
         $this->assertEquals(1, ModelSettings::all()->count());
 
-        $testData = User::with(['modelSettings' => function (MorphOne $builder) {
+        /*$testData = User::with(['modelSettings' => function (MorphOne $builder) {
             $builder->where(DB::raw("json_extract(settings, '$.user.first_name')"), 'JohnL');
         }])->whereHas('modelSettings')->first();
         $this->assertNull($testData->modelSettings);
@@ -64,7 +64,7 @@ class TableSettingsManagerTest extends TestCase
         $testData = User::with(['modelSettings' => function (MorphOne $builder) {
             $builder->where(DB::raw("json_extract(settings, '$.user.first_name')"), 'John');
         }])->whereHas('modelSettings')->first();
-        $this->assertNotNull($testData->modelSettings);
+        $this->assertNotNull($testData->modelSettings);*/
 
 
         $countJohnUsers = User::whereHas('modelSettings', function ($builder) {
