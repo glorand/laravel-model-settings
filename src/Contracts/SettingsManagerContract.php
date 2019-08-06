@@ -15,8 +15,8 @@ interface SettingsManagerContract
     /**
      * Fetches a value from the settings.
      *
-     * @param string|null $path if null returns all the settings array.
-     * @param null $default default value to return if the path does not exist.
+     * @param string|null $path if null returns all the settings array
+     * @param null $default default value to return if the path does not exist
      * @return mixed
      */
     public function get(string $path = null, $default = null);
@@ -56,7 +56,7 @@ interface SettingsManagerContract
     /**
      * Deletes multiple setting items in a single operation.
      *
-     * @param iterable $paths a list of string-based paths to be deleted.
+     * @param iterable $paths a list of string-based paths to be deleted
      * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
      */
     public function deleteMultiple(iterable $paths): self;
