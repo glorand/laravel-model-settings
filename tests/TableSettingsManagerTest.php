@@ -15,7 +15,7 @@ class TableSettingsManagerTest extends TestCase
         'user' => [
             'first_name' => "John",
             'last_name'  => "Doe",
-            'email'  => "john@doe.com",
+            'email'      => "john@doe.com",
         ],
     ];
     /** @var \Glorand\Model\Settings\Tests\Models\UsersWithTable */
@@ -163,6 +163,18 @@ class TableSettingsManagerTest extends TestCase
     }
 
     /**
+     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     */
+    public function testClear()
+    {
+        $this->model->settings()->apply($this->testArray);
+        $this->assertEquals($this->model->settings()->all(), $this->testArray);
+
+        $this->model->settings()->clear();
+        $this->assertEquals($this->model->settings()->all(), []);
+    }
+
+    /**
      * @throws \Exception
      */
     public function testSet()
@@ -171,6 +183,23 @@ class TableSettingsManagerTest extends TestCase
 
         $this->model->settings()->set('user.age', 18);
         $this->assertEquals($this->model->settings()->all(), ['user' => ['age' => 18]]);
+    }
+
+    /**
+     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     */
+    public function testSetMultiple()
+    {
+        $this->assertEquals($this->model->settings()->all(), []);
+        $testData = [
+            'a' => 'a',
+            'b' => 'b',
+        ];
+        $this->model->settings()->setMultiple($testData);
+        $this->assertEquals($this->model->settings()->all(), $testData);
+
+        $this->model->settings()->setMultiple($this->testArray);
+        $this->assertEquals($this->model->settings()->all(), array_merge($testData, $this->testArray));
     }
 
     /**

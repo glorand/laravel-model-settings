@@ -12,6 +12,13 @@ interface SettingsManagerContract
 
     public function apply(array $settings = []): self;
 
+    /**
+     * Fetches a value from the settings.
+     *
+     * @param string|null $path If null returns all the settings array.
+     * @param null $default Default value to return if the path does not exist.
+     * @return mixed
+     */
     public function get(string $path = null, $default = null);
 
     /**
@@ -28,7 +35,13 @@ interface SettingsManagerContract
 
     public function set(string $path, $value): self;
 
-    //public function setMultiple(iterable $values): self;
+    /**
+     * Persists a set of key => value pairs in settings.
+     *
+     * @param iterable $values
+     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
+     */
+    public function setMultiple(iterable $values): self;
 
     public function update(string $path, $value): self;
 
@@ -48,5 +61,10 @@ interface SettingsManagerContract
      */
     public function deleteMultiple(iterable $paths): self;
 
-    //public function clear(): self;
+    /**
+     * Wipes clean the entire settings for the model.
+     *
+     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
+     */
+    public function clear(): self;
 }

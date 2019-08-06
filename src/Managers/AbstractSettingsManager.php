@@ -80,4 +80,26 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
     {
         return $this->set($path, $value);
     }
+
+    /**
+     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
+     */
+    public function clear(): SettingsManagerContract
+    {
+        return $this->delete();
+    }
+
+    /**
+     * @param iterable $values
+     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
+     */
+    public function setMultiple(iterable $values): SettingsManagerContract
+    {
+        $settings = $this->all();
+        foreach ($values as $path => $value) {
+            array_set($settings, $path, $value);
+        }
+
+        return $this->apply($settings);
+    }
 }
