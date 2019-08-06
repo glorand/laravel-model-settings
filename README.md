@@ -156,7 +156,7 @@ $user->settings()->has('some.setting');
 ```php
 $user->settings()->delete('some.setting');
 //multiple
-$user->settings()->delete([
+$user->settings()->deleteMultiple([
 	'some.setting_1',
 	'some.setting_2',
 ]);
