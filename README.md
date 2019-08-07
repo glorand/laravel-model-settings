@@ -91,7 +91,7 @@ class User extends Model
 {
     use HasSettingsField;
     
-    //define only if you select a dirrerent name from the default
+    //define only if you select a different name from the default
     public $settingsFieldName = 'user_settings';  
 
 }
