@@ -57,6 +57,21 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
     }
 
     /**
+     * @param iterable|null $paths
+     * @param null $default
+     * @return iterable
+     */
+    public function getMultiple(iterable $paths = null, $default = null): iterable
+    {
+        $values = [];
+        foreach ($paths as $path) {
+            $values[$path] = $this->get($path, $default);
+        }
+
+        return $values;
+    }
+
+    /**
      * @param string $path
      * @param mixed $value
      * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
@@ -64,5 +79,27 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
     public function update(string $path, $value): SettingsManagerContract
     {
         return $this->set($path, $value);
+    }
+
+    /**
+     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
+     */
+    public function clear(): SettingsManagerContract
+    {
+        return $this->delete();
+    }
+
+    /**
+     * @param iterable $values
+     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
+     */
+    public function setMultiple(iterable $values): SettingsManagerContract
+    {
+        $settings = $this->all();
+        foreach ($values as $path => $value) {
+            array_set($settings, $path, $value);
+        }
+
+        return $this->apply($settings);
     }
 }

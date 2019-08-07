@@ -5,6 +5,8 @@ namespace Glorand\Model\Settings\Tests;
 use Glorand\Model\Settings\Models\ModelSettings;
 use Glorand\Model\Settings\Tests\Models\UsersWithTable as User;
 use Glorand\Model\Settings\Traits\HasSettingsTable;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Support\Facades\DB;
 
 class TableSettingsManagerTest extends TestCase
 {
@@ -13,6 +15,7 @@ class TableSettingsManagerTest extends TestCase
         'user' => [
             'first_name' => "John",
             'last_name'  => "Doe",
+            'email'      => "john@doe.com",
         ],
     ];
     /** @var \Glorand\Model\Settings\Tests\Models\UsersWithTable */
@@ -52,6 +55,29 @@ class TableSettingsManagerTest extends TestCase
         $this->assertEquals(1, ModelSettings::all()->count());
         $this->model->settings()->apply($this->testArray);
         $this->assertEquals(1, ModelSettings::all()->count());
+
+        /*$testData = User::with(['modelSettings' => function (MorphOne $builder) {
+            $builder->where(DB::raw("json_extract(settings, '$.user.first_name')"), 'JohnL');
+        }])->whereHas('modelSettings')->first();
+        $this->assertNull($testData->modelSettings);
+
+        $testData = User::with(['modelSettings' => function (MorphOne $builder) {
+            $builder->where(DB::raw("json_extract(settings, '$.user.first_name')"), 'John');
+        }])->whereHas('modelSettings')->first();
+        $this->assertNotNull($testData->modelSettings);*/
+
+
+        /*$countJohnUsers = User::whereHas('modelSettings', function ($builder) {
+            $builder->where(DB::raw("json_extract(settings, '$.user.first_name')"), 'John');
+        }
+        )->count();
+        $this->assertEquals(1, $countJohnUsers);
+
+        $countJohnUsers = User::whereHas('modelSettings', function ($builder) {
+            $builder->where(DB::raw("json_extract(settings, '$.user.first_name')"), 'JohnL');
+        }
+        )->count();
+        $this->assertEquals(0, $countJohnUsers);*/
     }
 
     /**
@@ -68,6 +94,36 @@ class TableSettingsManagerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testGetMultiple()
+    {
+        $this->assertEquals($this->model->settings()->all(), []);
+        $values = $this->model->settings()->getMultiple(['user.first_name', 'user.last_name'], 'def_val');
+        $this->assertEquals(
+            $values,
+            [
+                'user.first_name' => 'def_val',
+                'user.last_name'  => 'def_val',
+            ]
+        );
+
+        $this->model->settings()->apply($this->testArray);
+        $values = $this->model->settings()->getMultiple(
+            ['user.first_name', 'user.last_name', 'user.middle_name'],
+            'def_val'
+        );
+        $this->assertEquals(
+            $values,
+            [
+                'user.first_name'  => 'John',
+                'user.last_name'   => 'Doe',
+                'user.middle_name' => 'def_val',
+            ]
+        );
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testApply()
     {
         $this->model->settings()->apply($this->testArray);
@@ -75,7 +131,7 @@ class TableSettingsManagerTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
      */
     public function testDelete()
     {
@@ -92,6 +148,33 @@ class TableSettingsManagerTest extends TestCase
     }
 
     /**
+     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     */
+    public function testDeleteMultiple()
+    {
+        $this->model->settings()->apply($this->testArray);
+        $this->assertEquals($this->model->settings()->all(), $this->testArray);
+
+        $this->model->settings()->deleteMultiple(['user.first_name', 'user.last_name']);
+        $testData = $this->model->settings()->get('user');
+        $this->assertArrayNotHasKey('first_name', $testData);
+        $this->assertArrayNotHasKey('last_name', $testData);
+        $this->assertArrayHasKey('email', $testData);
+    }
+
+    /**
+     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     */
+    public function testClear()
+    {
+        $this->model->settings()->apply($this->testArray);
+        $this->assertEquals($this->model->settings()->all(), $this->testArray);
+
+        $this->model->settings()->clear();
+        $this->assertEquals($this->model->settings()->all(), []);
+    }
+
+    /**
      * @throws \Exception
      */
     public function testSet()
@@ -100,6 +183,23 @@ class TableSettingsManagerTest extends TestCase
 
         $this->model->settings()->set('user.age', 18);
         $this->assertEquals($this->model->settings()->all(), ['user' => ['age' => 18]]);
+    }
+
+    /**
+     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     */
+    public function testSetMultiple()
+    {
+        $this->assertEquals($this->model->settings()->all(), []);
+        $testData = [
+            'a' => 'a',
+            'b' => 'b',
+        ];
+        $this->model->settings()->setMultiple($testData);
+        $this->assertEquals($this->model->settings()->all(), $testData);
+
+        $this->model->settings()->setMultiple($this->testArray);
+        $this->assertEquals($this->model->settings()->all(), array_merge($testData, $this->testArray));
     }
 
     /**

@@ -125,6 +125,14 @@ $user->settings()->get();
 ```php
 $user->settings()->get('some.setting');
 $user->settings()->get('some.setting', 'default value');
+//multiple
+$user->settings()->getMultiple(
+	[
+		'some.setting_1',
+		'some.setting_2',
+	],
+	'default value'
+);
 ```
 
 #### Add / Update setting <a name="add_update"></a>
@@ -132,6 +140,11 @@ $user->settings()->get('some.setting', 'default value');
 $user->settings()->apply((array)$settings);
 $user->settings()->set('some.setting', 'new value');
 $user->settings()->update('some.setting', 'new value');
+//multiple
+$user->settings()->setMultiple([
+	'some.setting_1' => 'new value 1',
+	'some.setting_2' => 'new value 2',
+]);
 ```
 
 #### Check if the model has a specific setting <a name="check"></a>
@@ -142,10 +155,19 @@ $user->settings()->has('some.setting');
 #### Remove a setting from a model <a name="remove"></a>
 ```php
 $user->settings()->delete('some.setting');
+//multiple
+$user->settings()->deleteMultiple([
+	'some.setting_1',
+	'some.setting_2',
+]);
+//all
+$user->settings()->clear();
 ```
 
 #### Persistence for settings field <a name="persistence"></a>
-In case of field settings the auto-save is configurable
+In case of field settings the auto-save is configurable.
+
+**The ``default`` value is ``true``**
 
  - Use an attribute on model
 ```php
@@ -157,7 +179,7 @@ MODEL_SETTINGS_PERSISTENT=true
 ```
 - Config value - model settings config file
  ```php
-'settings_persistent' => env('MODEL_SETTINGS_PERSISTENT', false),
+'settings_persistent' => env('MODEL_SETTINGS_PERSISTENT', true),
 ```
 If the persistence is `false` you have to save the model after the operation.
 
@@ -169,3 +191,6 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ## License <a name="license"></a>
 The MIT License (MIT). Please see [LICENSE](LICENSE) for more information.
+
+## Related Stuff
+- [LaraNews - Laravel Model Settings](https://laravel-news.com/laravel-model-settings)
