@@ -67,7 +67,7 @@ class TableSettingsManagerTest extends TestCase
         $this->assertNotNull($testData->modelSettings);*/
 
 
-        $countJohnUsers = User::whereHas('modelSettings', function ($builder) {
+        /*$countJohnUsers = User::whereHas('modelSettings', function ($builder) {
             $builder->where(DB::raw("json_extract(settings, '$.user.first_name')"), 'John');
         }
         )->count();
@@ -77,7 +77,7 @@ class TableSettingsManagerTest extends TestCase
             $builder->where(DB::raw("json_extract(settings, '$.user.first_name')"), 'JohnL');
         }
         )->count();
-        $this->assertEquals(0, $countJohnUsers);
+        $this->assertEquals(0, $countJohnUsers);*/
     }
 
     /**
