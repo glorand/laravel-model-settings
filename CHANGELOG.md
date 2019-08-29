@@ -2,6 +2,10 @@
 
 All notable changes to `glorand/laravel-model-settings` will be documented in this file
 
+## 3.3.0 - 2019-08-29
+### Added
+- Default settings on Model
+
 ## 3.2.0 - 2019-08-07
 ### Added
 - Compatibility with PSR-16, CacheInterface

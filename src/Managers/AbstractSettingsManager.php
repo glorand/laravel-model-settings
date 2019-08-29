@@ -16,9 +16,12 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
     /** @var \Illuminate\Database\Eloquent\Model */
     protected $model;
 
+    /** @var array */
+    protected $defaultSettings = [];
+
     /**
      * AbstractSettingsManager constructor.
-     * @param \Illuminate\Database\Eloquent\Model $model
+     * @param \Illuminate\Database\Eloquent\Model|HasSettings $model
      * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
      */
     public function __construct(Model $model)
@@ -34,7 +37,7 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
      */
     public function all(): array
     {
-        return $this->model->getSettingsValue();
+        return array_merge($this->model->getDefaultSettings(), $this->model->getSettingsValue());
     }
 
     /**

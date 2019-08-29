@@ -3,6 +3,7 @@
 namespace Glorand\Model\Settings\Tests;
 
 use Glorand\Model\Settings\Models\ModelSettings;
+use Glorand\Model\Settings\Tests\Models\UsersWithDefaultSettingsTable;
 use Glorand\Model\Settings\Tests\Models\UsersWithTable as User;
 use Glorand\Model\Settings\Traits\HasSettingsTable;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -10,6 +11,8 @@ use Illuminate\Support\Facades\DB;
 
 class TableSettingsManagerTest extends TestCase
 {
+    /** @var \Glorand\Model\Settings\Tests\Models\UsersWithTable */
+    private $model;
     /** @var array */
     protected $testArray = [
         'user' => [
@@ -18,8 +21,10 @@ class TableSettingsManagerTest extends TestCase
             'email'      => "john@doe.com",
         ],
     ];
-    /** @var \Glorand\Model\Settings\Tests\Models\UsersWithTable */
-    private $model;
+    /** @var array  */
+    protected $defaultSettingsTestArray = [
+        'project' => 'Main Project',
+    ];
 
     public function setUp(): void
     {
@@ -39,6 +44,18 @@ class TableSettingsManagerTest extends TestCase
     public function testAll()
     {
         $this->assertEquals($this->model->settings()->all(), []);
+    }
+
+    /**
+     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     */
+    public function testDefaultValue()
+    {
+        $this->model->defaultSettings = $this->defaultSettingsTestArray;
+        $this->assertEquals($this->defaultSettingsTestArray, $this->model->settings()->all());
+
+        $this->model->settings()->apply($this->testArray);
+        $this->assertEquals($this->model->settings()->all(), array_merge($this->defaultSettingsTestArray, $this->testArray));
     }
 
     /**

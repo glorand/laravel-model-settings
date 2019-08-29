@@ -10,6 +10,9 @@
 <a href="https://packagist.org/packages/glorand/laravel-model-settings">
  <img src="https://poser.pugx.org/glorand/laravel-model-settings/v/stable" alt="Latest Stable Version">
 </a>
+<a href="https://packagist.org/packages/glorand/laravel-model-settings">
+  <img src="https://poser.pugx.org/glorand/laravel-model-settings/downloads" alt="Total Downloads">
+</a>
  <a href="https://travis-ci.com/glorand/laravel-model-settings">
  <img src="https://travis-ci.com/glorand/laravel-model-settings.svg?branch=master" alt="Build Status">
  </a>
@@ -37,6 +40,7 @@ Bug reports, feature requests, and pull requests can be submitted by following o
 - [Updating your Eloquent Models](#update_models)
     - [Option 1 - `HasSettingsField` trait](#update_models_1)
     - [Option 2 - `HasSettingsTable` trait](#update_models_2)
+- [Default Settings](#default_settings)
 - [Usage](#usage)
     - [Get all model's settings](#get_all)
     - [Get a specific setting](#get)
@@ -106,6 +110,19 @@ use Glorand\Model\Settings\Traits\HasSettingsTable;
 class User extends Model
 {
     use HasSettingsTable;
+}
+```
+
+##Default settings <a name="default_settings"></a>
+
+```php
+use Glorand\Model\Settings\Traits\HasSettingsTable;
+
+class User extends Model
+{
+    public $defaultSettings = [
+        'key_1' => 'val_1',
+    ];
 }
 ```
 

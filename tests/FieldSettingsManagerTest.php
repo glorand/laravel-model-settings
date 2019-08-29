@@ -17,6 +17,10 @@ class FieldSettingsManagerTest extends TestCase
             'email'      => "john@doe.com",
         ],
     ];
+    /** @var array  */
+    protected $defaultSettingsTestArray = [
+        'project' => 'Main Project',
+    ];
 
     public function setUp(): void
     {
@@ -31,11 +35,23 @@ class FieldSettingsManagerTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
      */
     public function testAll()
     {
         $this->assertEquals($this->model->settings()->all(), []);
+    }
+
+    /**
+     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     */
+    public function testDefaultValue()
+    {
+        $this->model->defaultSettings = $this->defaultSettingsTestArray;
+        $this->assertEquals($this->defaultSettingsTestArray, $this->model->settings()->all());
+
+        $this->model->settings()->apply($this->testArray);
+        $this->assertEquals($this->model->settings()->all(), array_merge($this->defaultSettingsTestArray, $this->testArray));
     }
 
     /**
