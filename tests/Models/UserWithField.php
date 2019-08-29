@@ -16,4 +16,6 @@ class UserWithField extends Model
     protected $guarded = [];
 
     protected $fillable = ['id', 'name'];
+
+    public $defaultSettings = [];
 }
