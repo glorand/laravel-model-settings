@@ -10,6 +10,7 @@ use Glorand\Model\Settings\Tests\Models\UsersWithTable;
 use Glorand\Model\Settings\Tests\Models\UserWithField;
 use Glorand\Model\Settings\Tests\Models\WrongUser;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
@@ -26,7 +27,7 @@ abstract class TestCase extends OrchestraTestCase
     protected function checkRequirements()
     {
         collect($this->getAnnotations())->filter(function ($location) {
-            return in_array('!Travis', array_get($location, 'requires', []));
+            return in_array('!Travis', Arr::get($location, 'requires', []));
         })->each(function ($location) {
             $this->markTestSkipped('Travis will not run this test.');
         });

@@ -5,6 +5,7 @@ namespace Glorand\Model\Settings\Traits;
 use Glorand\Model\Settings\Contracts\SettingsManagerContract;
 use Glorand\Model\Settings\Exceptions\ModelSettingsException;
 use Glorand\Model\Settings\Managers\FieldSettingsManager;
+use Illuminate\Support\Arr;
 
 /**
  * Trait HasSettingsField
@@ -36,7 +37,7 @@ trait HasSettingsField
     {
         $settingsFieldName = $this->getSettingsFieldName();
         $attributes = $this->getAttributes();
-        if (!array_has($attributes, $settingsFieldName)) {
+        if (!Arr::has($attributes, $settingsFieldName)) {
             throw new ModelSettingsException("Unknown field ($settingsFieldName) on table {$this->getTable()}");
         }
 

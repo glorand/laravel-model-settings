@@ -6,6 +6,7 @@ use Glorand\Model\Settings\Contracts\SettingsManagerContract;
 use Glorand\Model\Settings\Exceptions\ModelSettingsException;
 use Glorand\Model\Settings\Traits\HasSettings;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 
 /**
  * Class AbstractSettingsManager
@@ -46,7 +47,7 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
      */
     public function has(string $path): bool
     {
-        return array_has($this->all(), $path);
+        return Arr::has($this->all(), $path);
     }
 
     /**
@@ -56,7 +57,7 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
      */
     public function get(string $path = null, $default = null)
     {
-        return $path ? array_get($this->all(), $path, $default) : $this->all();
+        return $path ? Arr::get($this->all(), $path, $default) : $this->all();
     }
 
     /**
@@ -100,9 +101,25 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
     {
         $settings = $this->all();
         foreach ($values as $path => $value) {
-            array_set($settings, $path, $value);
+            Arr::set($settings, $path, $value);
         }
 
         return $this->apply($settings);
+    }
+
+    /**
+     * @param iterable $paths
+     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
+     */
+    public function deleteMultiple(iterable $paths): SettingsManagerContract
+    {
+        $settings = $this->all();
+        foreach ($paths as $path) {
+            Arr::forget($settings, $path);
+        }
+
+        $this->apply($settings);
+
+        return $this;
     }
 }
