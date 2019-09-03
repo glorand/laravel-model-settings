@@ -2,6 +2,7 @@
 
 namespace Glorand\Model\Settings\Traits;
 
+use Glorand\Model\Settings\Managers\AbstractSettingsManager;
 use Illuminate\Support\Arr;
 
 trait HasSettings
@@ -15,8 +16,7 @@ trait HasSettings
         return [];
     }
 
-    /**
-     * @return array
-     */
     abstract public function getSettingsValue(): array;
+
+    abstract public function settings(): AbstractSettingsManager;
 }

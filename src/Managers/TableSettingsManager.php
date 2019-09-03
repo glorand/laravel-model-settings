@@ -4,6 +4,7 @@ namespace Glorand\Model\Settings\Managers;
 
 use Glorand\Model\Settings\Contracts\SettingsManagerContract;
 use Glorand\Model\Settings\Models\ModelSettings;
+use Illuminate\Support\Arr;
 
 /**
  * Class TableSettingsManager
@@ -42,25 +43,9 @@ class TableSettingsManager extends AbstractSettingsManager
             }
         } else {
             $settings = $this->all();
-            array_forget($settings, $path);
+            Arr::forget($settings, $path);
             $this->apply($settings);
         }
-
-        return $this;
-    }
-
-    /**
-     * @param iterable $paths
-     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
-     */
-    public function deleteMultiple(iterable $paths): SettingsManagerContract
-    {
-        $settings = $this->all();
-        foreach ($paths as $path) {
-            array_forget($settings, $path);
-        }
-
-        $this->apply($settings);
 
         return $this;
     }
@@ -73,7 +58,7 @@ class TableSettingsManager extends AbstractSettingsManager
     public function set(string $path, $value): SettingsManagerContract
     {
         $settings = $this->all();
-        array_set($settings, $path, $value);
+        Arr::set($settings, $path, $value);
 
         return $this->apply($settings);
     }

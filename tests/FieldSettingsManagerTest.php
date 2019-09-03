@@ -2,6 +2,7 @@
 
 namespace Glorand\Model\Settings\Tests;
 
+use Glorand\Model\Settings\Exceptions\ModelSettingsException;
 use Glorand\Model\Settings\Tests\Models\UserWithField as User;
 use Glorand\Model\Settings\Traits\HasSettingsField;
 
@@ -54,12 +55,10 @@ class FieldSettingsManagerTest extends TestCase
         $this->assertEquals($this->model->settings()->all(), array_merge($this->defaultSettingsTestArray, $this->testArray));
     }
 
-    /**
-     * @expectedException \Glorand\Model\Settings\Exceptions\ModelSettingsException
-     * @expectedExceptionMessage Unknown field
-     */
     public function testSettingsMissingSettingsField()
     {
+        $this->expectException(ModelSettingsException::class);
+        $this->expectExceptionMessage('Unknown field');
         $this->model->settingsFieldName = 'test';
         $this->model->settings()->all();
     }
