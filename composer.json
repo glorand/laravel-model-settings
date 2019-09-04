@@ -28,7 +28,7 @@
         "phpunit/phpunit": "^7.5|^8.0",
         "orchestra/testbench": "~3.8.0|^4.0",
         "friendsofphp/php-cs-fixer": "^2.16@dev",
-        "predis/predis": "^1.1"
+        "josiasmontag/laravel-redis-mock": "^1.2"
     },
     "suggest": {
         "predis/predis": "Required to use settings with Redis"
