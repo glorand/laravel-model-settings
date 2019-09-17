@@ -18,7 +18,7 @@ class FieldSettingsManagerTest extends TestCase
             'email'      => "john@doe.com",
         ],
     ];
-    /** @var array  */
+    /** @var array */
     protected $defaultSettingsTestArray = [
         'project' => 'Main Project',
     ];

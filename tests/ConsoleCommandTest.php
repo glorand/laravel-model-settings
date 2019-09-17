@@ -12,7 +12,7 @@ class ConsoleCommandTest extends TestCase
         config(['model_settings.settings_table_name' => 'custom_settings_table']);
         $this->artisan('model-settings:model-settings-table')
             ->assertExitCode(0);
-        
+
         config(['model_settings.settings_table_name' => null]);
         $this->artisan('model-settings:model-settings-table')
             ->assertExitCode(0);

@@ -222,3 +222,4 @@ The MIT License (MIT). Please see [LICENSE](LICENSE) for more information.
 
 ## Related Stuff
 - [LaraNews - Laravel Model Settings](https://laravel-news.com/laravel-model-settings)
+- [made with Laravel - Laravel Model Settings](https://madewithlaravel.com/laravel-model-settings)
