@@ -6,10 +6,6 @@ build:
           - php-scrutinizer-run
           - command: phpcs-run
             use_website_config: true
-          - command: './vendor/bin/phpunit --coverage-clover=coverage.xml'
-            coverage:
-              file: coverage.xml
-              format: clover
 filter:
   excluded_paths:
     - 'tests/*'
@@ -36,3 +32,7 @@ coding_style:
         concatenation: true
       other:
         after_type_cast: false
+tools:
+  external_code_coverage:
+    timeout: 600
+    runs: 3

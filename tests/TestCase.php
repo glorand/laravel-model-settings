@@ -8,10 +8,12 @@ use Glorand\Model\Settings\Tests\Models\Article;
 use Glorand\Model\Settings\Tests\Models\User;
 use Glorand\Model\Settings\Tests\Models\UsersWithTable;
 use Glorand\Model\Settings\Tests\Models\UserWithField;
+use Glorand\Model\Settings\Tests\Models\UserWithRedis;
 use Glorand\Model\Settings\Tests\Models\WrongUser;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Schema;
+use Lunaweb\RedisMock\Providers\RedisMockServiceProvider;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
 abstract class TestCase extends OrchestraTestCase
@@ -43,14 +45,17 @@ abstract class TestCase extends OrchestraTestCase
     public function getEnvironmentSetUp($app)
     {
         $app['config']->set('auth.providers.users.model', UserWithField::class);
+        $app['config']->set('database.redis.client', 'mock');
+        $app['config']->set('database.default', 'testing');
+        $app->register(RedisMockServiceProvider::class);
     }
 
     protected function setUpDatabase()
     {
         $this->createSettingsTable();
 
-        $this->createTables('users_with_table', 'users_with_field', 'wrong_users');
-        $this->seedModels(UserWithField::class, UsersWithTable::class, WrongUser::class);
+        $this->createTables('users', 'users_with_table', 'users_with_field', 'wrong_users');
+        $this->seedModels(UserWithField::class, UsersWithTable::class, WrongUser::class, UserWithRedis::class);
     }
 
     protected function createSettingsTable()

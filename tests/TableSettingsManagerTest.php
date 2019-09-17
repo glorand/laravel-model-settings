@@ -6,8 +6,6 @@ use Glorand\Model\Settings\Models\ModelSettings;
 use Glorand\Model\Settings\Tests\Models\UsersWithDefaultSettingsTable;
 use Glorand\Model\Settings\Tests\Models\UsersWithTable as User;
 use Glorand\Model\Settings\Traits\HasSettingsTable;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Illuminate\Support\Facades\DB;
 
 class TableSettingsManagerTest extends TestCase
 {
@@ -21,7 +19,7 @@ class TableSettingsManagerTest extends TestCase
             'email'      => "john@doe.com",
         ],
     ];
-    /** @var array  */
+    /** @var array */
     protected $defaultSettingsTestArray = [
         'project' => 'Main Project',
     ];

@@ -2,13 +2,14 @@
 
 namespace Glorand\Model\Settings\Tests;
 
-use Glorand\Model\Settings\Exceptions\ModelSettingsException;
-use Glorand\Model\Settings\Tests\Models\UserWithField as User;
-use Glorand\Model\Settings\Traits\HasSettingsField;
+use Glorand\Model\Settings\Tests\Models\UserWithRedis as User;
+use Glorand\Model\Settings\Traits\HasSettingsRedis;
+use Illuminate\Support\Facades\Redis;
+use Lunaweb\RedisMock\MockPredisConnection;
 
-class FieldSettingsManagerTest extends TestCase
+class RedisSettingsManagerTest extends TestCase
 {
-    /** @var \Glorand\Model\Settings\Tests\Models\UserWithField */
+    /** @var \Glorand\Model\Settings\Tests\Models\UserWithRedis */
     protected $model;
     /** @var array */
     protected $testArray = [
@@ -32,7 +33,9 @@ class FieldSettingsManagerTest extends TestCase
     public function testInit()
     {
         $traits = class_uses($this->model);
-        $this->assertTrue(array_key_exists(HasSettingsField::class, $traits));
+        $this->assertTrue(array_key_exists(HasSettingsRedis::class, $traits));
+
+        $this->assertInstanceOf(MockPredisConnection::class, Redis::connection());
     }
 
     /**
@@ -52,15 +55,10 @@ class FieldSettingsManagerTest extends TestCase
         $this->assertEquals($this->defaultSettingsTestArray, $this->model->settings()->all());
 
         $this->model->settings()->apply($this->testArray);
-        $this->assertEquals($this->model->settings()->all(), array_merge($this->defaultSettingsTestArray, $this->testArray));
-    }
-
-    public function testSettingsMissingSettingsField()
-    {
-        $this->expectException(ModelSettingsException::class);
-        $this->expectExceptionMessage('Unknown field');
-        $this->model->settingsFieldName = 'test';
-        $this->model->settings()->all();
+        $this->assertEquals(
+            $this->model->settings()->all(),
+            array_merge($this->defaultSettingsTestArray, $this->testArray)
+        );
     }
 
     /**
@@ -80,6 +78,7 @@ class FieldSettingsManagerTest extends TestCase
      */
     public function testGet()
     {
+        $this->model->settings()->clear();
         $this->assertEquals($this->model->settings()->all(), []);
         $this->assertEquals($this->model->settings()->get('user'), null);
         $this->model->settings()->apply($this->testArray);
@@ -91,6 +90,7 @@ class FieldSettingsManagerTest extends TestCase
      */
     public function testGetMultiple()
     {
+        $this->model->settings()->clear();
         $this->assertEquals($this->model->settings()->all(), []);
         $values = $this->model->settings()->getMultiple(['user.first_name', 'user.last_name'], 'def_val');
         $this->assertEquals(
@@ -121,30 +121,6 @@ class FieldSettingsManagerTest extends TestCase
      */
     public function testApply()
     {
-        $this->model->settings()->apply($this->testArray);
-        $this->assertEquals($this->model->fresh()->settings()->all(), $this->testArray);
-    }
-
-    public function testPersistence()
-    {
-        $this->model->settings()->apply($this->testArray);
-        $this->assertEquals($this->model->fresh()->settings()->all(), $this->testArray);
-
-        $this->model->settings()->delete();
-
-        $this->model->setPersistSettings(false);
-        $this->model->settings()->apply($this->testArray);
-        $this->assertEquals($this->model->fresh()->settings()->all(), []);
-
-        $this->model->setPersistSettings(false);
-        $this->model->settings()->apply($this->testArray);
-        $this->model->save();
-        $this->assertEquals($this->model->fresh()->settings()->all(), $this->testArray);
-
-        $this->model->settings()->delete();
-
-        $this->model->fresh();
-        $this->model->setPersistSettings(true);
         $this->model->settings()->apply($this->testArray);
         $this->assertEquals($this->model->fresh()->settings()->all(), $this->testArray);
     }
@@ -209,6 +185,7 @@ class FieldSettingsManagerTest extends TestCase
      */
     public function testSetMultiple()
     {
+        $this->model->settings()->clear();
         $this->assertEquals($this->model->settings()->all(), []);
         $testData = [
             'a' => 'a',
@@ -226,6 +203,7 @@ class FieldSettingsManagerTest extends TestCase
      */
     public function testUpdate()
     {
+        $this->model->settings()->clear();
         $this->assertEquals($this->model->settings()->all(), []);
 
         $this->model->settings()->set('user.age', 18);

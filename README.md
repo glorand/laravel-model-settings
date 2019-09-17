@@ -40,6 +40,7 @@ Bug reports, feature requests, and pull requests can be submitted by following o
 - [Updating your Eloquent Models](#update_models)
     - [Option 1 - `HasSettingsField` trait](#update_models_1)
     - [Option 2 - `HasSettingsTable` trait](#update_models_2)
+    - [Option 3 - `HasSettingsRedis` trait](#update_models_3)
 - [Default Settings](#default_settings)
 - [Usage](#usage)
     - [Get all model's settings](#get_all)
@@ -113,7 +114,17 @@ class User extends Model
 }
 ```
 
-##Default settings <a name="default_settings"></a>
+#### Option 3 - `HasSettingsRedis` trait <a name="update_models_3"></a>
+```php
+use Glorand\Model\Settings\Traits\HasSettingsRedis;
+
+class User extends Model
+{
+    use HasSettingsRedis;
+}
+```
+
+## Default settings <a name="default_settings"></a>
 
 ```php
 use Glorand\Model\Settings\Traits\HasSettingsTable;
@@ -211,3 +222,4 @@ The MIT License (MIT). Please see [LICENSE](LICENSE) for more information.
 
 ## Related Stuff
 - [LaraNews - Laravel Model Settings](https://laravel-news.com/laravel-model-settings)
+- [made with Laravel - Laravel Model Settings](https://madewithlaravel.com/laravel-model-settings)
