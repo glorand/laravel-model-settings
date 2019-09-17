@@ -124,7 +124,7 @@ class User extends Model
 }
 ```
 
-##Default settings <a name="default_settings"></a>
+## Default settings <a name="default_settings"></a>
 
 ```php
 use Glorand\Model\Settings\Traits\HasSettingsTable;
