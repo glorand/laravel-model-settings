@@ -2,9 +2,10 @@
 
 All notable changes to `glorand/laravel-model-settings` will be documented in this file
 
-## 3.3.1 - 2019-09-04
+
+## 3.4.1 - 2019-09-17
 ### Added
-- Laravel 6 support
+- Redis support
 
 ## 3.3.0 - 2019-08-29
 ### Added
