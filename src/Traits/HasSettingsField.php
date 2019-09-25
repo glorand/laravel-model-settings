@@ -20,6 +20,13 @@ trait HasSettingsField
 
     private $persistSettings = null;
 
+    protected static function bootHasSettingsField()
+    {
+        static::saving(function (self $model) {
+            $model->fixSettingsValue();
+        });
+    }
+
     /**
      * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
      * @throws ModelSettingsException
@@ -27,6 +34,17 @@ trait HasSettingsField
     public function settings(): SettingsManagerContract
     {
         return new FieldSettingsManager($this);
+    }
+
+    public function fixSettingsValue()
+    {
+        $settingsFieldName = $this->getSettingsFieldName();
+        $attributes = $this->getAttributes();
+        if (Arr::has($attributes, $settingsFieldName)) {
+            if (is_array($this->$settingsFieldName)) {
+                $this->$settingsFieldName = json_encode($this->$settingsFieldName);
+            }
+        }
     }
 
     /**
