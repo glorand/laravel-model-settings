@@ -35,6 +35,14 @@ class FieldSettingsManagerTest extends TestCase
         $this->assertTrue(array_key_exists(HasSettingsField::class, $traits));
     }
 
+    public function testModelArraySettings()
+    {
+        $testArray = ['a' => 'b'];
+        $this->model->settings = $testArray;
+        $this->model->save();
+        $this->assertEquals($this->model->settings()->all(), $testArray);
+    }
+
     /**
      * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
      */
