@@ -2,6 +2,10 @@
 
 All notable changes to `glorand/laravel-model-settings` will be documented in this file
 
+## 3.4.3 - 2019-10-05
+### Added
+- Refactor
+
 ## 3.4.2 - 2019-09-25
 ### Added
 - Manage array type settings
