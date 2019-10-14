@@ -16,6 +16,7 @@ class TableSettingsManager extends AbstractSettingsManager
     /**
      * @param array $settings
      * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
+     * @throws \Exception
      */
     public function apply(array $settings = []): SettingsManagerContract
     {
@@ -26,40 +27,8 @@ class TableSettingsManager extends AbstractSettingsManager
         $modelSettings->settings = $settings;
         $modelSettings->save();
 
-        return $this;
-    }
-
-    /**
-     * @param string|null $path
-     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
-     * @throws \Exception
-     */
-    public function delete(string $path = null): SettingsManagerContract
-    {
-        if (!$path) {
-            /** @var ModelSettings $modelSettings */
-            if ($modelSettings = $this->model->modelSettings()->first()) {
-                $modelSettings->delete();
-            }
-        } else {
-            $settings = $this->all();
-            Arr::forget($settings, $path);
-            $this->apply($settings);
-        }
+        cache()->forget($this->model->getSettingsCacheKey());
 
         return $this;
-    }
-
-    /**
-     * @param string $path
-     * @param mixed $value
-     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
-     */
-    public function set(string $path, $value): SettingsManagerContract
-    {
-        $settings = $this->all();
-        Arr::set($settings, $path, $value);
-
-        return $this->apply($settings);
     }
 }

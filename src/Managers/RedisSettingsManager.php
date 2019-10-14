@@ -19,34 +19,4 @@ class RedisSettingsManager extends AbstractSettingsManager
 
         return $this;
     }
-
-    public function set(string $path, $value): SettingsManagerContract
-    {
-        $settings = $this->all();
-        Arr::set($settings, $path, $value);
-
-        return $this->apply($settings);
-    }
-
-    /**
-     * Delete an item by its unique path.
-     *
-     * @param string|null $path
-     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
-     */
-    public function delete(string $path = null): SettingsManagerContract
-    {
-        {
-            if (!$path) {
-                $settings = [];
-            } else {
-                $settings = $this->all();
-                Arr::forget($settings, $path);
-            }
-
-            $this->apply($settings);
-
-            return $this;
-        }
-    }
 }

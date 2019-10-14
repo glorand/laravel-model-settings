@@ -29,8 +29,20 @@ trait HasSettingsTable
 
     /**
      * @return array
+     * @throws \Exception
      */
     public function getSettingsValue(): array
+    {
+        if (config('model_settings.settings_table_use_cache')) {
+            return cache()->rememberForever($this->getSettingsCacheKey(), function () {
+                return $this->__getSettingsValue();
+            });
+        }
+
+        return $this->__getSettingsValue();
+    }
+
+    private function __getSettingsValue(): array
     {
         if ($modelSettings = $this->modelSettings()->first()) {
             return $modelSettings->settings;
@@ -45,5 +57,10 @@ trait HasSettingsTable
     public function modelSettings(): MorphOne
     {
         return $this->morphOne(ModelSettings::class, 'model');
+    }
+
+    public function getSettingsCacheKey(): string
+    {
+        return config('model_settings.settings_table_cache_prefix') . $this->id;
     }
 }
