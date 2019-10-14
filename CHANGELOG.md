@@ -2,8 +2,9 @@
 
 All notable changes to `glorand/laravel-model-settings` will be documented in this file
 
-## 3.4.3 - 2019-10-05
+## 3.5.0 - 2019-10-14
 ### Added
+- Use cache in case of Table Settings [Ref. task](https://github.com/glorand/laravel-model-settings/issues/25)
 - Refactor
 
 ## 3.4.2 - 2019-09-25

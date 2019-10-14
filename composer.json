@@ -23,6 +23,7 @@
         "illuminate/support": "~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0",
         "illuminate/console": "~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0",
         "illuminate/filesystem": "~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0",
+        "illuminate/cache": "~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0",
         "ext-json": "*"
     },
     "require-dev": {

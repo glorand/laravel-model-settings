@@ -16,6 +16,7 @@ class TableSettingsManager extends AbstractSettingsManager
     /**
      * @param array $settings
      * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
+     * @throws \Exception
      */
     public function apply(array $settings = []): SettingsManagerContract
     {
@@ -26,8 +27,7 @@ class TableSettingsManager extends AbstractSettingsManager
         $modelSettings->settings = $settings;
         $modelSettings->save();
 
-        return $this;
-    }
+        cache()->forget($this->model->getSettingsCacheKey());
 
         return $this;
     }

@@ -46,14 +46,28 @@ class TableSettingsManagerTest extends TestCase
 
     /**
      * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     * @throws \Exception
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function testDefaultValue()
     {
         $this->model->defaultSettings = $this->defaultSettingsTestArray;
-        $this->assertEquals($this->defaultSettingsTestArray, $this->model->settings()->all());
+        $this->assertEquals(
+            $this->defaultSettingsTestArray,
+            $this->model->settings()->all());
 
         $this->model->settings()->apply($this->testArray);
-        $this->assertEquals($this->model->settings()->all(), array_merge($this->defaultSettingsTestArray, $this->testArray));
+        $this->assertEquals(
+            array_merge($this->defaultSettingsTestArray, $this->testArray),
+            $this->model->settings()->all()
+        );
+
+        $this->assertTrue(cache()->has($this->model->getSettingsCacheKey()));
+
+        $this->assertEquals(
+            $this->testArray,
+            cache()->get($this->model->getSettingsCacheKey())
+        );
     }
 
     /**
