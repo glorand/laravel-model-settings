@@ -19,10 +19,10 @@
  <a href="LICENSE.md">
  <img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat" alt="Software License">
  </a>
- <a href="https://github.styleci.io/repos/163381474">
+<br />
+<a href="https://github.styleci.io/repos/163381474">
  <img src="https://github.styleci.io/repos/163381474/shield?branch=master" alt="StyleCI">
  </a>
-<br />
 <a href="https://codeclimate.com/github/glorand/laravel-model-settings/maintainability">
 <img src="https://api.codeclimate.com/v1/badges/ea0941afe155dd14f5d8/maintainability" />
 </a>
