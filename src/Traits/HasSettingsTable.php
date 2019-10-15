@@ -46,9 +46,9 @@ trait HasSettingsTable
     {
         if ($modelSettings = $this->modelSettings()->first()) {
             return $modelSettings->settings;
-        } else {
-            return [];
         }
+
+        return [];
     }
 
     /**
