@@ -22,7 +22,11 @@
  <a href="https://github.styleci.io/repos/163381474">
  <img src="https://github.styleci.io/repos/163381474/shield?branch=master" alt="StyleCI">
  </a>
- <a href="https://scrutinizer-ci.com/g/glorand/laravel-model-settings/">
+<br />
+<a href="https://codeclimate.com/github/glorand/laravel-model-settings/maintainability">
+<img src="https://api.codeclimate.com/v1/badges/ea0941afe155dd14f5d8/maintainability" />
+</a>
+<a href="https://scrutinizer-ci.com/g/glorand/laravel-model-settings/">
  <img src="https://scrutinizer-ci.com/g/glorand/laravel-model-settings/badges/quality-score.png?b=master" alt="Scrutinizer Code Quality">
  </a>
  <a href="https://scrutinizer-ci.com/g/glorand/laravel-model-settings/?branch=master">
