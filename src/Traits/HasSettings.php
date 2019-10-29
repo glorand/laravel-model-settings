@@ -23,7 +23,7 @@ trait HasSettings
      * @param $value
      * @return array
      */
-    public function getSettingsAttribute($value): string
+    public function getSettingsAttribute($value): array
     {
         if (is_array($this->defaultSettings) && ! empty($this->defaultSettings)) {
             return $value ? array_merge(json_decode($value, true), $this->defaultSettings) : $this->defaultSettings;
