@@ -16,6 +16,22 @@ trait HasSettings
         return [];
     }
 
+    /**
+     * Accessor to set default settings when one is
+     * set in model property
+     *
+     * @param $value
+     * @return array
+     */
+    public function getSettingsAttribute($value)
+    {
+        if (is_array($this->defaultSettings) && $this->defaultSettings) {
+            return $value ? array_merge(json_decode($value, true), $this->defaultSettings) : $this->defaultSettings;
+        }
+
+        return $value;
+    }
+
     abstract public function getSettingsValue(): array;
 
     abstract public function settings(): AbstractSettingsManager;
