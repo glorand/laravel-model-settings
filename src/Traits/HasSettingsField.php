@@ -6,6 +6,7 @@ use Glorand\Model\Settings\Contracts\SettingsManagerContract;
 use Glorand\Model\Settings\Exceptions\ModelSettingsException;
 use Glorand\Model\Settings\Managers\FieldSettingsManager;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Schema;
 
 /**
  * Trait HasSettingsField
@@ -54,8 +55,7 @@ trait HasSettingsField
     public function getSettingsValue(): array
     {
         $settingsFieldName = $this->getSettingsFieldName();
-        $attributes = $this->getAttributes();
-        if (!Arr::has($attributes, $settingsFieldName)) {
+        if (!$this->hasSettingsField()) {
             throw new ModelSettingsException("Unknown field ($settingsFieldName) on table {$this->getTable()}");
         }
 
@@ -84,6 +84,26 @@ trait HasSettingsField
     public function setPersistSettings(bool $val = true)
     {
         $this->persistSettings = $val;
+    }
+
+
+    /**
+     * @return mixed
+     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     */
+    private function hasSettingsField()
+    {
+        try {
+            return cache()->remember(
+                config('model_settings.settings_table_cache_prefix') . '::has_field',
+                now()->addDays(1),
+                function () {
+                    return Schema::hasColumn($this->getTable(), $this->getSettingsFieldName());
+                }
+            );
+        } catch (\Exception $e) {
+            throw new ModelSettingsException("Cache: " . $e->getMessage());
+        }
     }
 
     abstract public function getTable();
