@@ -61,6 +61,8 @@ trait HasSettingsTable
 
     public function getSettingsCacheKey(): string
     {
-        return config('model_settings.settings_table_cache_prefix') . $this->id;
+        return config('model_settings.settings_table_cache_prefix') . $this->getTable() . '::' . $this->id;
     }
+    
+    abstract public function getTable();
 }

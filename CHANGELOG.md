@@ -2,6 +2,10 @@
 
 All notable changes to `glorand/laravel-model-settings` will be documented in this file
 
+## 3.5.2 - 2019-12-05
+### Fix
+- https://github.com/glorand/laravel-model-settings/issues/33
+
 ## 3.5.1 - 2019-11-29
 ### Fix
 - Check column settings exists directly on the database table
