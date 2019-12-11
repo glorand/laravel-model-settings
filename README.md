@@ -32,6 +32,8 @@
  <a href="https://scrutinizer-ci.com/g/glorand/laravel-model-settings/?branch=master">
  <img src="https://scrutinizer-ci.com/g/glorand/laravel-model-settings/badges/coverage.png?b=master" alt="Scrutinizer Code Coverage"/>
  </a>
+ <br />
+ <a title="MadeWithLaravel.com Shield" href="https://madewithlaravel.com/p/laravel-model-settings/shield-link"> <img src="https://madewithlaravel.com/storage/repo-shields/1716-shield.svg"/></a>
 </p>
 
 The package requires PHP 7.1.3+ and follows the FIG standards PSR-1, PSR-2 and PSR-4 
