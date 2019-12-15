@@ -2,11 +2,11 @@
 
 namespace Glorand\Model\Settings\Managers;
 
+use Illuminate\Support\Arr;
+use Illuminate\Database\Eloquent\Model;
+use Glorand\Model\Settings\Traits\HasSettings;
 use Glorand\Model\Settings\Contracts\SettingsManagerContract;
 use Glorand\Model\Settings\Exceptions\ModelSettingsException;
-use Glorand\Model\Settings\Traits\HasSettings;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
 
 /**
  * Class AbstractSettingsManager
@@ -38,7 +38,13 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
      */
     public function all(): array
     {
-        return array_merge($this->model->getDefaultSettings(), $this->model->getSettingsValue());
+        $arrayDot = array_merge($this->model->getDefaultSettings(), $this->model->getSettingsValue());
+        $array = [];
+        foreach ($arrayDot as $key => $value) {
+            Arr::set($array, $key, $value);
+        }
+
+        return $array;
     }
 
     /**
