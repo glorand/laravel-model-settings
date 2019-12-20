@@ -38,7 +38,12 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
      */
     public function all(): array
     {
-        return array_merge($this->model->getDefaultSettings(), $this->model->getSettingsValue());
+        $array = [];
+        foreach (array_merge($this->model->getDefaultSettings(), $this->model->getSettingsValue()) as $key => $value) {
+            Arr::set($array, $key, $value);
+        }
+
+        return $array;
     }
 
     /**
