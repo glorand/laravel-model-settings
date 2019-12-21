@@ -2,11 +2,11 @@
 
 namespace Glorand\Model\Settings\Traits;
 
-use Glorand\Model\Settings\Contracts\SettingsManagerContract;
-use Glorand\Model\Settings\Exceptions\ModelSettingsException;
-use Glorand\Model\Settings\Managers\FieldSettingsManager;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Schema;
+use Glorand\Model\Settings\Managers\FieldSettingsManager;
+use Glorand\Model\Settings\Contracts\SettingsManagerContract;
+use Glorand\Model\Settings\Exceptions\ModelSettingsException;
 
 /**
  * Trait HasSettingsField
@@ -55,11 +55,13 @@ trait HasSettingsField
     public function getSettingsValue(): array
     {
         $settingsFieldName = $this->getSettingsFieldName();
+        $attributes = $this->getAttributes();
+
         if (!$this->hasSettingsField()) {
             throw new ModelSettingsException("Unknown field ($settingsFieldName) on table {$this->getTable()}");
         }
 
-        return json_decode($this->getAttributeValue($settingsFieldName) ?? '[]', true);
+        return json_decode($attributes[$settingsFieldName] ?? '[]', true);
     }
 
     /**
