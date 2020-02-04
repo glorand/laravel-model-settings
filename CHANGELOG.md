@@ -2,6 +2,9 @@
 
 All notable changes to `glorand/laravel-model-settings` will be documented in this file
 
+## 3.5.5 - 2020-02-04
+### Bugfix
+
 ## 3.5.4 - 2019-12-20
 ### Fix
 - https://github.com/glorand/laravel-model-settings/issues/40

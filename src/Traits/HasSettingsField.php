@@ -2,6 +2,7 @@
 
 namespace Glorand\Model\Settings\Traits;
 
+use Exception;
 use Glorand\Model\Settings\Contracts\SettingsManagerContract;
 use Glorand\Model\Settings\Exceptions\ModelSettingsException;
 use Glorand\Model\Settings\Managers\FieldSettingsManager;
@@ -23,7 +24,8 @@ trait HasSettingsField
 
     protected static function bootHasSettingsField()
     {
-        static::saving(function (self $model) {
+        static::saving(function ($model) {
+            /** @var self $model */
             $model->fixSettingsValue();
         });
     }
@@ -101,7 +103,7 @@ trait HasSettingsField
                     return Schema::hasColumn($this->getTable(), $this->getSettingsFieldName());
                 }
             );
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ModelSettingsException("Cache: " . $e->getMessage());
         }
     }

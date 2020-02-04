@@ -3,7 +3,6 @@
 namespace Glorand\Model\Settings\Managers;
 
 use Glorand\Model\Settings\Contracts\SettingsManagerContract;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Redis;
 
 /**
