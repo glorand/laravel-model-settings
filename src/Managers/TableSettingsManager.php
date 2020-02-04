@@ -4,7 +4,6 @@ namespace Glorand\Model\Settings\Managers;
 
 use Glorand\Model\Settings\Contracts\SettingsManagerContract;
 use Glorand\Model\Settings\Models\ModelSettings;
-use Illuminate\Support\Arr;
 
 /**
  * Class TableSettingsManager

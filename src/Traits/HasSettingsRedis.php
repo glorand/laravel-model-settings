@@ -27,7 +27,7 @@ trait HasSettingsRedis
 
     public function getSettingsValue(): array
     {
-        $redisValue = Redis::get($this->cacheKey());
+        $redisValue = Redis::connection()->get($this->cacheKey());
 
         return Arr::wrap(json_decode($redisValue, true));
     }
@@ -35,10 +35,9 @@ trait HasSettingsRedis
     public function cacheKey(string $key = null): string
     {
         return sprintf(
-            "r-k-%s:%s:%s",
+            "r-k-%s:%s",
             $this->getTable(),
-            $this->getKey(),
-            $this->updated_at->timestamp
+            $this->getKey()
         ) . $key;
     }
 
