@@ -35,10 +35,10 @@ trait HasSettingsRedis
     public function cacheKey(string $key = null): string
     {
         return sprintf(
-                "r-k-%s:%s",
-                $this->getTable(),
-                $this->getKey()
-            ) . $key;
+            "r-k-%s:%s",
+            $this->getTable(),
+            $this->getKey()
+        ) . $key;
     }
 
     abstract public function getTable();
