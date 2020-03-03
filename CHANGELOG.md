@@ -2,6 +2,10 @@
 
 All notable changes to `glorand/laravel-model-settings` will be documented in this file
 
+## 3.6.0 - 2020-03-03
+
+- add support for Laravel 7
+
 ## 3.5.5 - 2020-02-04
 ### Bugfix
 
