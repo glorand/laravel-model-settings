@@ -165,6 +165,7 @@ class TableSettingsManagerTest extends TestCase
     public function testDelete()
     {
         $this->model->settings()->apply($this->testArray);
+        $this->assertEquals(1, $this->model->modelSettings()->count());
 
         $this->assertEquals($this->model->settings()->all(), $this->testArray);
         $this->assertEquals($this->model->settings()->get('user.first_name'), 'John');
@@ -174,6 +175,7 @@ class TableSettingsManagerTest extends TestCase
 
         $this->model->settings()->delete();
         $this->assertEquals($this->model->settings()->all(), []);
+        $this->assertEquals(0, $this->model->modelSettings()->count());
     }
 
     /**
@@ -196,10 +198,14 @@ class TableSettingsManagerTest extends TestCase
      */
     public function testClear()
     {
+        $this->assertEquals(0, $this->model->modelSettings()->count());
+        $this->assertEquals($this->model->settings()->all(), []);
         $this->model->settings()->apply($this->testArray);
         $this->assertEquals($this->model->settings()->all(), $this->testArray);
+        $this->assertEquals(1, $this->model->modelSettings()->count());
 
         $this->model->settings()->clear();
+        $this->assertEquals(0, $this->model->modelSettings()->count());
         $this->assertEquals($this->model->settings()->all(), []);
     }
 
