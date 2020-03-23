@@ -19,12 +19,19 @@ class TableSettingsManager extends AbstractSettingsManager
      */
     public function apply(array $settings = []): SettingsManagerContract
     {
-        if (!$modelSettings = $this->model->modelSettings()->first()) {
-            $modelSettings = new ModelSettings();
-            $modelSettings->model()->associate($this->model);
+        $modelSettings = $this->model->modelSettings()->first();
+        if (!count($settings)) {
+            if ($modelSettings) {
+                $modelSettings->delete();
+            }
+        } else {
+            if (!$modelSettings) {
+                $modelSettings = new ModelSettings();
+                $modelSettings->model()->associate($this->model);
+            }
+            $modelSettings->settings = $settings;
+            $modelSettings->save();
         }
-        $modelSettings->settings = $settings;
-        $modelSettings->save();
 
         cache()->forget($this->model->getSettingsCacheKey());
 
