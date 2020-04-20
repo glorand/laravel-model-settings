@@ -3,12 +3,12 @@
 namespace Glorand\Model\Settings\Tests;
 
 use Glorand\Model\Settings\Exceptions\ModelSettingsException;
-use Glorand\Model\Settings\Tests\Models\UserWithField as User;
+use Glorand\Model\Settings\Tests\Models\UserWithTextField as User;
 use Glorand\Model\Settings\Traits\HasSettingsField;
 
-class FieldSettingsManagerTest extends TestCase
+class TextFieldSettingsManagerTest extends TestCase
 {
-    /** @var \Glorand\Model\Settings\Tests\Models\UserWithField */
+    /** @var \Glorand\Model\Settings\Tests\Models\UserWithTextField */
     protected $model;
     /** @var array */
     protected $testArray = [
@@ -35,7 +35,6 @@ class FieldSettingsManagerTest extends TestCase
         $this->assertArrayHasKey(HasSettingsField::class, $traits);
     }
 
-
     /**
      * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
      */
@@ -49,12 +48,23 @@ class FieldSettingsManagerTest extends TestCase
     /**
      * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
      */
+    public function testIfSettingsIsNotValidJson()
+    {
+        $this->model->settings = 'Invalid Json';
+        $this->model->save();
+
+        $this->assertEquals([], $this->model->settings()->all());
+    }
+
+    /**
+     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     */
     public function testModelArraySettings()
     {
         $testArray = ['a' => 'b'];
         $this->model->settings = $testArray;
         $this->model->save();
-        $this->assertEquals($this->model->settings()->all(), $testArray);
+        $this->assertEquals($testArray, $this->model->settings()->all());
     }
 
     /**
@@ -62,7 +72,7 @@ class FieldSettingsManagerTest extends TestCase
      */
     public function testAll()
     {
-        $this->assertEquals($this->model->settings()->all(), []);
+        $this->assertEquals([], $this->model->settings()->all());
     }
 
     /**
@@ -74,7 +84,10 @@ class FieldSettingsManagerTest extends TestCase
         $this->assertEquals($this->defaultSettingsTestArray, $this->model->settings()->all());
 
         $this->model->settings()->apply($this->testArray);
-        $this->assertEquals($this->model->settings()->all(), array_merge($this->defaultSettingsTestArray, $this->testArray));
+        $this->assertEquals(
+            array_merge($this->defaultSettingsTestArray, $this->testArray),
+            $this->model->settings()->all()
+        );
     }
 
     public function testSettingsMissingSettingsField()
@@ -86,26 +99,26 @@ class FieldSettingsManagerTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
      */
     public function testHas()
     {
         $this->model->settings()->apply($this->testArray);
-        $this->assertEquals($this->model->settings()->all(), $this->testArray);
+        $this->assertEquals($this->testArray, $this->model->settings()->all());
 
         $this->assertTrue($this->model->settings()->has('user.first_name'));
         $this->assertFalse($this->model->settings()->has('user.age'));
     }
 
     /**
-     * @throws \Exception
+     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
      */
     public function testGet()
     {
-        $this->assertEquals($this->model->settings()->all(), []);
-        $this->assertEquals($this->model->settings()->get('user'), null);
+        $this->assertEquals([], $this->model->settings()->all());
+        $this->assertEquals(null, $this->model->settings()->get('user'));
         $this->model->settings()->apply($this->testArray);
-        $this->assertEquals($this->model->settings()->get('user.first_name'), 'John');
+        $this->assertEquals('John', $this->model->settings()->get('user.first_name'));
     }
 
     /**
@@ -113,14 +126,14 @@ class FieldSettingsManagerTest extends TestCase
      */
     public function testGetMultiple()
     {
-        $this->assertEquals($this->model->settings()->all(), []);
+        $this->assertEquals([], $this->model->settings()->all());
         $values = $this->model->settings()->getMultiple(['user.first_name', 'user.last_name'], 'def_val');
         $this->assertEquals(
-            $values,
             [
                 'user.first_name' => 'def_val',
                 'user.last_name'  => 'def_val',
-            ]
+            ],
+            $values
         );
 
         $this->model->settings()->apply($this->testArray);
@@ -129,12 +142,12 @@ class FieldSettingsManagerTest extends TestCase
             'def_val'
         );
         $this->assertEquals(
-            $values,
             [
                 'user.first_name'  => 'John',
                 'user.last_name'   => 'Doe',
                 'user.middle_name' => 'def_val',
-            ]
+            ],
+            $values
         );
     }
 
@@ -171,7 +184,7 @@ class FieldSettingsManagerTest extends TestCase
         $this->model->fresh();
         $this->model->setPersistSettings(true);
         $this->model->settings()->apply($this->testArray);
-        $this->assertEquals($this->model->fresh()->settings()->all(), $this->testArray);
+        $this->assertEquals($this->testArray, $this->model->fresh()->settings()->all());
     }
 
     /**
@@ -219,7 +232,7 @@ class FieldSettingsManagerTest extends TestCase
     }
 
     /**
-     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     * @throws \Exception
      */
     public function testSet()
     {
@@ -247,7 +260,7 @@ class FieldSettingsManagerTest extends TestCase
     }
 
     /**
-     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     * @throws \Exception
      */
     public function testUpdate()
     {

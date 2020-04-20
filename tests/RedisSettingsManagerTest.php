@@ -38,11 +38,23 @@ class RedisSettingsManagerTest extends TestCase
         $this->assertInstanceOf(MockPredisConnection::class, Redis::connection());
     }
 
+
+    /**
+     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     */
+    public function testExist()
+    {
+        $this->assertFalse($this->model->settings()->exist());
+        $this->model->settings()->apply($this->testArray);
+        $this->assertTrue($this->model->settings()->exist());
+    }
+
     /**
      * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
      */
     public function testAll()
     {
+        $this->model->settings()->clear();
         $this->assertEquals($this->model->settings()->all(), []);
     }
 

@@ -10,6 +10,8 @@ interface SettingsManagerContract
 
     public function all(): array;
 
+    public function exist(): bool;
+
     public function apply(array $settings = []): self;
 
     /**
