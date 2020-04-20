@@ -36,6 +36,17 @@ class TableSettingsManagerTest extends TestCase
         $this->assertTrue(array_key_exists(HasSettingsTable::class, $traits));
     }
 
+
+    /**
+     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     */
+    public function testExist()
+    {
+        $this->assertFalse($this->model->settings()->exist());
+        $this->model->settings()->apply($this->testArray);
+        $this->assertTrue($this->model->settings()->exist());
+    }
+
     /**
      * @throws \Exception
      */

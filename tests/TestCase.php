@@ -9,6 +9,7 @@ use Glorand\Model\Settings\Tests\Models\User;
 use Glorand\Model\Settings\Tests\Models\UsersWithTable;
 use Glorand\Model\Settings\Tests\Models\UserWithField;
 use Glorand\Model\Settings\Tests\Models\UserWithRedis;
+use Glorand\Model\Settings\Tests\Models\UserWithTextField;
 use Glorand\Model\Settings\Tests\Models\WrongUser;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Arr;
@@ -54,8 +55,8 @@ abstract class TestCase extends OrchestraTestCase
     {
         $this->createSettingsTable();
 
-        $this->createTables('users', 'users_with_table', 'users_with_field', 'wrong_users');
-        $this->seedModels(UserWithField::class, UsersWithTable::class, WrongUser::class, UserWithRedis::class);
+        $this->createTables('users', 'users_with_table', 'users_with_field', 'users_with_text_field', 'wrong_users');
+        $this->seedModels(UserWithField::class, UserWithTextField::class, UsersWithTable::class, WrongUser::class, UserWithRedis::class);
     }
 
     protected function createSettingsTable()
@@ -75,6 +76,10 @@ abstract class TestCase extends OrchestraTestCase
 
                 if ('users_with_field' === $tableName) {
                     $table->json('settings')->nullable();
+                }
+
+                if ('users_with_text_field' === $tableName) {
+                    $table->text('settings')->nullable();
                 }
             });
         });

@@ -49,6 +49,7 @@ Bug reports, feature requests, and pull requests can be submitted by following o
     - [Option 3 - `HasSettingsRedis` trait](#update_models_3)
 - [Default Settings](#default_settings)
 - [Usage](#usage)
+    - [Check settings (exist)](#exist)
     - [Get all model's settings](#get_all)
     - [Get a specific setting](#get)
     - [Add / Update setting](#add_update)
@@ -147,6 +148,11 @@ class User extends Model
 
 ```php
 $user = App\User::first();
+```
+
+#### Check settings (exist) <a name="exist"></a>
+```php
+$user->settings()->exist();
 ```
 
 #### Get all model's settings <a name="get_all"></a>

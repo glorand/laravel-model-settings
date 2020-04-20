@@ -61,7 +61,9 @@ trait HasSettingsField
             throw new ModelSettingsException("Unknown field ($settingsFieldName) on table {$this->getTable()}");
         }
 
-        return json_decode($this->getAttributeValue($settingsFieldName) ?? '[]', true);
+        $value = json_decode($this->getAttributeValue($settingsFieldName) ?? '[]', true);
+
+        return is_array($value) ? $value : [];
     }
 
     /**

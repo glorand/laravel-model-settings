@@ -4,7 +4,6 @@ namespace Glorand\Model\Settings\Traits;
 
 use Glorand\Model\Settings\Contracts\SettingsManagerContract;
 use Glorand\Model\Settings\Managers\RedisSettingsManager;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Redis;
 
 /**
@@ -28,8 +27,9 @@ trait HasSettingsRedis
     public function getSettingsValue(): array
     {
         $redisValue = Redis::connection()->get($this->cacheKey());
+        $value = json_decode($redisValue, true);
 
-        return Arr::wrap(json_decode($redisValue, true));
+        return is_array($value) ? $value : [];
     }
 
     public function cacheKey(string $key = null): string
