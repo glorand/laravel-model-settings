@@ -9,15 +9,18 @@ class ConsoleCommandTest extends TestCase
         $this->artisan('model-settings:model-settings-table')
             ->assertExitCode(0);
 
+        config(['model_settings.settings_table_name' => null]);
+        $this->artisan('model-settings:model-settings-table')
+            ->assertExitCode(0);
+    }
+
+    public function testUpdateConfig()
+    {
         $this->assertEquals('model_settings', config('model_settings.settings_table_name'));
         $newTableName = uniqid();
         config(['model_settings.settings_table_name' => $newTableName]);
         $this->assertEquals($newTableName, config('model_settings.settings_table_name'));
 
-        $this->artisan('model-settings:model-settings-table')
-            ->assertExitCode(0);
-
-        config(['model_settings.settings_table_name' => null]);
         $this->artisan('model-settings:model-settings-table')
             ->assertExitCode(0);
     }
