@@ -36,6 +36,16 @@ class TableSettingsManagerTest extends TestCase
         $this->assertTrue(array_key_exists(HasSettingsTable::class, $traits));
     }
 
+    /**
+     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     */
+    public function testEmpty()
+    {
+        $this->model->settings()->clear();
+        $this->assertTrue($this->model->settings()->empty());
+        $this->model->settings()->apply($this->testArray);
+        $this->assertFalse($this->model->settings()->empty());
+    }
 
     /**
      * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
@@ -78,6 +88,14 @@ class TableSettingsManagerTest extends TestCase
         $this->assertEquals(
             $this->testArray,
             cache()->get($this->model->getSettingsCacheKey())
+        );
+
+        $this->assertTrue(config('model_settings.settings_table_use_cache'));
+        config()->set('model_settings.settings_table_use_cache', false);
+        $this->assertFalse(config('model_settings.settings_table_use_cache'));
+        $this->assertEquals(
+            array_merge($this->defaultSettingsTestArray, $this->testArray),
+            $this->model->settings()->all()
         );
     }
 

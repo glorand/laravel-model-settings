@@ -27,12 +27,12 @@ class CreateSettingsFieldForModel extends Command
         if (empty($table)) {
             $this->error('The name of the table is required!');
 
-            return false;
+            return 1;
         }
         if (!Schema::hasTable($table)) {
             $this->error('Unable to find table "' . $table . '" on the current DB!');
 
-            return false;
+            return 2;
         }
 
         $defaultFieldName = config('model_settings.settings_field_name');
@@ -45,7 +45,7 @@ class CreateSettingsFieldForModel extends Command
         if (Schema::hasColumn($table, $fieldName)) {
             $this->error('Field "' . $fieldName . '" already exists on table "' . $table . '"');
 
-            return false;
+            return 3;
         }
 
         $fileName = date('Y_m_d_His') . '_update_' . $table . '_table_add_' . $fieldName . '.php';
@@ -58,10 +58,10 @@ class CreateSettingsFieldForModel extends Command
         $stub = str_replace('DummyTable', $table, $stub);
         $stub = str_replace('settingsFieldName', $fieldName, $stub);
 
-        $file->put($path, $stub);
+        $file->replace($path, $stub);
 
         $this->line("<info>Created Migration:</info> {$fileName}");
 
-        return true;
+        return 0;
     }
 }

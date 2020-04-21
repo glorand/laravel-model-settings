@@ -35,6 +35,16 @@ class FieldSettingsManagerTest extends TestCase
         $this->assertArrayHasKey(HasSettingsField::class, $traits);
     }
 
+    /**
+     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     */
+    public function testEmpty()
+    {
+        $this->model->settings()->clear();
+        $this->assertTrue($this->model->settings()->empty());
+        $this->model->settings()->apply($this->testArray);
+        $this->assertFalse($this->model->settings()->empty());
+    }
 
     /**
      * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
