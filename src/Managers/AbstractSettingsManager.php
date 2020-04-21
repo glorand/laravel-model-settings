@@ -46,11 +46,20 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
         return $array;
     }
 
+    /**
+     * @return bool
+     */
     public function exist(): bool
     {
-        $all = $this->all();
+        return count($this->all()) > 0;
+    }
 
-        return count($all) > 0;
+    /**
+     * @return bool
+     */
+    public function empty(): bool
+    {
+        return count($this->all()) <= 0;
     }
 
     /**
