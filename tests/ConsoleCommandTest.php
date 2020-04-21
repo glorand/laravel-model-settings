@@ -13,6 +13,12 @@ class ConsoleCommandTest extends TestCase
             ->assertExitCode(0);
     }
 
+    public function testAlreadyExistsTable()
+    {
+        $this->artisan('model-settings:model-settings-table')
+            ->assertExitCode(2);
+    }
+
     public function testTableCommandWithNullTableNameConfig()
     {
         config(['model_settings.settings_table_name' => null]);
@@ -34,24 +40,26 @@ class ConsoleCommandTest extends TestCase
 
     public function testModelSettingsFieldCommand()
     {
+        $table = 'users_with_table';
+        $fieldName = 'custom_settings_field';
+
         $this->artisan('model-settings:model-settings-field')
             ->expectsQuestion('What is the name of the table?', '')
-            ->assertExitCode(0);
+            ->assertExitCode(1);
+
+        $this->artisan('model-settings:model-settings-field')
+            ->expectsQuestion('What is the name of the table?', $table . '_wrong')
+            ->assertExitCode(2);
 
         $this->artisan('model-settings:model-settings-field')
             ->expectsQuestion('What is the name of the table?', 'users_with_field')
             ->expectsQuestion('What is the name of the settings field name?', 'settings')
-            ->assertExitCode(0);
+            ->assertExitCode(3);
 
-        $table = 'users_with_table';
-        $fieldName = 'custom_settings_field';
-        /*$this->artisan('model-settings:model-settings-field')
-            ->expectsQuestion('What is the name of the table?', $table)
-            ->expectsQuestion('What is the name of the settings field name?', $fieldName)
-            ->assertExitCode(0);*/
 
         $this->artisan('model-settings:model-settings-field')
-            ->expectsQuestion('What is the name of the table?', $table . '_wrong')
+            ->expectsQuestion('What is the name of the table?', $table)
+            ->expectsQuestion('What is the name of the settings field name?', $fieldName)
             ->assertExitCode(0);
     }
 }
