@@ -2,20 +2,23 @@
 
 namespace Glorand\Model\Settings\Tests;
 
+use Illuminate\Support\Facades\Schema;
+
 class ConsoleCommandTest extends TestCase
 {
     public function testModelSettingsTableCommand()
     {
+        Schema::dropIfExists(config('model_settings.settings_table_name'));
         $this->artisan('model-settings:model-settings-table')
             ->assertExitCode(0);
     }
 
     public function testTableCommandWithNullTableNameConfig()
     {
-        //config(['model_settings.settings_table_name' => null]);
-        //$this->assertEquals(null, config('model_settings.settings_table_name'));
+        config(['model_settings.settings_table_name' => null]);
+        $this->assertEquals(null, config('model_settings.settings_table_name'));
         $this->artisan('model-settings:model-settings-table')
-            ->assertExitCode(0);
+            ->assertExitCode(1);
     }
 
     public function testTableCommandUpdateConfig()
@@ -24,7 +27,7 @@ class ConsoleCommandTest extends TestCase
         $newTableName = 'custom_table_settings';
         config()->set('model_settings.settings_table_name', $newTableName);
         $this->assertEquals($newTableName, config('model_settings.settings_table_name'));
-
+        Schema::dropIfExists($newTableName);
         $this->artisan('model-settings:model-settings-table')
             ->assertExitCode(0);
     }

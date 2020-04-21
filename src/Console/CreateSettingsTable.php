@@ -27,13 +27,13 @@ class CreateSettingsTable extends Command
         if (empty($table)) {
             $this->error('The name of the table is required!');
 
-            return false;
+            return 1;
         }
 
         if (Schema::hasTable($table)) {
             $this->error('Table "' . $table . '" already exists!');
 
-            return false;
+            return 2;
         }
 
         $fileName = date('Y_m_d_His') . '_create_' . $table . '_table.php';
@@ -48,6 +48,6 @@ class CreateSettingsTable extends Command
         $file->replace($path, $stub);
         $this->line("<info>Created Migration:</info> {$fileName}");
 
-        return true;
+        return 0;
     }
 }
