@@ -22,7 +22,7 @@ class ConsoleCommandTest extends TestCase
     {
         $this->assertEquals('model_settings', config('model_settings.settings_table_name'));
         $newTableName = 'custom_table_settings';
-        config(['model_settings.settings_table_name' => $newTableName]);
+        config()->set('model_settings.settings_table_name', $newTableName);
         $this->assertEquals($newTableName, config('model_settings.settings_table_name'));
 
         $this->artisan('model-settings:model-settings-table')
