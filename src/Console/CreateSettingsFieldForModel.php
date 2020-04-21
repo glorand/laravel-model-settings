@@ -58,7 +58,7 @@ class CreateSettingsFieldForModel extends Command
         $stub = str_replace('DummyTable', $table, $stub);
         $stub = str_replace('settingsFieldName', $fieldName, $stub);
 
-        $file->put($path, $stub);
+        $file->replace($path, $stub);
 
         $this->line("<info>Created Migration:</info> {$fileName}");
 
