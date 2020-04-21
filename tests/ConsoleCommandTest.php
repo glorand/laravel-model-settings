@@ -10,11 +10,12 @@ class ConsoleCommandTest extends TestCase
             ->assertExitCode(0);
 
         $this->assertEquals('model_settings', config('model_settings.settings_table_name'));
-        config(['model_settings.settings_table_name' => 'custom_settings_table']);
-        $this->assertEquals('custom_settings_table', config('model_settings.settings_table_name'));
+        $newTableName = uniqid();
+        config(['model_settings.settings_table_name' => $newTableName]);
+        $this->assertEquals($newTableName, config('model_settings.settings_table_name'));
 
-        /*$this->artisan('model-settings:model-settings-table')
-            ->assertExitCode(0);*/
+        $this->artisan('model-settings:model-settings-table')
+            ->assertExitCode(0);
 
         config(['model_settings.settings_table_name' => null]);
         $this->artisan('model-settings:model-settings-table')
