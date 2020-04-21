@@ -20,10 +20,10 @@ class ConsoleCommandTest extends TestCase
 
     public function testTableCommandUpdateConfig()
     {
-        //$this->assertEquals('model_settings', config('model_settings.settings_table_name'));
-        //$newTableName = uniqid();
-        //config(['model_settings.settings_table_name' => $newTableName]);
-        //$this->assertEquals($newTableName, config('model_settings.settings_table_name'));
+        $this->assertEquals('model_settings', config('model_settings.settings_table_name'));
+        $newTableName = uniqid();
+        config(['model_settings.settings_table_name' => $newTableName]);
+        $this->assertEquals($newTableName, config('model_settings.settings_table_name'));
 
         $this->artisan('model-settings:model-settings-table')
             ->assertExitCode(0);
