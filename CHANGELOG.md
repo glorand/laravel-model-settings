@@ -2,6 +2,10 @@
 
 All notable changes to `glorand/laravel-model-settings` will be documented in this file
 
+## 3.6.4 - 2020-04-24
+### Fix
+- github actions
+
 ## 3.6.3 - 2020-04-21
 ### Fix
 - "empty()" - to check if the model has empty setting
