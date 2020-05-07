@@ -5,6 +5,11 @@ namespace Glorand\Model\Settings\Tests\Models;
 use Glorand\Model\Settings\Traits\HasSettingsField;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class UserWithField
+ * @package Glorand\Model\Settings\Tests\Models
+ * @method static first()
+ */
 class UserWithField extends Model
 {
     use HasSettingsField;

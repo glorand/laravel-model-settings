@@ -2,6 +2,11 @@
 
 All notable changes to `glorand/laravel-model-settings` will be documented in this file
 
+## 3.6.5 - 2020-05-07
+### Fix
+- code refactor
+- use Cache facade instead of cache() helper function
+
 ## 3.6.4 - 2020-04-24
 ### Fix
 - github actions

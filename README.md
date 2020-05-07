@@ -13,6 +13,9 @@
 <a href="https://packagist.org/packages/glorand/laravel-model-settings">
   <img src="https://poser.pugx.org/glorand/laravel-model-settings/downloads" alt="Total Downloads">
 </a>
+<a href="https://github.com/glorand/laravel-model-settings">
+    <img src="https://github.com/glorand/laravel-model-settings/workflows/Test/badge.svg?branch=master">
+</a>
  <a href="https://travis-ci.com/glorand/laravel-model-settings">
  <img src="https://travis-ci.com/glorand/laravel-model-settings.svg?branch=master" alt="Build Status">
  </a>

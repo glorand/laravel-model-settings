@@ -6,6 +6,7 @@ use Glorand\Model\Settings\Contracts\SettingsManagerContract;
 use Glorand\Model\Settings\Managers\TableSettingsManager;
 use Glorand\Model\Settings\Models\ModelSettings;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * Trait HasSettingsTable
@@ -29,12 +30,11 @@ trait HasSettingsTable
 
     /**
      * @return array
-     * @throws \Exception
      */
     public function getSettingsValue(): array
     {
         if (config('model_settings.settings_table_use_cache')) {
-            return cache()->rememberForever($this->getSettingsCacheKey(), function () {
+            return Cache::rememberForever($this->getSettingsCacheKey(), function () {
                 return $this->__getSettingsValue();
             });
         }

@@ -34,6 +34,7 @@ class TextFieldSettingsManagerTest extends TestCase
         $traits = class_uses($this->model);
         $this->assertArrayHasKey(HasSettingsField::class, $traits);
     }
+
     /**
      * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
      */
