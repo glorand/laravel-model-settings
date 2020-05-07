@@ -2,12 +2,13 @@
 
 namespace Glorand\Model\Settings\Tests\Models;
 
-use Closure;
 use Glorand\Model\Settings\Traits\HasSettingsTable;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @method static whereHas(string $string, Closure $param)
+ * Class UsersWithTable
+ * @package Glorand\Model\Settings\Tests\Models
+ * @method static first()
  */
 class UsersWithTable extends Model
 {
