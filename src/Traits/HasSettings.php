@@ -9,12 +9,13 @@ trait HasSettings
 {
     public function getDefaultSettings(): array
     {
-        if (property_exists($this, 'defaultSettings') && is_array($this->defaultSettings)) {
+        if (property_exists($this, 'defaultSettings')
+            && is_array($this->defaultSettings)) {
             return Arr::wrap($this->defaultSettings);
-        } elseif (config('model_settings.defaultSettings.' . $this->table) && is_array(config('model_settings.defaultSettings.' . $this->table))) {
+        } elseif (config('model_settings.defaultSettings.' . $this->table)
+            && is_array(config('model_settings.defaultSettings.' . $this->table))) {
             return Arr::wrap(config('model_settings.defaultSettings.' . $this->table));
         }
-
         return [];
     }
 
