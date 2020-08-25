@@ -87,6 +87,21 @@ class FieldSettingsManagerTest extends TestCase
         $this->assertEquals($this->model->settings()->all(), array_merge($this->defaultSettingsTestArray, $this->testArray));
     }
 
+    /**
+     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     */
+    public function testDefaultValueFromConfig()
+    {
+        $this->model->defaultSettings = false;
+        $this->assertEquals([], $this->model->settings()->all());
+
+        config()->set('model_settings.defaultSettings.' . $this->model->getTable(), $this->defaultSettingsTestArray);
+
+        $this->assertEquals($this->defaultSettingsTestArray, $this->model->settings()->all());
+        $this->model->settings()->apply($this->testArray);
+        $this->assertEquals($this->model->settings()->all(), array_merge($this->defaultSettingsTestArray, $this->testArray));
+    }
+
     public function testSettingsMissingSettingsField()
     {
         $this->expectException(ModelSettingsException::class);

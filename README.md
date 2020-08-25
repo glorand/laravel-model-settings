@@ -137,6 +137,25 @@ class User extends Model
 
 ## Default settings <a name="default_settings"></a>
 
+You can set default configs for a table in model_settings.php config file 
+
+```php
+return [
+    // start other config options
+    
+    // end other config options
+    
+    // defaultConfigs
+    'defaultSettings' => [
+        'users' => [
+            'key_1' => 'val_1',
+        ]
+    ]
+];
+```
+
+Or in your model itself:
+
 ```php
 use Glorand\Model\Settings\Traits\HasSettingsTable;
 
@@ -147,6 +166,9 @@ class User extends Model
     ];
 }
 ```
+
+> Please note that if you define settings in the model, the settings from configs will have no effect, they will just be ignored. 
+
 
 ## Usage <a name="usage"></a>
 
