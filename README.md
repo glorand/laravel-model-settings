@@ -39,7 +39,7 @@
  <a title="MadeWithLaravel.com Shield" href="https://madewithlaravel.com/p/laravel-model-settings/shield-link"> <img src="https://madewithlaravel.com/storage/repo-shields/1716-shield.svg"/></a>
 </p>
 
-The package requires PHP 7.1.3+ and follows the FIG standards PSR-1, PSR-2 and PSR-4 
+The package requires PHP 7.1.3+ and follows the FIG standards PSR-1, PSR-2 and PSR-4
 to ensure a high level of interoperability between shared PHP.
 
 Bug reports, feature requests, and pull requests can be submitted by following our [Contribution Guide](CONTRIBUTING.md).
@@ -106,9 +106,12 @@ use Glorand\Model\Settings\Traits\HasSettingsField;
 class User extends Model
 {
     use HasSettingsField;
-    
+
     //define only if you select a different name from the default
-    public $settingsFieldName = 'user_settings';  
+    public $settingsFieldName = 'user_settings';
+
+    //define only if the model overrides the default connection
+    protected $connection = 'mysql';
 
 }
 ```
@@ -137,14 +140,14 @@ class User extends Model
 
 ## Default settings <a name="default_settings"></a>
 
-You can set default configs for a table in model_settings.php config file 
+You can set default configs for a table in model_settings.php config file
 
 ```php
 return [
     // start other config options
-    
+
     // end other config options
-    
+
     // defaultConfigs
     'defaultSettings' => [
         'users' => [
@@ -167,7 +170,7 @@ class User extends Model
 }
 ```
 
-> Please note that if you define settings in the model, the settings from configs will have no effect, they will just be ignored. 
+> Please note that if you define settings in the model, the settings from configs will have no effect, they will just be ignored.
 
 
 ## Usage <a name="usage"></a>
