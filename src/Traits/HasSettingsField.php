@@ -108,7 +108,11 @@ trait HasSettingsField
             config('model_settings.settings_table_cache_prefix') . '::has_field',
             now()->addDays(1),
             function () {
-                return Schema::connection($this->getConnectionName())->hasColumn($this->getTable(), $this->getSettingsFieldName());
+                return Schema::connection($this->getConnectionName())
+                    ->hasColumn(
+                        $this->getTable(),
+                        $this->getSettingsFieldName()
+                    );
             }
         );
     }
