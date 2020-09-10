@@ -2,6 +2,12 @@
 
 All notable changes to `glorand/laravel-model-settings` will be documented in this file
 
+## 4.0.0 - 2020-09-11
+### Added
+- Add support for Laravel 8
+- Drop support for Laravel 5.8 and lower
+- Drop support for PHP 7.1 and lower
+
 ## 3.7.0 - 2020-09-10
 ### Added
 - HasSettingsField now adheres to $connection override on model [Ref. task](https://github.com/glorand/laravel-model-settings/issues/62)
