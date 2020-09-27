@@ -34,16 +34,54 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
     }
 
     /**
+     * Check if array is associative and not sequential
+     * @param array $arr
+     * @return bool
+     */
+    public static function isAssoc(array $arr)
+    {
+        if (array() === $arr) return false;
+        return array_keys($arr) !== range(0, count($arr) - 1);
+    }
+
+    /**
+     * Flatten array with dots for settings package
+     * @param $array
+     * @param string $prepend
+     * @return array
+     */
+    public static function dotFlatten($array, $prepend = '') {
+        $results = [];
+        foreach ($array as $key => $value) {
+            // only re-run if nested array is associative (key-based)
+            // cannot use pre-shipped Arr:dot method
+            if (is_array($value) && static::isAssoc($value) && !empty($value)) {
+                $results = array_merge($results, static::dotFlatten($value, $prepend.$key.'.'));
+            } else {
+                $results[$prepend.$key] = $value;
+            }
+        }
+        return $results;
+    }
+
+    /**
+     * Get nested merged array with all available keys
      * @return array
      */
     public function all(): array
     {
-        $array = [];
-        foreach (array_merge($this->model->getDefaultSettings(), $this->model->getSettingsValue()) as $key => $value) {
-            Arr::set($array, $key, $value);
-        }
+        return $this->getMultiple(null);
+    }
 
-        return $array;
+    /**
+     * Get flat merged array with dot-notation keys
+     * @return array
+     */
+    public function allFlattened()
+    {
+        $flattenedDefaultSettings = static::dotFlatten($this->model->getDefaultSettings());
+        $flattenedSettingsValue = static::dotFlatten($this->model->getSettingsValue());
+        return array_merge($flattenedDefaultSettings, $flattenedSettingsValue);
     }
 
     /**
@@ -84,16 +122,21 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
     /**
      * @param iterable|null $paths
      * @param null $default
-     * @return iterable
+     * @return array
      */
-    public function getMultiple(iterable $paths = null, $default = null): iterable
+    public function getMultiple(iterable $paths = null, $default = null): array
     {
-        $values = [];
-        foreach ($paths as $path) {
-            $values[$path] = $this->get($path, $default);
+        $array = [];
+        $allFlattened = $this->allFlattened();
+        if (is_null($paths)) {
+            $paths = array_keys($allFlattened);
         }
 
-        return $values;
+        foreach ($paths as $path) {
+            Arr::set($array, $path, Arr::get($allFlattened, $path, Arr::get($default, $path)));
+        }
+
+        return $array;
     }
 
     /**
