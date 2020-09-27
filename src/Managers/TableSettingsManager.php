@@ -34,7 +34,7 @@ class TableSettingsManager extends AbstractSettingsManager
         }
 
         cache()->forget($this->model->getSettingsCacheKey());
-        cache()->forget($this->getAllSettingsCacheKey());
+        $this->forgetAllSettings();
 
         return $this;
     }

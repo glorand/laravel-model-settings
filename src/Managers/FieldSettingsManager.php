@@ -22,7 +22,7 @@ class FieldSettingsManager extends AbstractSettingsManager
             $this->model->save();
         }
 
-        cache()->forget($this->getAllSettingsCacheKey());
+        $this->forgetAllSettings();
 
         return $this;
     }

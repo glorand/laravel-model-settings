@@ -2,6 +2,7 @@
 
 namespace Glorand\Model\Settings\Managers;
 
+use Exception;
 use Glorand\Model\Settings\Contracts\SettingsManagerContract;
 use Glorand\Model\Settings\Exceptions\ModelSettingsException;
 use Glorand\Model\Settings\Traits\HasSettings;
@@ -233,6 +234,14 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
         $this->apply($settings);
 
         return $this;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function forgetAllSettings()
+    {
+        cache()->forget($this->getAllSettingsCacheKey());
     }
 
     /**
