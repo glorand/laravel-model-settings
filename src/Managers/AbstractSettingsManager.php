@@ -207,7 +207,8 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
     {
         $settings = $this->model->getSettingsValue();
         $default = $this->model->getDefaultSettings();
-        foreach ($values as $path => $value) {
+        $flattenedValues = static::dotFlatten($values);
+        foreach ($flattenedValues as $path => $value) {
             if ($value === Arr::get($default, $path)) {
                 Arr::forget($settings, $path);
             } else {
