@@ -42,8 +42,7 @@ trait HasSettingsField
     public function fixSettingsValue()
     {
         $settingsFieldName = $this->getSettingsFieldName();
-        $attributes = $this->getChanges();
-        if (Arr::has($attributes, $settingsFieldName)) {
+        if ($this->isDirty($settingsFieldName)) {
             $this->settings()->forgetAllSettings();
             if (is_array($this->$settingsFieldName)) {
                 $this->$settingsFieldName = json_encode($this->$settingsFieldName);
