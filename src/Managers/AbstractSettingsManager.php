@@ -146,8 +146,13 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
      */
     public function set(string $path, $value): SettingsManagerContract
     {
-        $settings = $this->all();
-        Arr::set($settings, $path, $value);
+        $settings = $this->model->getSettingsValue();
+        $default = $this->model->getDefaultSettings();
+        if ($value === Arr::get($default, $path)) {
+            Arr::forget($settings, $path);
+        } else {
+            Arr::set($settings, $path, $value);
+        }
 
         return $this->apply($settings);
     }
@@ -171,7 +176,7 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
         if (!$path) {
             $settings = [];
         } else {
-            $settings = $this->all();
+            $settings = $this->model->getSettingsValue();
             Arr::forget($settings, $path);
         }
 
@@ -194,9 +199,14 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
      */
     public function setMultiple(iterable $values): SettingsManagerContract
     {
-        $settings = $this->all();
+        $settings = $this->model->getSettingsValue();
+        $default = $this->model->getDefaultSettings();
         foreach ($values as $path => $value) {
-            Arr::set($settings, $path, $value);
+            if ($value === Arr::get($default, $path)) {
+                Arr::forget($settings, $path);
+            } else {
+                Arr::set($settings, $path, $value);
+            }
         }
 
         return $this->apply($settings);
@@ -208,7 +218,7 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
      */
     public function deleteMultiple(iterable $paths): SettingsManagerContract
     {
-        $settings = $this->all();
+        $settings = $this->model->getSettingsValue();
         foreach ($paths as $path) {
             Arr::forget($settings, $path);
         }
