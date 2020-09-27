@@ -249,6 +249,6 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
      */
     public function getAllSettingsCacheKey(): string
     {
-        return config('model_settings.settings_table_cache_prefix') . $this->model->getTable() . '::' . $this->model->getKey() . '::all';
+        return config('model_settings.settings_table_cache_prefix') . $this->model->getTable() . ':' . $this->model->getKey() . '::all';
     }
 }
