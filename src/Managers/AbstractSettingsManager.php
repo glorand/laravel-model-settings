@@ -7,6 +7,7 @@ use Glorand\Model\Settings\Exceptions\ModelSettingsException;
 use Glorand\Model\Settings\Traits\HasSettings;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * Class AbstractSettingsManager
@@ -70,6 +71,11 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
      */
     public function all(): array
     {
+        if (config('model_settings.settings_cache_all') && !($this instanceof RedisSettingsManager)) {
+            return Cache::remember($this->getAllSettingsCacheKey(), now()->addDay(), function () {
+                return $this->getMultiple(null);
+            });
+        }
         return $this->getMultiple(null);
     }
 
@@ -226,5 +232,13 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
         $this->apply($settings);
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAllSettingsCacheKey(): string
+    {
+        return config('model_settings.settings_table_cache_prefix') . $this->model->getTable() . '::all';
     }
 }
