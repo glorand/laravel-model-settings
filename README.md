@@ -39,7 +39,7 @@
  <a title="MadeWithLaravel.com Shield" href="https://madewithlaravel.com/p/laravel-model-settings/shield-link"> <img src="https://madewithlaravel.com/storage/repo-shields/1716-shield.svg"/></a>
 </p>
 
-The package requires PHP 7.1.3+ and follows the FIG standards PSR-1, PSR-2 and PSR-4
+The package requires PHP 7.2+ and follows the FIG standards PSR-1, PSR-2 and PSR-4
 to ensure a high level of interoperability between shared PHP.
 
 Bug reports, feature requests, and pull requests can be submitted by following our [Contribution Guide](CONTRIBUTING.md).
@@ -68,6 +68,16 @@ Bug reports, feature requests, and pull requests can be submitted by following o
 ```shell
 $ composer require glorand/laravel-model-settings
 ```
+
+```
+{
+    "require": {
+        "glorand/laravel-model-settings": "^4.0"
+    }
+}
+```
+
+For Laravel 5.8 and lower use V3.*
 
 ```
 {
