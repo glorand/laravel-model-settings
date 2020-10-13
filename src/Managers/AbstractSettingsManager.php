@@ -157,11 +157,37 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
         $default = $this->model->getDefaultSettings();
         if ($value === Arr::get($default, $path)) {
             Arr::forget($settings, $path);
+            $this->forgetEmpty($settings, $path);
         } else {
             Arr::set($settings, $path, $value);
         }
 
         return $this->apply($settings);
+    }
+
+	/**
+	 *
+	 */
+    protected function forgetEmpty(&$settings, $path) {
+    	// Forget path if it is empty
+	    if(!Arr::get($settings, $path)){
+		    Arr::forget($settings, $path);
+	    }else{
+	    	return;
+	    }
+
+    	// Get path as array
+    	$paths = explode('.', $path);
+
+    	// remove last path
+	    array_pop($paths);
+
+	    // Return if it was the last
+	    if(count($paths) === 0){
+	    	return;
+	    }
+
+	    $this->forgetEmpty($settings, implode('.', $paths));
     }
 
     /**
