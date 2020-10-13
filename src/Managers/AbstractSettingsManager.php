@@ -140,7 +140,14 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
         }
 
         foreach ($paths as $path) {
-            Arr::set($array, $path, Arr::get($allFlattened, $path, Arr::get($default, $path)));
+        	// Get default value
+	        $defaultValue = null;
+	        if(is_array($default)){
+		        $defaultValue = Arr::get($default, $path);
+	        }else{
+	        	$defaultValue = $default;
+	        }
+            Arr::set($array, $path, Arr::get($allFlattened, $path, $defaultValue));
         }
 
         return $array;

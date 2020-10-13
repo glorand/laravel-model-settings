@@ -158,11 +158,13 @@ class TableSettingsManagerTest extends TestCase
         $this->assertEquals($this->model->settings()->all(), []);
         $values = $this->model->settings()->getMultiple(['user.first_name', 'user.last_name'], 'def_val');
         $this->assertEquals(
-            $values,
-            [
-                'user.first_name' => 'def_val',
-                'user.last_name'  => 'def_val',
-            ]
+	        [
+		        'user' => [
+			        'first_name' => 'def_val',
+			        'last_name' => 'def_val'
+		        ]
+	        ],
+            $values
         );
 
         $this->model->settings()->apply($this->testArray);
@@ -171,12 +173,14 @@ class TableSettingsManagerTest extends TestCase
             'def_val'
         );
         $this->assertEquals(
-            $values,
-            [
-                'user.first_name'  => 'John',
-                'user.last_name'   => 'Doe',
-                'user.middle_name' => 'def_val',
-            ]
+	        [
+		        'user' => [
+			        'first_name'  => 'John',
+			        'last_name'   => 'Doe',
+			        'middle_name' => 'def_val',
+		        ]
+	        ],
+            $values
         );
     }
 

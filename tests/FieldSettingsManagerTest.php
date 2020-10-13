@@ -143,8 +143,10 @@ class FieldSettingsManagerTest extends TestCase
 		$this->assertEquals(
 			$values,
 			[
-				'user.first_name' => 'def_val',
-				'user.last_name'  => 'def_val',
+				'user' => [
+					'first_name' => 'def_val',
+					'last_name'  => 'def_val'
+				]
 			]
 		);
 
@@ -153,13 +155,14 @@ class FieldSettingsManagerTest extends TestCase
 			['user.first_name', 'user.last_name', 'user.middle_name'],
 			'def_val'
 		);
-		$this->assertEquals(
-			$values,
-			[
-				'user.first_name'  => 'John',
-				'user.last_name'   => 'Doe',
-				'user.middle_name' => 'def_val',
-			]
+		$this->assertEquals([
+				'user' => [
+					'first_name' => "John",
+					'last_name'  => "Doe",
+					'middle_name'      => "def_val",
+				]
+			],
+			$values
 		);
 	}
 
@@ -342,7 +345,7 @@ class FieldSettingsManagerTest extends TestCase
 		// Now we are going crazy
 		$this->model->settings()->set('test2.test2.test2', 1);
 		$this->assertEquals([
-			'test' => [
+			'test'  => [
 				'test' => [
 					'a' => 666,
 				],
@@ -366,5 +369,5 @@ class FieldSettingsManagerTest extends TestCase
 
 		$this->model->settings()->set('test2.test2.test2', 123);
 		$this->assertEquals([], $this->model->getSettingsValue());
-    }
+	}
 }
