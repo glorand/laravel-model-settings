@@ -87,14 +87,11 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
     public function allFlattened()
     {
         $flattenedDefaultSettings = static::dotFlatten($this->model->getDefaultSettings());
+        $validKeys = array_keys($flattenedDefaultSettings);
         $flattenedSettingsValue = static::dotFlatten($this->model->getSettingsValue());
-        $merged = array_merge($flattenedDefaultSettings, $flattenedSettingsValue);
         // ensure only valid keys are merged (prevent parent key with empty value overriding nested key with value)
-        if (is_array($this->model->defaultSettings)) {
-            $validKeys = array_keys($this->model->defaultSettings);
-            $merged = Arr::only($merged, $validKeys);
-        }
-        return $merged;
+        $flattenedSettingsValue = Arr::only($flattenedSettingsValue, $validKeys);
+        return array_merge($flattenedDefaultSettings, $flattenedSettingsValue);
     }
 
     /**
