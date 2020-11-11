@@ -77,16 +77,6 @@ $ composer require glorand/laravel-model-settings
 }
 ```
 
-For Laravel 5.8 and lower use V3.*
-
-```
-{
-    "require": {
-        "glorand/laravel-model-settings": "^3.0"
-    }
-}
-```
-
 ## Env (config) variables **(.env file)**
 
 Default name for the settings field - when you use the `HasSettingsField`
