@@ -11,6 +11,7 @@ use Glorand\Model\Settings\Tests\Models\UserWithField;
 use Glorand\Model\Settings\Tests\Models\UserWithRedis;
 use Glorand\Model\Settings\Tests\Models\UserWithTextField;
 use Glorand\Model\Settings\Tests\Models\WrongUser;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Schema;
@@ -97,5 +98,29 @@ abstract class TestCase extends OrchestraTestCase
     public function markTestAsPassed()
     {
         $this->assertTrue(true);
+    }
+
+    /**
+     * @param string $type
+     * @return \Illuminate\Database\Eloquent\Model|\Glorand\Model\Settings\Traits\HasSettings
+     */
+    protected function getModelByType(string $type): Model
+    {
+        switch ($type) {
+            case 'table':
+                $model = UsersWithTable::first();
+                break;
+            case 'text_field':
+                $model = UserWithTextField::first();
+                break;
+            case 'redis':
+                $model = UserWithRedis::first();
+                break;
+            default:
+                $model = UserWithField::first();
+                break;
+        }
+
+        return $model;
     }
 }
