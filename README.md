@@ -8,7 +8,7 @@
 
 <p align="center">
 <a href="https://packagist.org/packages/glorand/laravel-model-settings">
- <img src="https://poser.pugx.org/glorand/laravel-model-settings/v/stable" alt="Latest Stable Version">
+ <img src="https://poser.pugx.org/glorand/laravel-model-settings/v" alt="Latest Stable Version">
 </a>
 <a href="https://packagist.org/packages/glorand/laravel-model-settings">
   <img src="https://poser.pugx.org/glorand/laravel-model-settings/downloads" alt="Total Downloads">
