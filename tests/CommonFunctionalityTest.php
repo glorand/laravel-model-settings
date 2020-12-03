@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Glorand\Model\Settings\Tests;
-
 
 use Glorand\Model\Settings\Traits\HasSettingsField;
 use Glorand\Model\Settings\Traits\HasSettingsRedis;
