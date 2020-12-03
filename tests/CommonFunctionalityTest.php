@@ -153,10 +153,8 @@ class CommonFunctionalityTest extends TestCase
         $values = $model->settings()->getMultiple(['user.first_name', 'user.last_name'], 'def_val');
         $this->assertEquals(
             [
-                'user' => [
-                    'first_name' => 'def_val',
-                    'last_name'  => 'def_val',
-                ],
+                'user.first_name' => 'def_val',
+                'user.last_name'  => 'def_val',
             ],
             $values
         );
@@ -173,9 +171,7 @@ class CommonFunctionalityTest extends TestCase
                     'last_name'  => 'Doe',
                     'email'      => 'john@doe.com',
                 ],
-                'project' => [
-                    'name' => 'Project One',
-                ],
+                'project.name' => 'Project One',
                 'date'    => 'def_val',
             ],
             $values
