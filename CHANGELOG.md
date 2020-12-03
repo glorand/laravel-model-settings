@@ -2,6 +2,18 @@
 
 All notable changes to `glorand/laravel-model-settings` will be documented in this file
 
+## 4.1.0 - 2020-12-03
+### Added
+- Refactor unit tests
+
+## 4.0.2 - 2020-12-01
+### Added
+- Setup connection of the model in HasSettingsTableTrait
+
+## 4.0.1 - 2020-11-19
+### Added
+- Update README
+
 ## 4.0.0 - 2020-09-11
 ### Added
 - Add support for Laravel 8
