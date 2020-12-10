@@ -2,6 +2,10 @@
 
 All notable changes to `glorand/laravel-model-settings` will be documented in this file
 
+## 4.2.0 - 2020-12-14
+### Added
+- Refactor the work with default settings (flatten arrays)
+
 ## 4.1.0 - 2020-12-03
 ### Added
 - Refactor unit tests
