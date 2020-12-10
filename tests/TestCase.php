@@ -30,7 +30,7 @@ abstract class TestCase extends OrchestraTestCase
 
     protected function checkRequirements()
     {
-        
+        //
     }
 
     protected function getPackageProviders($app)
