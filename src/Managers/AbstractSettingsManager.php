@@ -34,16 +34,59 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
     }
 
     /**
+     * Check if array is associative and not sequential
+     * @param array $arr
+     * @return bool
+     */
+    private static function isAssoc(array $arr): bool
+    {
+        if ([] === $arr) {
+            return false;
+        }
+
+        return array_keys($arr) !== range(0, count($arr) - 1);
+    }
+
+    /**
+     * Flatten array with dots for settings package
+     * @param $array
+     * @param string $prepend
+     * @return array
+     */
+    public static function dotFlatten($array, $prepend = ''): array
+    {
+        $results = [];
+        foreach ($array as $key => $value) {
+            // only re-run if nested array is associative (key-based)
+            if (is_array($value) && static::isAssoc($value) && !empty($value)) {
+                $results = array_merge($results, static::dotFlatten($value, $prepend . $key . '.'));
+            } else {
+                $results[$prepend . $key] = $value;
+            }
+        }
+
+        return $results;
+    }
+
+    /**
+     * Get nested merged array with all available keys
      * @return array
      */
     public function all(): array
     {
-        $array = [];
-        foreach (array_merge($this->model->getDefaultSettings(), $this->model->getSettingsValue()) as $key => $value) {
-            Arr::set($array, $key, $value);
-        }
+        return $this->getMultiple();
+    }
 
-        return $array;
+    /**
+     * Get flat merged array with dot-notation keys
+     * @return array
+     */
+    public function allFlattened(): array
+    {
+        $flattenedDefaultSettings = static::dotFlatten($this->model->getDefaultSettings());
+        $flattenedSettingsValue = static::dotFlatten($this->model->getSettingsValue());
+
+        return array_merge($flattenedDefaultSettings, $flattenedSettingsValue);
     }
 
     /**
@@ -74,7 +117,7 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
     /**
      * @param string|null $path
      * @param null $default
-     * @return array|mixed
+     * @return array|\ArrayAccess|mixed
      */
     public function get(string $path = null, $default = null)
     {
@@ -84,16 +127,25 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
     /**
      * @param iterable|null $paths
      * @param null $default
-     * @return iterable
+     * @return array
      */
-    public function getMultiple(iterable $paths = null, $default = null): iterable
+    public function getMultiple(iterable $paths = null, $default = null): array
     {
-        $values = [];
-        foreach ($paths as $path) {
-            $values[$path] = $this->get($path, $default);
+        $array = [];
+        $allFlattened = $this->allFlattened();
+        $settingsArray = [];
+        foreach ($allFlattened as $key => $value) {
+            Arr::set($settingsArray, $key, $value);
+        }
+        if (is_null($paths)) {
+            return $settingsArray;
         }
 
-        return $values;
+        foreach ($paths as $path) {
+            Arr::set($array, $path, Arr::get($settingsArray, $path, $default));
+        }
+
+        return $array;
     }
 
     /**
