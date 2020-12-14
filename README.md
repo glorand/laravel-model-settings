@@ -14,8 +14,8 @@
 <a href="https://packagist.org/packages/glorand/laravel-model-settings">
  <img src="https://img.shields.io/packagist/v/glorand/laravel-model-settings" alt="Latest Stable Version">
 </a>
-<a href="https://packagist.org/packages/glorand/laravel-model-settings">
-  <img src="https://img.shields.io/packagist/dt/glorand/laravel-model-settings?color=red" alt="Total Downloads">
+<a href="https://github.com/glorand/laravel-model-settings/actions">
+<img src="https://github.com/glorand/laravel-model-settings/workflows/Test/badge.svg" alt="'Github Actions" />
 </a>
  <a href="https://travis-ci.com/glorand/laravel-model-settings">
  <img src="https://travis-ci.com/glorand/laravel-model-settings.svg?branch=master" alt="Build Status">
@@ -27,9 +27,6 @@
 <img src="https://api.codeclimate.com/v1/badges/ea0941afe155dd14f5d8/maintainability" alt="maintainability" />
 </a>
 <br />
-<a href="https://github.com/glorand/laravel-model-settings/actions">
-<img src="https://github.com/glorand/laravel-model-settings/workflows/Test/badge.svg" alt="'Github Actions" />
-</a>
 <a href="https://github.styleci.io/repos/163381474">
  <img src="https://github.styleci.io/repos/163381474/shield?branch=master&style=flat" alt="StyleCI">
  </a>
