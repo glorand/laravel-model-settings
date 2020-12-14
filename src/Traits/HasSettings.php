@@ -12,7 +12,7 @@ trait HasSettings
         if (property_exists($this, 'defaultSettings')
             && is_array($this->defaultSettings)) {
             return Arr::wrap($this->defaultSettings);
-        } else if (($defaultSettings = config('model_settings.defaultSettings.' . $this->getTable()))
+        } elseif (($defaultSettings = config('model_settings.defaultSettings.' . $this->getTable()))
             && is_array($defaultSettings)) {
             return Arr::wrap($defaultSettings);
         }
