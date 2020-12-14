@@ -27,6 +27,9 @@
 <img src="https://api.codeclimate.com/v1/badges/ea0941afe155dd14f5d8/maintainability" alt="maintainability" />
 </a>
 <br />
+<a href="https://github.com/glorand/laravel-model-settings/actions">
+<img src="https://github.com/glorand/laravel-model-settings/workflows/Test/badge.svg" alt="'Github Actions" />
+</a>
 <a href="https://github.styleci.io/repos/163381474">
  <img src="https://github.styleci.io/repos/163381474/shield?branch=master&style=flat" alt="StyleCI">
  </a>
