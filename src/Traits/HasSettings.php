@@ -2,7 +2,7 @@
 
 namespace Glorand\Model\Settings\Traits;
 
-use Glorand\Model\Settings\Managers\AbstractSettingsManager;
+use Glorand\Model\Settings\Contracts\SettingsManagerContract;
 use Illuminate\Support\Arr;
 
 trait HasSettings
@@ -16,10 +16,11 @@ trait HasSettings
             && is_array($defaultSettings)) {
             return Arr::wrap($defaultSettings);
         }
+
         return [];
     }
 
     abstract public function getSettingsValue(): array;
 
-    abstract public function settings(): AbstractSettingsManager;
+    abstract public function settings(): SettingsManagerContract;
 }
