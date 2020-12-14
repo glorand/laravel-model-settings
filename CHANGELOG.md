@@ -2,6 +2,10 @@
 
 All notable changes to `glorand/laravel-model-settings` will be documented in this file
 
+## 4.2.1 - 2020-12-14
+### Added
+- PHP8 support
+
 ## 4.2.0 - 2020-12-14
 ### Added
 - Refactor the work with default settings (flatten arrays)
