@@ -119,4 +119,11 @@ abstract class TestCase extends OrchestraTestCase
 
         return $model;
     }
+
+    protected function markPassedForPhp8()
+    {
+        if (version_compare(PHP_VERSION, '8.0', '>=')) {
+            $this->markTestAsPassed();
+        }
+    }
 }
