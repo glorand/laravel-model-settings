@@ -7,14 +7,15 @@
 </h6>
 
 <p align="center">
+<a href="https://packagist.org/packages/glorand/laravel-model-settings/stats">
+<img src="https://img.shields.io/packagist/dt/glorand/laravel-model-settings?style=for-the-badge&color=red" alt="Total Downloads"/>
+</a>
+<br />
 <a href="https://packagist.org/packages/glorand/laravel-model-settings">
- <img src="https://poser.pugx.org/glorand/laravel-model-settings/v" alt="Latest Stable Version">
+ <img src="https://img.shields.io/packagist/v/glorand/laravel-model-settings" alt="Latest Stable Version">
 </a>
 <a href="https://packagist.org/packages/glorand/laravel-model-settings">
-  <img src="https://poser.pugx.org/glorand/laravel-model-settings/downloads" alt="Total Downloads">
-</a>
-<a href="https://github.com/glorand/laravel-model-settings/actions">
-    <img src="https://github.com/glorand/laravel-model-settings/workflows/Test/badge.svg?branch=master">
+  <img src="https://img.shields.io/packagist/dt/glorand/laravel-model-settings?color=red" alt="Total Downloads">
 </a>
  <a href="https://travis-ci.com/glorand/laravel-model-settings">
  <img src="https://travis-ci.com/glorand/laravel-model-settings.svg?branch=master" alt="Build Status">
@@ -22,13 +23,13 @@
  <a href="LICENSE.md">
  <img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat" alt="Software License">
  </a>
+<a href="https://codeclimate.com/github/glorand/laravel-model-settings/maintainability">
+<img src="https://api.codeclimate.com/v1/badges/ea0941afe155dd14f5d8/maintainability" alt="maintainability" />
+</a>
 <br />
 <a href="https://github.styleci.io/repos/163381474">
- <img src="https://github.styleci.io/repos/163381474/shield?branch=master" alt="StyleCI">
+ <img src="https://github.styleci.io/repos/163381474/shield?branch=master&style=flat" alt="StyleCI">
  </a>
-<a href="https://codeclimate.com/github/glorand/laravel-model-settings/maintainability">
-<img src="https://api.codeclimate.com/v1/badges/ea0941afe155dd14f5d8/maintainability" />
-</a>
 <a href="https://scrutinizer-ci.com/g/glorand/laravel-model-settings/">
  <img src="https://scrutinizer-ci.com/g/glorand/laravel-model-settings/badges/quality-score.png?b=master" alt="Scrutinizer Code Quality">
  </a>
@@ -37,6 +38,7 @@
  </a>
  <br />
  <a title="MadeWithLaravel.com Shield" href="https://madewithlaravel.com/p/laravel-model-settings/shield-link"> <img src="https://madewithlaravel.com/storage/repo-shields/1716-shield.svg"/></a>
+<a title="PHP Version" href="#"><img src="https://img.shields.io/packagist/php-v/glorand/laravel-model-settings" alt="PHP Version" /></a>
 </p>
 
 The package requires PHP 7.2+ and follows the FIG standards PSR-1, PSR-2 and PSR-4
