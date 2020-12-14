@@ -10,7 +10,10 @@ class CreateSettingsFieldForModelConsoleTest extends TestCase
 
     public function testEmptyTable()
     {
-       $this->markPassedForPhp8();
+        if (version_compare(PHP_VERSION, '8.0', '>=')) {
+            $this->markTestAsPassed();
+            return;
+        }
         $this->artisan('model-settings:model-settings-field')
             ->expectsQuestion('What is the name of the table?', '')
             ->assertExitCode(1);
