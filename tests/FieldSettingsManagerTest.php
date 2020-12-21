@@ -8,20 +8,20 @@ use Glorand\Model\Settings\Traits\HasSettingsField;
 
 class FieldSettingsManagerTest extends TestCase
 {
-	/** @var \Glorand\Model\Settings\Tests\Models\UserWithField */
-	protected $model;
-	/** @var array */
-	protected $testArray = [
-		'user' => [
-			'first_name' => "John",
-			'last_name'  => "Doe",
-			'email'      => "john@doe.com",
-		],
-	];
-	/** @var array */
-	protected $defaultSettingsTestArray = [
-		'project' => 'Main Project',
-	];
+    /** @var \Glorand\Model\Settings\Tests\Models\UserWithField */
+    protected $model;
+    /** @var array */
+    protected $testArray = [
+        'user'    => [
+            'first_name' => "John",
+            'last_name'  => "Doe",
+            'email'      => "john@doe.com",
+        ],
+        'project' => [
+            'name'        => 'Project One',
+            'description' => 'Test Description',
+        ],
+    ];
 
 	public function setUp(): void
 	{

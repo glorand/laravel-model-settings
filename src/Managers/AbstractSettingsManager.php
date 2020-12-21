@@ -40,9 +40,12 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
      * @param array $arr
      * @return bool
      */
-    public static function isAssoc(array $arr)
+    private static function isAssoc(array $arr): bool
     {
-        if (array() === $arr) return false;
+        if ([] === $arr) {
+            return false;
+        }
+
         return array_keys($arr) !== range(0, count($arr) - 1);
     }
 
@@ -52,17 +55,18 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
      * @param string $prepend
      * @return array
      */
-    public static function dotFlatten($array, $prepend = '') {
+    public static function dotFlatten($array, $prepend = ''): array
+    {
         $results = [];
         foreach ($array as $key => $value) {
             // only re-run if nested array is associative (key-based)
-            // cannot use pre-shipped Arr:dot method
             if (is_array($value) && static::isAssoc($value) && !empty($value)) {
-                $results = array_merge($results, static::dotFlatten($value, $prepend.$key.'.'));
+                $results = array_merge($results, static::dotFlatten($value, $prepend . $key . '.'));
             } else {
-                $results[$prepend.$key] = $value;
+                $results[$prepend . $key] = $value;
             }
         }
+
         return $results;
     }
 
@@ -122,7 +126,7 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
     /**
      * @param string|null $path
      * @param null $default
-     * @return array|mixed
+     * @return array|\ArrayAccess|mixed
      */
     public function get(string $path = null, $default = null)
     {

@@ -11,6 +11,7 @@ use Glorand\Model\Settings\Tests\Models\UserWithField;
 use Glorand\Model\Settings\Tests\Models\UserWithRedis;
 use Glorand\Model\Settings\Tests\Models\UserWithTextField;
 use Glorand\Model\Settings\Tests\Models\WrongUser;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Schema;
@@ -29,11 +30,7 @@ abstract class TestCase extends OrchestraTestCase
 
     protected function checkRequirements()
     {
-        collect($this->getAnnotations())->filter(function ($location) {
-            return in_array('!Travis', Arr::get($location, 'requires', []));
-        })->each(function ($location) {
-            $this->markTestSkipped('Travis will not run this test.');
-        });
+        //
     }
 
     protected function getPackageProviders($app)
@@ -97,5 +94,29 @@ abstract class TestCase extends OrchestraTestCase
     public function markTestAsPassed()
     {
         $this->assertTrue(true);
+    }
+
+    /**
+     * @param string $type
+     * @return \Illuminate\Database\Eloquent\Model|\Glorand\Model\Settings\Traits\HasSettings
+     */
+    protected function getModelByType(string $type): Model
+    {
+        switch ($type) {
+            case 'table':
+                $model = UsersWithTable::first();
+                break;
+            case 'text_field':
+                $model = UserWithTextField::first();
+                break;
+            case 'redis':
+                $model = UserWithRedis::first();
+                break;
+            default:
+                $model = UserWithField::first();
+                break;
+        }
+
+        return $model;
     }
 }
