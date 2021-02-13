@@ -20,7 +20,7 @@ interface SettingsManagerContract
      * Fetches a value from the settings.
      *
      * @param string|null $path if null returns all the settings array
-     * @param null $default default value to return if the path does not exist
+     * @param mixed $default default value to return if the path does not exist
      * @return mixed
      */
     public function get(string $path = null, $default = null);
@@ -29,7 +29,7 @@ interface SettingsManagerContract
      * Obtains multiple items by their paths.
      *
      * @param iterable $paths
-     * @param null $default
+     * @param mixed $default
      * @return iterable A list of key => value pairs.
      * Paths that do not exist will have $default as value.
      */
