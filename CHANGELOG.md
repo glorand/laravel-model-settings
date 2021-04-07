@@ -2,6 +2,9 @@
 
 All notable changes to `glorand/laravel-model-settings` will be documented in this file
 
+## 4.2.2 - 2021-04-07
+### Fix param type
+
 ## 4.2.1 - 2020-12-14
 ### Added
 - PHP8 support
