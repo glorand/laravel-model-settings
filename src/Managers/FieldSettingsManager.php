@@ -22,6 +22,8 @@ class FieldSettingsManager extends AbstractSettingsManager
             $this->model->save();
         }
 
+        $this->forgetAllSettings();
+
         return $this;
     }
 }

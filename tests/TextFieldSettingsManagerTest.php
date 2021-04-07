@@ -7,26 +7,26 @@ use Glorand\Model\Settings\Tests\Models\UserWithTextField as User;
 
 class TextFieldSettingsManagerTest extends TestCase
 {
-    /** @var \Glorand\Model\Settings\Tests\Models\UserWithTextField */
-    protected $model;
-    /** @var array */
-    protected $testArray = [
-        'user' => [
-            'first_name' => "John",
-            'last_name'  => "Doe",
-            'email'      => "john@doe.com",
-        ],
-    ];
-    /** @var array */
-    protected $defaultSettingsTestArray = [
-        'project' => 'Main Project',
-    ];
+	/** @var \Glorand\Model\Settings\Tests\Models\UserWithTextField */
+	protected $model;
+	/** @var array */
+	protected $testArray = [
+		'user' => [
+			'first_name' => "John",
+			'last_name'  => "Doe",
+			'email'      => "john@doe.com",
+		],
+	];
+	/** @var array */
+	protected $defaultSettingsTestArray = [
+		'project' => 'Main Project',
+	];
 
-    public function setUp(): void
-    {
-        parent::setUp();
-        $this->model = User::first();
-    }
+	public function setUp(): void
+	{
+		parent::setUp();
+		$this->model = User::first();
+	}
 
     /**
      * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
