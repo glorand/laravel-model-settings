@@ -2,6 +2,10 @@
 
 All notable changes to `glorand/laravel-model-settings` will be documented in this file
 
+## 4.3.0 - 2021-10-11
+### Added
+- Using another method name other than settings()
+
 ## 4.2.2 - 2021-04-07
 ### Fix param type
 

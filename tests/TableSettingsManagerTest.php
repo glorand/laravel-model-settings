@@ -41,6 +41,11 @@ class TableSettingsManagerTest extends TestCase
             $this->model->settings()->all()
         );
 
+        $this->assertEquals(
+            $this->model->config()->all(),
+            $this->model->settings()->all()
+        );
+
         $this->model->settings()->apply($this->testArray);
         $this->assertEquals(
             array_merge($this->defaultSettingsTestArray, $this->testArray),

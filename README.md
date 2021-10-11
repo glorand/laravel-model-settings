@@ -62,6 +62,7 @@ Bug reports, feature requests, and pull requests can be submitted by following o
     - [Check if the model has a specific setting](#check)
     - [Remove a setting from a model](#remove)
     - [Persistence](#persistence)
+    - [Using another method name other than settings()](#invokeSettingsBy)
  - [Changelog](#changelog)
  - [Contributing](#contributing)
 - [License](#license)
@@ -258,6 +259,11 @@ MODEL_SETTINGS_PERSISTENT=true
 'settings_persistent' => env('MODEL_SETTINGS_PERSISTENT', true),
 ```
 If the persistence is `false` you have to save the model after the operation.
+
+### Using another method name other than `settings()` <a name="invokeSettingsBy"></a>
+If you prefer to use another name other than `settings` ,
+you can do so by defining a `$invokeSettingsBy` property. 
+This forward calls (such as `configurations()`) to the `settings()` method.
 
 ## Changelog <a name="changelog"></a>
 Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
