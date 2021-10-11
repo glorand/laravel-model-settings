@@ -20,6 +20,15 @@ trait HasSettings
         return [];
     }
 
+    public function __call($name, $args)
+    {
+        if (isset($this->invokeSettingsBy) && $name === $this->invokeSettingsBy) {
+            return $this->settings();
+        }
+
+        return is_callable(['parent', '__call']) ? parent::__call($name, $args) : null;
+    }
+
     abstract public function getSettingsValue(): array;
 
     abstract public function settings(): SettingsManagerContract;
