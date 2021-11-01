@@ -12,7 +12,7 @@ use Glorand\Model\Settings\Contracts\SettingsManagerContract;
 class FieldSettingsManager extends AbstractSettingsManager
 {
     /**
-     * @param array $settings
+     * @param  array  $settings
      * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
      */
     public function apply(array $settings = []): SettingsManagerContract

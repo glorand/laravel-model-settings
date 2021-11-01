@@ -54,6 +54,7 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
      * @param array $array
      * @param string $prepend
      * @return array
+     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     public static function dotFlatten(array $array, string $prepend = ''): array
     {

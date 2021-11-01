@@ -19,7 +19,6 @@ class CreateSettingsFieldForModel extends Command
      * @param  \Illuminate\Filesystem\Filesystem  $file
      * @return int
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
-     * @SuppressWarnings (PHPMD.ExcessiveMethodLength)
      */
     public function handle(Filesystem $file): int
     {
