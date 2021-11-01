@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Schema;
  * @property array $settings
  * @property string $settingsFieldName
  * @property boolean $persistSettings
+ * @SuppressWarnings(PHPMD.StaticAccess)
  */
 trait HasSettingsField
 {
