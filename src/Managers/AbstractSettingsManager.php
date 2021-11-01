@@ -231,7 +231,7 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
     /**
      * @param  array  $settings
      * @throws \Illuminate\Validation\ValidationException
-     * @SuppressWarnings (PHPMD.StaticAccess)
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     protected function validate(array $settings)
     {
