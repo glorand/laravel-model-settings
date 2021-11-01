@@ -12,6 +12,7 @@ use Illuminate\Support\Arr;
 /**
  * Class AbstractSettingsManager
  * @package Glorand\Model\Settings\Managers
+ * @SuppressWarnings (PHPMD.StaticAccess)
  */
 abstract class AbstractSettingsManager implements SettingsManagerContract
 {
@@ -50,11 +51,11 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
 
     /**
      * Flatten array with dots for settings package
-     * @param $array
+     * @param array $array
      * @param string $prepend
      * @return array
      */
-    public static function dotFlatten($array, $prepend = ''): array
+    public static function dotFlatten(array $array, string $prepend = ''): array
     {
         $results = [];
         foreach ($array as $key => $value) {
