@@ -6,6 +6,7 @@ use Glorand\Model\Settings\Traits\HasSettingsField;
 use Glorand\Model\Settings\Traits\HasSettingsRedis;
 use Glorand\Model\Settings\Traits\HasSettingsTable;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Validation\ValidationException;
 use Lunaweb\RedisMock\MockPredisConnection;
 
 class CommonFunctionalityTest extends TestCase
@@ -19,13 +20,14 @@ class CommonFunctionalityTest extends TestCase
     ];
     /** @var \string[][] */
     protected $testArray = [
-        'user'    => [
+        'user' => [
             'first_name' => "John",
-            'last_name'  => "Doe",
-            'email'      => "john@doe.com",
+            'last_name' => "Doe",
+            'email' => "john@doe.com",
+            'age' => 27,
         ],
         'project' => [
-            'name'        => 'Project One',
+            'name' => 'Project One',
             'description' => 'Test Description',
         ],
     ];
@@ -34,8 +36,20 @@ class CommonFunctionalityTest extends TestCase
     protected $defaultSettingsTestArray = [
         'config' => [
             'email' => 'gmail',
-            'file'  => 'aws',
+            'file' => 'aws',
         ],
+    ];
+
+    /** @var string[] */
+    protected $rules = [
+        'user' => [
+            'array',
+        ],
+        'user.email' => [
+            'string',
+            'email',
+        ],
+        'user.age' => 'integer',
     ];
 
     public function setUp(): void
@@ -105,7 +119,7 @@ class CommonFunctionalityTest extends TestCase
         );
 
         $this->assertTrue($model->settings()->has('user.first_name'));
-        $this->assertFalse($model->settings()->has('user.age'));
+        $this->assertFalse($model->settings()->has('user.role'));
     }
 
     /**
@@ -153,7 +167,7 @@ class CommonFunctionalityTest extends TestCase
             [
                 'user' => [
                     'first_name' => 'def_val',
-                    'last_name'  => 'def_val',
+                    'last_name' => 'def_val',
                 ],
             ],
             $values
@@ -166,15 +180,16 @@ class CommonFunctionalityTest extends TestCase
         );
         $this->assertEquals(
             [
-                'user'    => [
+                'user' => [
                     'first_name' => 'John',
-                    'last_name'  => 'Doe',
-                    'email'      => 'john@doe.com',
+                    'last_name' => 'Doe',
+                    'email' => 'john@doe.com',
+                    'age' => 27,
                 ],
                 'project' => [
                     'name' => 'Project One',
                 ],
-                'date'    => 'def_val',
+                'date' => 'def_val',
             ],
             $values
         );
@@ -360,5 +375,33 @@ class CommonFunctionalityTest extends TestCase
             array_merge($this->defaultSettingsTestArray, $this->testArray),
             $model->settings()->all()
         );
+    }
+
+    /**
+     * @dataProvider  modelTypesProvider
+     */
+    public function testValidateData(string $modelType)
+    {
+        $model = $this->getModelByType($modelType);
+        $model->settingsRules = $this->rules;
+
+        $model->settings()->clear();
+        $this->assertEquals([], $model->settings()->all());
+
+        $model->settings()->apply($this->testArray);
+
+        $model->settings()->clear();
+        $this->assertEquals([], $model->settings()->all());
+
+        try {
+            $model->settings()->set('user.age', 'string');
+        } catch (ValidationException $e) {
+            $this->assertArrayHasKey('user.age', $e->errors());
+        }
+
+        $testArray = $this->testArray;
+        $testArray['user']['age'] = 'string';
+        $this->expectException(ValidationException::class);
+        $model->settings()->apply($testArray);
     }
 }

@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Schema;
  * @property array $settings
  * @property string $settingsFieldName
  * @property boolean $persistSettings
+ * @SuppressWarnings(PHPMD.StaticAccess)
  */
 trait HasSettingsField
 {
@@ -104,7 +105,7 @@ trait HasSettingsField
      */
     private function hasSettingsField()
     {
-        return Cache::remember(
+        return cache::remember(
             config('model_settings.settings_table_cache_prefix') . '::has_field',
             now()->addDays(1),
             function () {

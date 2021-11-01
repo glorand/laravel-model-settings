@@ -16,11 +16,11 @@ class CreateSettingsFieldForModel extends Command
     protected $description = 'Create migration for the (update) selected table, adding settings field';
 
     /**
-     * @param \Illuminate\Filesystem\Filesystem $file
-     * @return bool
+     * @param  \Illuminate\Filesystem\Filesystem  $file
+     * @return int
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    public function handle(Filesystem $file)
+    public function handle(Filesystem $file): int
     {
         $table = $this->ask('What is the name of the table?');
         $table = strtolower(Str::snake(trim($table)));

@@ -5,12 +5,14 @@ namespace Glorand\Model\Settings\Managers;
 use Glorand\Model\Settings\Contracts\SettingsManagerContract;
 use Glorand\Model\Settings\Exceptions\ModelSettingsException;
 use Glorand\Model\Settings\Traits\HasSettings;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 
 /**
  * Class AbstractSettingsManager
  * @package Glorand\Model\Settings\Managers
+ * @SuppressWarnings(PHPMD.StaticAccess)
  */
 abstract class AbstractSettingsManager implements SettingsManagerContract
 {
@@ -49,11 +51,12 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
 
     /**
      * Flatten array with dots for settings package
-     * @param $array
+     * @param array $array
      * @param string $prepend
      * @return array
+     * @SuppressWarnings(PHPMD.ElseExpression)
      */
-    public static function dotFlatten($array, $prepend = ''): array
+    public static function dotFlatten(array $array, string $prepend = ''): array
     {
         $results = [];
         foreach ($array as $key => $value) {
@@ -225,5 +228,14 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
         $this->apply($settings);
 
         return $this;
+    }
+
+    /**
+     * @param  array  $settings
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function validate(array $settings)
+    {
+        Validator::make(Arr::wrap($settings), Arr::wrap($this->model->getRules()))->validate();
     }
 }
