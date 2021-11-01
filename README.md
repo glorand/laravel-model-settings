@@ -41,7 +41,7 @@
 <a title="PHP Version" href="#"><img src="https://img.shields.io/packagist/php-v/glorand/laravel-model-settings" alt="PHP Version" /></a>
 </p>
 
-The package requires PHP 7.2+ and follows the FIG standards PSR-1, PSR-2 and PSR-4
+The package requires PHP 7.3+ and follows the FIG standards PSR-1, PSR-2, PSR-4 and PSR-12
 to ensure a high level of interoperability between shared PHP.
 
 Bug reports, feature requests, and pull requests can be submitted by following our [Contribution Guide](CONTRIBUTING.md).
