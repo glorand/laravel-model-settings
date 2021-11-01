@@ -62,7 +62,8 @@ Bug reports, feature requests, and pull requests can be submitted by following o
     - [Check if the model has a specific setting](#check)
     - [Remove a setting from a model](#remove)
     - [Persistence](#persistence)
-    - [Using another method name other than settings()](#invokeSettingsBy)
+    - [Using another method name other than `settings()`](#invokeSettingsBy)
+    - [Validation system for settings data](#validation)
  - [Changelog](#changelog)
  - [Contributing](#contributing)
 - [License](#license)
@@ -264,6 +265,40 @@ If the persistence is `false` you have to save the model after the operation.
 If you prefer to use another name other than `settings` ,
 you can do so by defining a `$invokeSettingsBy` property. 
 This forward calls (such as `configurations()`) to the `settings()` method.
+
+### Validation system for settings data <a name="validation></a>
+When you're using the set() or apply()|update() methods thrown an exception when you break a rule.
+You can define rules on model using `$settingsRules` public property, and the rules array definition is identical with
+the Laravel default validation rules. ([see Laravel rules](https://laravel.com/docs/8.x/validation#available-validation-rules))
+```php
+class User extends Model
+{
+    use HasSettingsTable;
+
+    public array $defaultSettings = [
+        'user' => [
+            'name' => 'Test User',
+            'email' => 'user@test.com'
+            'age' => 27,
+        ],
+        'language' => 'en',
+        'max_size' => 12,
+    ];
+
+    // settings rules
+    public array $settingsRules = [
+        'user' => 'array',
+        'user.email' => [
+            'string',
+            'email',
+        ],
+        'user.age' => 'integer',
+        'language' => 'string|in:en,es,it|max:2',
+        'max_size' => 'int|min:5|max:15',
+    ];
+}
+
+```
 
 ## Changelog <a name="changelog"></a>
 Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.

@@ -5,8 +5,21 @@ namespace Glorand\Model\Settings\Traits;
 use Glorand\Model\Settings\Contracts\SettingsManagerContract;
 use Illuminate\Support\Arr;
 
+/**
+ * @property array $settingRules
+ * @property array $defaultSettings
+ */
 trait HasSettings
 {
+    public function getRules(): array
+    {
+        if (property_exists($this, 'settingsRules') && is_array($this->settingsRules)) {
+            return $this->settingsRules;
+        }
+
+        return [];
+    }
+
     public function getDefaultSettings(): array
     {
         if (property_exists($this, 'defaultSettings')

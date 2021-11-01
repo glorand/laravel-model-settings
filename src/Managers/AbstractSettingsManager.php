@@ -5,6 +5,7 @@ namespace Glorand\Model\Settings\Managers;
 use Glorand\Model\Settings\Contracts\SettingsManagerContract;
 use Glorand\Model\Settings\Exceptions\ModelSettingsException;
 use Glorand\Model\Settings\Traits\HasSettings;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 
@@ -225,5 +226,14 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
         $this->apply($settings);
 
         return $this;
+    }
+
+    /**
+     * @param  array  $settings
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function validate(array $settings)
+    {
+        Validator::make(Arr::wrap($settings), Arr::wrap($this->model->getRules()))->validate();
     }
 }
