@@ -12,7 +12,6 @@ use Illuminate\Support\Arr;
 /**
  * Class AbstractSettingsManager
  * @package Glorand\Model\Settings\Managers
- * @SuppressWarnings (PHPMD.StaticAccess)
  */
 abstract class AbstractSettingsManager implements SettingsManagerContract
 {
@@ -232,6 +231,7 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
     /**
      * @param  array  $settings
      * @throws \Illuminate\Validation\ValidationException
+     * @SuppressWarnings (PHPMD.StaticAccess)
      */
     protected function validate(array $settings)
     {
