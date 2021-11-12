@@ -2,6 +2,10 @@
 
 All notable changes to `glorand/laravel-model-settings` will be documented in this file
 
+## 4.4.1 - 2021-11-13
+### Fix
+- fix validation variable name
+
 ## 4.4.0 - 2021-11-01
 ### Added
 - Validation system for settings data
