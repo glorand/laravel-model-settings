@@ -13,9 +13,10 @@ use Glorand\Model\Settings\Models\ModelSettings;
 class TableSettingsManager extends AbstractSettingsManager
 {
     /**
-     * @param array $settings
+     * @param  array  $settings
      * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     public function apply(array $settings = []): SettingsManagerContract
     {
