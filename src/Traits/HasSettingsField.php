@@ -105,7 +105,7 @@ trait HasSettingsField
      */
     private function hasSettingsField()
     {
-        return cache::remember(
+        return Cache::remember(
             config('model_settings.settings_table_cache_prefix') . '::has_field',
             now()->addDays(1),
             function () {

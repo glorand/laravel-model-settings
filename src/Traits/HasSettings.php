@@ -6,8 +6,9 @@ use Glorand\Model\Settings\Contracts\SettingsManagerContract;
 use Illuminate\Support\Arr;
 
 /**
- * @property array $settingRules
+ * @property array $settingsRules
  * @property array $defaultSettings
+ * @SuppressWarnings(PHPMD.StaticAccess)
  */
 trait HasSettings
 {
