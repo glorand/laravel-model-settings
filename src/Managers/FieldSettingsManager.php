@@ -26,4 +26,14 @@ class FieldSettingsManager extends AbstractSettingsManager
 
         return $this;
     }
+
+    /**
+     * Get nested merged array with all available keys
+     *
+     * @return array
+     */
+    public function all(): array
+    {
+        return $this->getMultiple(null);
+    }
 }
