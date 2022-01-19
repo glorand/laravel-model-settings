@@ -20,7 +20,7 @@ class TableSettingsManager extends AbstractSettingsManager
      */
     public function apply(array $settings = []): SettingsManagerContract
     {
-        $this->validate($settings);
+        $settings = $this->validate($settings);
 
         $modelSettings = $this->model->modelSettings()->first();
         if (!count($settings)) {

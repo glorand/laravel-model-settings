@@ -14,7 +14,7 @@ class RedisSettingsManager extends AbstractSettingsManager
 {
     public function apply(array $settings = []): SettingsManagerContract
     {
-        $this->validate($settings);
+        $settings = $this->validate($settings);
 
         Redis::set($this->model->cacheKey(), json_encode($settings));
 
