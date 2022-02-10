@@ -29,7 +29,7 @@
     "require-dev": {
         "phpunit/phpunit": "^8.0|^9.0",
         "orchestra/testbench": "^7.0",
-        "friendsofphp/php-cs-fixer": "^2.16@dev",
+        "friendsofphp/php-cs-fixer": "^3.6",
         "josiasmontag/laravel-redis-mock": "^1.2"
     },
     "suggest": {
