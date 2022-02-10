@@ -2,7 +2,6 @@ language: php
 
 php:
   - 8.0
-  - 8.1
 
 before_script:
   - composer selfupdate
