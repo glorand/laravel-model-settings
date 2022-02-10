@@ -2,6 +2,12 @@
 
 All notable changes to `glorand/laravel-model-settings` will be documented in this file
 
+## 5.0.0 - 2022-02-10
+### Added
+- Add support for Laravel 9 by @belzaaron
+- DROP Laravel 7,8 support
+- 8.0 min. php version
+
 ## 4.4.1 - 2021-11-13
 ### Fix
 - fix validation variable name
