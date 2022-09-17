@@ -53,17 +53,19 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
      * Flatten array with dots for settings package
      * @param $array
      * @param string $prepend
+     * @param array $depthKeys list of keys for max depth of flattening
      * @return array
      */
-    public static function dotFlatten($array, $prepend = ''): array
+    public static function dotFlatten($array, string $prepend = '', array $depthKeys = []): array
     {
         $results = [];
         foreach ($array as $key => $value) {
+            $newKey = $prepend . $key;
             // only re-run if nested array is associative (key-based)
-            if (is_array($value) && static::isAssoc($value) && !empty($value)) {
+            if (! in_array($newKey, $depthKeys) && is_array($value) && static::isAssoc($value) && !empty($value)) {
                 $results = array_merge($results, static::dotFlatten($value, $prepend . $key . '.'));
             } else {
-                $results[$prepend . $key] = $value;
+                $results[$newKey] = $value;
             }
         }
 
@@ -92,7 +94,7 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
     {
         $flattenedDefaultSettings = static::dotFlatten($this->model->getDefaultSettings());
         $validKeys = array_keys($flattenedDefaultSettings);
-        $flattenedSettingsValue = static::dotFlatten($this->model->getSettingsValue());
+        $flattenedSettingsValue = static::dotFlatten($this->model->getSettingsValue(), '', $validKeys);
         // ensure only valid keys are merged (prevent parent key with empty value overriding nested key with value)
         $flattenedSettingsValue = Arr::only($flattenedSettingsValue, $validKeys);
         return array_merge($flattenedDefaultSettings, $flattenedSettingsValue);
