@@ -60,10 +60,14 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
     {
         $results = [];
         foreach ($array as $key => $value) {
-            $newKey = $prepend . $key;
+            // remove last
+            $newKey = $key;
+            if ($prepend !== '') {
+                $newKey = $prepend .'.'. $key;
+            }
             // only re-run if nested array is associative (key-based)
             if (! in_array($newKey, $depthKeys) && is_array($value) && static::isAssoc($value) && !empty($value)) {
-                $results = array_merge($results, static::dotFlatten($value, $prepend . $key . '.'));
+                $results = array_merge($results, static::dotFlatten($value, $newKey, $depthKeys));
             } else {
                 $results[$newKey] = $value;
             }
