@@ -40,7 +40,9 @@ trait HasSettings
             return $this->settings();
         }
 
-        return is_callable(['parent', '__call']) ? parent::__call($name, $args) : null;
+        return is_callable(['parent', '__call'])
+            ? call_user_func(get_parent_class($this) . '::__call', $name, $args)
+            : null;
     }
 
     abstract public function getSettingsValue(): array;
