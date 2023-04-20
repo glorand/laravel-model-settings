@@ -54,7 +54,7 @@ Bug reports, feature requests, and pull requests can be submitted by following o
     - [Option 3 - `HasSettingsRedis` trait](#update_models_3)
 - [Default Settings](#default_settings)
 - [Usage](#usage)
-    - [Check id the settings for the entity is empty (exist)](#empty)
+    - [Check if the settings for the entity is empty (exist)](#empty)
     - [Check settings (exist)](#exist)
     - [Get all model's settings](#get_all)
     - [Get a specific setting](#get)
@@ -183,7 +183,7 @@ class User extends Model
 $user = App\User::first();
 ```
 
-#### Check id the settings for the entity is empty <a name="empty"></a>
+#### Check if the settings for the entity is empty <a name="empty"></a>
 ```php
 $user->settings()->empty();
 ```
