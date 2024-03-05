@@ -13,7 +13,7 @@ class ParentChildSettingsTest extends TestCase
         $this->model = UsersWithParentModelWithField::first();
     }
 
-    public function testSettingsForChild()
+    public function testSettingsForChild(): void
     {
         $testArray = ['a' => 'b'];
         $this->model->settings = $testArray;

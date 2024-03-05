@@ -12,14 +12,14 @@ class TestWrongModelTest extends TestCase
     /**
      * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
      */
-    public function testSettingsFieldUndefined()
+    public function testSettingsFieldUndefined(): void
     {
         $this->expectException(ModelSettingsException::class);
         $this->expectExceptionMessage('missing HasSettings');
         new FieldSettingsManager(WrongUser::first());
     }
 
-    public function testSettingsMissingSettingsField()
+    public function testSettingsMissingSettingsField(): void
     {
         $this->expectException(ModelSettingsException::class);
         $this->expectExceptionMessage('Unknown field');

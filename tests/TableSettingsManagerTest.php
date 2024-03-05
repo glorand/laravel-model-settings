@@ -33,7 +33,7 @@ class TableSettingsManagerTest extends TestCase
      * @throws \Exception
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function testSpecificDefaultValue()
+    public function testSpecificDefaultValue(): void
     {
         $this->model->defaultSettings = $this->defaultSettingsTestArray;
         $this->assertEquals(
@@ -68,7 +68,7 @@ class TableSettingsManagerTest extends TestCase
         );
     }
 
-    public function testSettingsTableCount()
+    public function testSettingsTableCount(): void
     {
         $this->model->settings()->apply($this->testArray);
         $this->assertEquals(1, ModelSettings::all()->count());
@@ -91,7 +91,7 @@ class TableSettingsManagerTest extends TestCase
         $this->assertEquals(0, $this->model->modelSettings()->count());
     }
 
-    public function testAddEagerConstraints()
+    public function testAddEagerConstraints(): void
     {
         $this->model->settings()->apply($this->testArray);
         $this->assertEquals(1, ModelSettings::all()->count());

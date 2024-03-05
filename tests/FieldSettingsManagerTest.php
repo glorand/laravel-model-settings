@@ -31,7 +31,7 @@ class FieldSettingsManagerTest extends TestCase
     /**
      * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
      */
-    public function testModelArraySettings()
+    public function testModelArraySettings(): void
     {
         $testArray = ['a' => 'b'];
         $this->model->settings = $testArray;
@@ -39,7 +39,7 @@ class FieldSettingsManagerTest extends TestCase
         $this->assertEquals($this->model->settings()->all(), $testArray);
     }
 
-    public function testSettingsMissingSettingsField()
+    public function testSettingsMissingSettingsField(): void
     {
         $this->expectException(ModelSettingsException::class);
         $this->expectExceptionMessage('Unknown field');
@@ -50,7 +50,7 @@ class FieldSettingsManagerTest extends TestCase
     /**
      * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
      */
-    public function testPersistence()
+    public function testPersistence(): void
     {
         $this->model->settings()->apply($this->testArray);
         $this->assertEquals($this->testArray, $this->model->fresh()->settings()->all());

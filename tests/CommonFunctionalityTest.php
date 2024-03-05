@@ -68,7 +68,7 @@ class CommonFunctionalityTest extends TestCase
         return $modelTypes;
     }
 
-    public function testInit()
+    public function testInit(): void
     {
         $traits = class_uses($this->getModelByType('redis'));
         $this->assertTrue(array_key_exists(HasSettingsRedis::class, $traits));
@@ -95,7 +95,7 @@ class CommonFunctionalityTest extends TestCase
     }
 
     #[DataProvider('modelTypesProvider')]
-    public function testExist(string $modelType)
+    public function testExist(string $modelType): void
     {
         $model = $this->getModelByType($modelType);
 
@@ -104,7 +104,7 @@ class CommonFunctionalityTest extends TestCase
     }
 
     #[DataProvider('modelTypesProvider')]
-    public function testHas(string $modelType)
+    public function testHas(string $modelType): void
     {
         $model = $this->getModelByType($modelType);
 
@@ -118,7 +118,7 @@ class CommonFunctionalityTest extends TestCase
     }
 
     #[DataProvider('modelTypesProvider')]
-    public function testAll(string $modelType)
+    public function testAll(string $modelType): void
     {
         $model = $this->getModelByType($modelType);
 
@@ -134,7 +134,7 @@ class CommonFunctionalityTest extends TestCase
     }
 
     #[DataProvider('modelTypesProvider')]
-    public function testGet(string $modelType)
+    public function testGet(string $modelType): void
     {
         $model = $this->getModelByType($modelType);
         $model->settings()->clear();
@@ -145,7 +145,7 @@ class CommonFunctionalityTest extends TestCase
     }
 
     #[DataProvider('modelTypesProvider')]
-    public function testGetMultiple(string $modelType)
+    public function testGetMultiple(string $modelType): void
     {
         $model = $this->getModelByType($modelType);
 
@@ -185,7 +185,7 @@ class CommonFunctionalityTest extends TestCase
     }
 
     #[DataProvider('modelTypesProvider')]
-    public function testApply(string $modelType)
+    public function testApply(string $modelType): void
     {
         $model = $this->getModelByType($modelType);
         $model->settings()->apply($this->testArray);
@@ -193,7 +193,7 @@ class CommonFunctionalityTest extends TestCase
     }
 
     #[DataProvider('modelTypesProvider')]
-    public function testUpdate(string $modelType)
+    public function testUpdate(string $modelType): void
     {
         $model = $this->getModelByType($modelType);
 
@@ -208,7 +208,7 @@ class CommonFunctionalityTest extends TestCase
     }
 
     #[DataProvider('modelTypesProvider')]
-    public function testSet(string $modelType)
+    public function testSet(string $modelType): void
     {
         $model = $this->getModelByType($modelType);
 
@@ -220,7 +220,7 @@ class CommonFunctionalityTest extends TestCase
     }
 
     #[DataProvider('modelTypesProvider')]
-    public function testSetMultiple(string $modelType)
+    public function testSetMultiple(string $modelType): void
     {
         $model = $this->getModelByType($modelType);
 
@@ -241,7 +241,7 @@ class CommonFunctionalityTest extends TestCase
     }
 
     #[DataProvider('modelTypesProvider')]
-    public function testClear(string $modelType)
+    public function testClear(string $modelType): void
     {
         $model = $this->getModelByType($modelType);
 
@@ -253,7 +253,7 @@ class CommonFunctionalityTest extends TestCase
     }
 
     #[DataProvider('modelTypesProvider')]
-    public function testDelete(string $modelType)
+    public function testDelete(string $modelType): void
     {
         $model = $this->getModelByType($modelType);
         $model->settings()->apply($this->testArray);
@@ -269,7 +269,7 @@ class CommonFunctionalityTest extends TestCase
     }
 
     #[DataProvider('modelTypesProvider')]
-    public function testDeleteMultiple(string $modelType)
+    public function testDeleteMultiple(string $modelType): void
     {
         $model = $this->getModelByType($modelType);
         $model->settings()->apply($this->testArray);
@@ -283,7 +283,7 @@ class CommonFunctionalityTest extends TestCase
     }
 
     #[DataProvider('modelTypesProvider')]
-    public function testDefaultValue(string $modelType)
+    public function testDefaultValue(string $modelType): void
     {
         $model = $this->getModelByType($modelType);
         $model->settings()->clear();
@@ -330,7 +330,7 @@ class CommonFunctionalityTest extends TestCase
     }
 
     #[DataProvider('modelTypesProvider')]
-    public function testDefaultValueFromConfig(string $modelType)
+    public function testDefaultValueFromConfig(string $modelType): void
     {
         $model = $this->getModelByType($modelType);
 
@@ -349,7 +349,7 @@ class CommonFunctionalityTest extends TestCase
     }
 
     #[DataProvider('modelTypesProvider')]
-    public function testValidateData(string $modelType)
+    public function testValidateData(string $modelType): void
     {
         $model = $this->getModelByType($modelType);
         $model->settingsRules = $this->rules;

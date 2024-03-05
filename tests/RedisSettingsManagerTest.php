@@ -15,7 +15,7 @@ class RedisSettingsManagerTest extends TestCase
         $this->model = User::first();
     }
 
-    public function testMarker()
+    public function testMarker(): void
     {
         $this->assertTrue(true);
     }
