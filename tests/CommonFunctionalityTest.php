@@ -58,7 +58,7 @@ class CommonFunctionalityTest extends TestCase
         parent::setUp();
     }
 
-    public function modelTypesProvider(): array
+    public static function modelTypesProvider(): array
     {
         $modelTypes = [];
         foreach ($this->modelTypes as $modelType) {
