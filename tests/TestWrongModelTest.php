@@ -7,7 +7,7 @@ use Glorand\Model\Settings\Managers\FieldSettingsManager;
 use Glorand\Model\Settings\Tests\Models\WrongUser;
 use Glorand\Model\Settings\Tests\Models\WrongUserWithField;
 
-class TestWrongModelTest extends TestCase
+final class TestWrongModelTest extends TestCase
 {
     /**
      * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException

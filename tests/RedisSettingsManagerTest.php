@@ -4,7 +4,7 @@ namespace Glorand\Model\Settings\Tests;
 
 use Glorand\Model\Settings\Tests\Models\UserWithRedis as User;
 
-class RedisSettingsManagerTest extends TestCase
+final class RedisSettingsManagerTest extends TestCase
 {
     /** @var \Glorand\Model\Settings\Tests\Models\UserWithRedis */
     protected $model;

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Redis;
 use Illuminate\Validation\ValidationException;
 use Lunaweb\RedisMock\MockPredisConnection;
 
-class CommonFunctionalityTest extends TestCase
+final class CommonFunctionalityTest extends TestCase
 {
     /** @var string[] */
     protected $modelTypes = [

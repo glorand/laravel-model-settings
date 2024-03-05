@@ -2,7 +2,7 @@
 
 namespace Glorand\Model\Settings\Tests;
 
-class CreateSettingsFieldForModelConsoleTest extends TestCase
+final class CreateSettingsFieldForModelConsoleTest extends TestCase
 {
     private $table = 'users_with_field';
     private $fieldName = 'custom_settings_field';

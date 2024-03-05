@@ -4,7 +4,7 @@ namespace Glorand\Model\Settings\Tests;
 
 use Illuminate\Support\Facades\Schema;
 
-class CreateSettingsTableConsoleTest extends TestCase
+final class CreateSettingsTableConsoleTest extends TestCase
 {
     public function testEmptyTable(): void
     {

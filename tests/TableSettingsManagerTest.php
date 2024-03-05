@@ -5,7 +5,7 @@ namespace Glorand\Model\Settings\Tests;
 use Glorand\Model\Settings\Models\ModelSettings;
 use Glorand\Model\Settings\Tests\Models\UsersWithTable as User;
 
-class TableSettingsManagerTest extends TestCase
+final class TableSettingsManagerTest extends TestCase
 {
     /** @var \Glorand\Model\Settings\Tests\Models\UsersWithTable */
     private $model;

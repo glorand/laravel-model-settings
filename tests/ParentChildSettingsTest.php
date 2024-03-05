@@ -5,7 +5,7 @@ namespace Glorand\Model\Settings\Tests;
 use Glorand\Model\Settings\Tests\Models\UsersWithParentModelWithField;
 use Glorand\Model\Settings\Tests\Models\UserWithField as User;
 
-class ParentChildSettingsTest extends TestCase
+final class ParentChildSettingsTest extends TestCase
 {
     protected function setUp(): void
     {

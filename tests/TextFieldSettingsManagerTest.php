@@ -5,7 +5,7 @@ namespace Glorand\Model\Settings\Tests;
 use Glorand\Model\Settings\Exceptions\ModelSettingsException;
 use Glorand\Model\Settings\Tests\Models\UserWithTextField as User;
 
-class TextFieldSettingsManagerTest extends TestCase
+final class TextFieldSettingsManagerTest extends TestCase
 {
     /** @var \Glorand\Model\Settings\Tests\Models\UserWithTextField */
     protected $model;
