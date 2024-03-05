@@ -9,7 +9,7 @@ class RedisSettingsManagerTest extends TestCase
     /** @var \Glorand\Model\Settings\Tests\Models\UserWithRedis */
     protected $model;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->model = User::first();

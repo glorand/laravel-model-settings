@@ -52,7 +52,7 @@ class CommonFunctionalityTest extends TestCase
         'user.age' => 'integer',
     ];
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
     }

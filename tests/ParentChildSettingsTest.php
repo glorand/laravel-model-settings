@@ -7,7 +7,7 @@ use Glorand\Model\Settings\Tests\Models\UserWithField as User;
 
 class ParentChildSettingsTest extends TestCase
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->model = UsersWithParentModelWithField::first();
