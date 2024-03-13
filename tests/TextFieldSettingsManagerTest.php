@@ -5,7 +5,7 @@ namespace Glorand\Model\Settings\Tests;
 use Glorand\Model\Settings\Exceptions\ModelSettingsException;
 use Glorand\Model\Settings\Tests\Models\UserWithTextField as User;
 
-class TextFieldSettingsManagerTest extends TestCase
+final class TextFieldSettingsManagerTest extends TestCase
 {
     /** @var \Glorand\Model\Settings\Tests\Models\UserWithTextField */
     protected $model;
@@ -22,7 +22,7 @@ class TextFieldSettingsManagerTest extends TestCase
         'project' => 'Main Project',
     ];
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->model = User::first();
@@ -31,7 +31,7 @@ class TextFieldSettingsManagerTest extends TestCase
     /**
      * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
      */
-    public function testIfSettingsIsNotValidJson()
+    public function testIfSettingsIsNotValidJson(): void
     {
         $this->model->settings = 'Invalid Json';
         $this->model->save();
@@ -42,7 +42,7 @@ class TextFieldSettingsManagerTest extends TestCase
     /**
      * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
      */
-    public function testModelArraySettings()
+    public function testModelArraySettings(): void
     {
         $testArray = ['a' => 'b'];
         $this->model->settings = $testArray;
@@ -50,7 +50,7 @@ class TextFieldSettingsManagerTest extends TestCase
         $this->assertEquals($testArray, $this->model->settings()->all());
     }
 
-    public function testSettingsMissingSettingsField()
+    public function testSettingsMissingSettingsField(): void
     {
         $this->expectException(ModelSettingsException::class);
         $this->expectExceptionMessage('Unknown field');
@@ -61,7 +61,7 @@ class TextFieldSettingsManagerTest extends TestCase
     /**
      * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
      */
-    public function testPersistence()
+    public function testPersistence(): void
     {
         $this->model->settings()->apply($this->testArray);
         $this->assertEquals($this->testArray, $this->model->fresh()->settings()->all());

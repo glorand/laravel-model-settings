@@ -2,13 +2,13 @@
 
 namespace Glorand\Model\Settings\Tests;
 
-class CreateSettingsFieldForModelConsoleTest extends TestCase
+final class CreateSettingsFieldForModelConsoleTest extends TestCase
 {
     private $table = 'users_with_field';
     private $fieldName = 'custom_settings_field';
     private $alreadyExistsFieldName = 'settings';
 
-    public function testEmptyTable()
+    public function testEmptyTable(): void
     {
         if (version_compare(PHP_VERSION, '8.0', '>=')) {
             $this->markTestAsPassed();
@@ -19,7 +19,7 @@ class CreateSettingsFieldForModelConsoleTest extends TestCase
             ->assertExitCode(1);
     }
 
-    public function testMissingTable()
+    public function testMissingTable(): void
     {
         if (version_compare(PHP_VERSION, '8.0', '>=')) {
             $this->markTestAsPassed();
@@ -30,7 +30,7 @@ class CreateSettingsFieldForModelConsoleTest extends TestCase
             ->assertExitCode(2);
     }
 
-    public function testAlreadyExistsField()
+    public function testAlreadyExistsField(): void
     {
         if (version_compare(PHP_VERSION, '8.0', '>=')) {
             $this->markTestAsPassed();
@@ -42,7 +42,7 @@ class CreateSettingsFieldForModelConsoleTest extends TestCase
             ->assertExitCode(3);
     }
 
-    public function testCreateMigrationFile()
+    public function testCreateMigrationFile(): void
     {
         if (version_compare(PHP_VERSION, '8.0', '>=')) {
             $this->markTestAsPassed();

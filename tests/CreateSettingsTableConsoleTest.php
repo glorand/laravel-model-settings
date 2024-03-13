@@ -4,9 +4,9 @@ namespace Glorand\Model\Settings\Tests;
 
 use Illuminate\Support\Facades\Schema;
 
-class CreateSettingsTableConsoleTest extends TestCase
+final class CreateSettingsTableConsoleTest extends TestCase
 {
-    public function testEmptyTable()
+    public function testEmptyTable(): void
     {
         if (version_compare(PHP_VERSION, '8.0', '>=')) {
             $this->markTestAsPassed();
@@ -18,7 +18,7 @@ class CreateSettingsTableConsoleTest extends TestCase
             ->assertExitCode(1);
     }
 
-    public function testAlreadyExistsTable()
+    public function testAlreadyExistsTable(): void
     {
         if (version_compare(PHP_VERSION, '8.0', '>=')) {
             $this->markTestAsPassed();
@@ -29,7 +29,7 @@ class CreateSettingsTableConsoleTest extends TestCase
             ->assertExitCode(2);
     }
 
-    public function testCreateMigration()
+    public function testCreateMigration(): void
     {
         if (version_compare(PHP_VERSION, '8.0', '>=')) {
             $this->markTestAsPassed();
@@ -41,7 +41,7 @@ class CreateSettingsTableConsoleTest extends TestCase
             ->assertExitCode(0);
     }
 
-    public function testWithUpdateConfig()
+    public function testWithUpdateConfig(): void
     {
         if (version_compare(PHP_VERSION, '8.0', '>=')) {
             $this->markTestAsPassed();

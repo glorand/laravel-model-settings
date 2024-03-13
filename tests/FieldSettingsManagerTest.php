@@ -5,7 +5,7 @@ namespace Glorand\Model\Settings\Tests;
 use Glorand\Model\Settings\Exceptions\ModelSettingsException;
 use Glorand\Model\Settings\Tests\Models\UserWithField as User;
 
-class FieldSettingsManagerTest extends TestCase
+final class FieldSettingsManagerTest extends TestCase
 {
     /** @var \Glorand\Model\Settings\Tests\Models\UserWithField */
     protected $model;
@@ -22,7 +22,7 @@ class FieldSettingsManagerTest extends TestCase
         ],
     ];
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->model = User::first();
@@ -31,7 +31,7 @@ class FieldSettingsManagerTest extends TestCase
     /**
      * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
      */
-    public function testModelArraySettings()
+    public function testModelArraySettings(): void
     {
         $testArray = ['a' => 'b'];
         $this->model->settings = $testArray;
@@ -39,7 +39,7 @@ class FieldSettingsManagerTest extends TestCase
         $this->assertEquals($this->model->settings()->all(), $testArray);
     }
 
-    public function testSettingsMissingSettingsField()
+    public function testSettingsMissingSettingsField(): void
     {
         $this->expectException(ModelSettingsException::class);
         $this->expectExceptionMessage('Unknown field');
@@ -50,7 +50,7 @@ class FieldSettingsManagerTest extends TestCase
     /**
      * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
      */
-    public function testPersistence()
+    public function testPersistence(): void
     {
         $this->model->settings()->apply($this->testArray);
         $this->assertEquals($this->testArray, $this->model->fresh()->settings()->all());
