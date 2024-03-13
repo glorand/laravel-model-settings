@@ -96,7 +96,7 @@ class TableSettingsManagerTest extends TestCase
         $this->model->settings()->apply($this->testArray);
         $this->assertEquals(1, ModelSettings::all()->count());
 
-        $this->expectErrorMessage('addEagerConstraints');
+        $this->expectExceptionMessage('addEagerConstraints');
         $this->model->load('settings')->settings()->set('test', 'test');
 
         $this->model->load('modelSettings')->settings()->set('test', 'test');
