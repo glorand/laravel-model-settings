@@ -6,14 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
- * Class ModelSettings
- * @package Glorand\Model\Settings\Models
+ * Class ModelSettings.
+ *
  * @property array $settings
  */
 class ModelSettings extends Model
 {
     /**
      * ModelSettings constructor.
+     *
      * @param array $attributes
      */
     public function __construct(array $attributes = [])

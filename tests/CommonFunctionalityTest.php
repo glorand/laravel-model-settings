@@ -2,13 +2,13 @@
 
 namespace Glorand\Model\Settings\Tests;
 
-use PHPUnit\Framework\Attributes\DataProvider;
 use Glorand\Model\Settings\Traits\HasSettingsField;
 use Glorand\Model\Settings\Traits\HasSettingsRedis;
 use Glorand\Model\Settings\Traits\HasSettingsTable;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Validation\ValidationException;
 use Lunaweb\RedisMock\MockPredisConnection;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 final class CommonFunctionalityTest extends TestCase
 {
@@ -22,13 +22,13 @@ final class CommonFunctionalityTest extends TestCase
     /** @var \string[][] */
     protected static array $testArray = [
         'user' => [
-            'first_name' => "John",
-            'last_name' => "Doe",
-            'email' => "john@doe.com",
-            'age' => 27,
+            'first_name' => 'John',
+            'last_name'  => 'Doe',
+            'email'      => 'john@doe.com',
+            'age'        => 27,
         ],
         'project' => [
-            'name' => 'Project One',
+            'name'        => 'Project One',
             'description' => 'Test Description',
         ],
     ];
@@ -37,7 +37,7 @@ final class CommonFunctionalityTest extends TestCase
     protected $defaultSettingsTestArray = [
         'config' => [
             'email' => 'gmail',
-            'file' => 'aws',
+            'file'  => 'aws',
         ],
     ];
 
@@ -156,7 +156,7 @@ final class CommonFunctionalityTest extends TestCase
             [
                 'user' => [
                     'first_name' => 'def_val',
-                    'last_name' => 'def_val',
+                    'last_name'  => 'def_val',
                 ],
             ],
             $values
@@ -171,9 +171,9 @@ final class CommonFunctionalityTest extends TestCase
             [
                 'user' => [
                     'first_name' => 'John',
-                    'last_name' => 'Doe',
-                    'email' => 'john@doe.com',
-                    'age' => 27,
+                    'last_name'  => 'Doe',
+                    'email'      => 'john@doe.com',
+                    'age'        => 27,
                 ],
                 'project' => [
                     'name' => 'Project One',
@@ -338,7 +338,7 @@ final class CommonFunctionalityTest extends TestCase
         $model->settings()->clear();
         $this->assertEquals([], $model->settings()->all());
 
-        config()->set('model_settings.defaultSettings.' . $model->getTable(), $this->defaultSettingsTestArray);
+        config()->set('model_settings.defaultSettings.'.$model->getTable(), $this->defaultSettingsTestArray);
 
         $this->assertEquals($this->defaultSettingsTestArray, $model->settings()->all());
         $model->settings()->apply(self::$testArray);

@@ -10,11 +10,12 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
 
 /**
- * Trait HasSettingsField
- * @package Glorand\Model\Settings\Traits
- * @property array $settings
+ * Trait HasSettingsField.
+ *
+ * @property array  $settings
  * @property string $settingsFieldName
- * @property boolean $persistSettings
+ * @property bool   $persistSettings
+ *
  * @SuppressWarnings(PHPMD.StaticAccess)
  */
 trait HasSettingsField
@@ -32,8 +33,9 @@ trait HasSettingsField
     }
 
     /**
-     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
      * @throws ModelSettingsException
+     *
+     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
      */
     public function settings(): SettingsManagerContract
     {
@@ -52,8 +54,9 @@ trait HasSettingsField
     }
 
     /**
-     * @return array
      * @throws ModelSettingsException
+     *
+     * @return array
      */
     public function getSettingsValue(): array
     {
@@ -99,14 +102,13 @@ trait HasSettingsField
         $this->persistSettings = $val;
     }
 
-
     /**
      * @return mixed
      */
     private function hasSettingsField()
     {
         return Cache::remember(
-            config('model_settings.settings_table_cache_prefix') . '::has_field',
+            config('model_settings.settings_table_cache_prefix').'::has_field',
             now()->addDays(1),
             function () {
                 return Schema::connection($this->getConnectionName())

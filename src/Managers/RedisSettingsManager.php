@@ -6,8 +6,8 @@ use Glorand\Model\Settings\Contracts\SettingsManagerContract;
 use Illuminate\Support\Facades\Redis;
 
 /**
- * Class FieldSettingsManager
- * @package Glorand\Model\Settings\Managers
+ * Class FieldSettingsManager.
+ *
  * @property \Illuminate\Database\Eloquent\Model|\Glorand\Model\Settings\Traits\HasSettingsRedis $model
  */
 class RedisSettingsManager extends AbstractSettingsManager

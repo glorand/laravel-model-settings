@@ -5,8 +5,8 @@ namespace Glorand\Model\Settings\Tests\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class WrongUser
- * @package Glorand\Model\Settings\Tests\Models
+ * Class WrongUser.
+ *
  * @method static first()
  */
 class WrongUser extends Model

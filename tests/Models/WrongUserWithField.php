@@ -6,8 +6,8 @@ use Glorand\Model\Settings\Traits\HasSettingsField;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class WrongUserWithField
- * @package Glorand\Model\Settings\Tests\Models
+ * Class WrongUserWithField.
+ *
  * @method static first()
  */
 class WrongUserWithField extends Model

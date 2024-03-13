@@ -12,9 +12,9 @@ final class FieldSettingsManagerTest extends TestCase
     /** @var array */
     protected $testArray = [
         'user'    => [
-            'first_name' => "John",
-            'last_name'  => "Doe",
-            'email'      => "john@doe.com",
+            'first_name' => 'John',
+            'last_name'  => 'Doe',
+            'email'      => 'john@doe.com',
         ],
         'project' => [
             'name'        => 'Project One',

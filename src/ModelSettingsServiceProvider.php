@@ -18,12 +18,12 @@ class ModelSettingsServiceProvider extends ServiceProvider
         }
 
         $this->publishes([
-            __DIR__ . '/../config/model_settings.php' => config_path('model_settings.php'),
+            __DIR__.'/../config/model_settings.php' => config_path('model_settings.php'),
         ]);
     }
 
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/model_settings.php', 'model_settings');
+        $this->mergeConfigFrom(__DIR__.'/../config/model_settings.php', 'model_settings');
     }
 }

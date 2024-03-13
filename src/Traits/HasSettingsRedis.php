@@ -7,8 +7,8 @@ use Glorand\Model\Settings\Managers\RedisSettingsManager;
 use Illuminate\Support\Facades\Redis;
 
 /**
- * Trait HasSettingsRedis
- * @package Glorand\Model\Settings\Traits
+ * Trait HasSettingsRedis.
+ *
  * @property array $settings
  */
 trait HasSettingsRedis
@@ -16,8 +16,9 @@ trait HasSettingsRedis
     use HasSettings;
 
     /**
-     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
      * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     *
+     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
      */
     public function settings(): SettingsManagerContract
     {
@@ -35,10 +36,10 @@ trait HasSettingsRedis
     public function cacheKey(string $key = null): string
     {
         return sprintf(
-            "r-k-%s:%s",
+            'r-k-%s:%s',
             $this->getTable(),
             $this->getKey()
-        ) . $key;
+        ).$key;
     }
 
     abstract public function getTable();

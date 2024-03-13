@@ -12,6 +12,7 @@ final class CreateSettingsFieldForModelConsoleTest extends TestCase
     {
         if (version_compare(PHP_VERSION, '8.0', '>=')) {
             $this->markTestAsPassed();
+
             return;
         }
         $this->artisan('model-settings:model-settings-field')
@@ -23,10 +24,11 @@ final class CreateSettingsFieldForModelConsoleTest extends TestCase
     {
         if (version_compare(PHP_VERSION, '8.0', '>=')) {
             $this->markTestAsPassed();
+
             return;
         }
         $this->artisan('model-settings:model-settings-field')
-            ->expectsQuestion('What is the name of the table?', $this->table . '_wrong')
+            ->expectsQuestion('What is the name of the table?', $this->table.'_wrong')
             ->assertExitCode(2);
     }
 
@@ -34,6 +36,7 @@ final class CreateSettingsFieldForModelConsoleTest extends TestCase
     {
         if (version_compare(PHP_VERSION, '8.0', '>=')) {
             $this->markTestAsPassed();
+
             return;
         }
         $this->artisan('model-settings:model-settings-field')
@@ -46,6 +49,7 @@ final class CreateSettingsFieldForModelConsoleTest extends TestCase
     {
         if (version_compare(PHP_VERSION, '8.0', '>=')) {
             $this->markTestAsPassed();
+
             return;
         }
         $this->artisan('model-settings:model-settings-field')

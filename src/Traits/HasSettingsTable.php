@@ -9,10 +9,11 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\Cache;
 
 /**
- * Trait HasSettingsTable
- * @package Glorand\Model\Settings\Traits
+ * Trait HasSettingsTable.
+ *
  * @property ModelSettings $modelSettings
- * @property array $settings
+ * @property array         $settings
+ *
  * @method morphOne($model, $name)
  */
 trait HasSettingsTable
@@ -20,8 +21,9 @@ trait HasSettingsTable
     use HasSettings;
 
     /**
-     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
      * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     *
+     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
      */
     public function settings(): SettingsManagerContract
     {
@@ -61,7 +63,7 @@ trait HasSettingsTable
 
     public function getSettingsCacheKey(): string
     {
-        return config('model_settings.settings_table_cache_prefix') . $this->getTable() . '::' . $this->getKey();
+        return config('model_settings.settings_table_cache_prefix').$this->getTable().'::'.$this->getKey();
     }
 
     abstract public function getTable();

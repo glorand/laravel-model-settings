@@ -17,8 +17,10 @@ class CreateSettingsTable extends Command
 
     /**
      * @param \Illuminate\Filesystem\Filesystem $file
-     * @return bool
+     *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     *
+     * @return bool
      */
     public function handle(Filesystem $file)
     {
@@ -31,17 +33,16 @@ class CreateSettingsTable extends Command
         }
 
         if (Schema::hasTable($table)) {
-            $this->error('Table "' . $table . '" already exists!');
+            $this->error('Table "'.$table.'" already exists!');
 
             return 2;
         }
 
-        $fileName = date('Y_m_d_His') . '_create_' . $table . '_table.php';
-        $path = database_path('migrations') . '/' . $fileName;
-        $className = 'Create' . ucfirst(Str::camel($table)) . 'Table';
+        $fileName = date('Y_m_d_His').'_create_'.$table.'_table.php';
+        $path = database_path('migrations').'/'.$fileName;
+        $className = 'Create'.ucfirst(Str::camel($table)).'Table';
 
-
-        $stub = $file->get(__DIR__ . '/../../stubs/create_settings_table.stub');
+        $stub = $file->get(__DIR__.'/../../stubs/create_settings_table.stub');
         $stub = str_replace('DummyClass', $className, $stub);
         $stub = str_replace('DummyTable', $table, $stub);
 

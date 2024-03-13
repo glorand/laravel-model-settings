@@ -6,8 +6,8 @@ use Glorand\Model\Settings\Traits\HasSettingsRedis;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class UserWithRedis
- * @package Glorand\Model\Settings\Tests\Models
+ * Class UserWithRedis.
+ *
  * @method static first()
  */
 class UserWithRedis extends Model

@@ -6,8 +6,8 @@ use Glorand\Model\Settings\Traits\HasSettingsField;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class UserWithTextField
- * @package Glorand\Model\Settings\Tests\Models
+ * Class UserWithTextField.
+ *
  * @method static first()
  */
 class UserWithTextField extends Model

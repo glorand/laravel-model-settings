@@ -4,8 +4,6 @@ namespace Glorand\Model\Settings\Tests;
 
 use CreateModelSettingsTable;
 use Glorand\Model\Settings\ModelSettingsServiceProvider;
-use Glorand\Model\Settings\Tests\Models\Article;
-use Glorand\Model\Settings\Tests\Models\User;
 use Glorand\Model\Settings\Tests\Models\UsersWithTable;
 use Glorand\Model\Settings\Tests\Models\UserWithField;
 use Glorand\Model\Settings\Tests\Models\UserWithRedis;
@@ -13,7 +11,6 @@ use Glorand\Model\Settings\Tests\Models\UserWithTextField;
 use Glorand\Model\Settings\Tests\Models\WrongUser;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Schema;
 use Lunaweb\RedisMock\Providers\RedisMockServiceProvider;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
@@ -58,7 +55,7 @@ abstract class TestCase extends OrchestraTestCase
 
     protected function createSettingsTable()
     {
-        include_once __DIR__ . '/migrations/create_model_settings_table.php';
+        include_once __DIR__.'/migrations/create_model_settings_table.php';
 
         (new CreateModelSettingsTable())->up();
     }
@@ -98,6 +95,7 @@ abstract class TestCase extends OrchestraTestCase
 
     /**
      * @param string $type
+     *
      * @return \Illuminate\Database\Eloquent\Model|\Glorand\Model\Settings\Traits\HasSettings
      */
     protected function getModelByType(string $type): Model

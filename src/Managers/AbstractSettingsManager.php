@@ -5,13 +5,13 @@ namespace Glorand\Model\Settings\Managers;
 use Glorand\Model\Settings\Contracts\SettingsManagerContract;
 use Glorand\Model\Settings\Exceptions\ModelSettingsException;
 use Glorand\Model\Settings\Traits\HasSettings;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Validator;
 
 /**
- * Class AbstractSettingsManager
- * @package Glorand\Model\Settings\Managers
+ * Class AbstractSettingsManager.
+ *
  * @SuppressWarnings(PHPMD.StaticAccess)
  */
 abstract class AbstractSettingsManager implements SettingsManagerContract
@@ -24,7 +24,9 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
 
     /**
      * AbstractSettingsManager constructor.
+     *
      * @param \Illuminate\Database\Eloquent\Model|HasSettings $model
+     *
      * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
      */
     public function __construct(Model $model)
@@ -36,8 +38,10 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
     }
 
     /**
-     * Check if array is associative and not sequential
+     * Check if array is associative and not sequential.
+     *
      * @param array $arr
+     *
      * @return bool
      */
     private static function isAssoc(array $arr): bool
@@ -50,10 +54,13 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
     }
 
     /**
-     * Flatten array with dots for settings package
-     * @param array $array
+     * Flatten array with dots for settings package.
+     *
+     * @param array  $array
      * @param string $prepend
+     *
      * @return array
+     *
      * @SuppressWarnings(PHPMD.ElseExpression)
      */
     public static function dotFlatten(array $array, string $prepend = ''): array
@@ -62,9 +69,9 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
         foreach ($array as $key => $value) {
             // only re-run if nested array is associative (key-based)
             if (is_array($value) && static::isAssoc($value) && !empty($value)) {
-                $results = array_merge($results, static::dotFlatten($value, $prepend . $key . '.'));
+                $results = array_merge($results, static::dotFlatten($value, $prepend.$key.'.'));
             } else {
-                $results[$prepend . $key] = $value;
+                $results[$prepend.$key] = $value;
             }
         }
 
@@ -72,7 +79,8 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
     }
 
     /**
-     * Get nested merged array with all available keys
+     * Get nested merged array with all available keys.
+     *
      * @return array
      */
     public function all(): array
@@ -81,7 +89,8 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
     }
 
     /**
-     * Get flat merged array with dot-notation keys
+     * Get flat merged array with dot-notation keys.
+     *
      * @return array
      */
     public function allFlattened(): array
@@ -110,6 +119,7 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
 
     /**
      * @param string $path
+     *
      * @return bool
      */
     public function has(string $path): bool
@@ -119,7 +129,8 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
 
     /**
      * @param string|null $path
-     * @param null $default
+     * @param null        $default
+     *
      * @return array|\ArrayAccess|mixed
      */
     public function get(string $path = null, $default = null)
@@ -129,7 +140,8 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
 
     /**
      * @param iterable|null $paths
-     * @param null $default
+     * @param null          $default
+     *
      * @return array
      */
     public function getMultiple(iterable $paths = null, $default = null): array
@@ -153,7 +165,8 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
 
     /**
      * @param string $path
-     * @param $value
+     * @param        $value
+     *
      * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
      */
     public function set(string $path, $value): SettingsManagerContract
@@ -166,7 +179,8 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
 
     /**
      * @param string $path
-     * @param mixed $value
+     * @param mixed  $value
+     *
      * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
      */
     public function update(string $path, $value): SettingsManagerContract
@@ -176,6 +190,7 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
 
     /**
      * @param string|null $path
+     *
      * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
      */
     public function delete(string $path = null): SettingsManagerContract
@@ -202,6 +217,7 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
 
     /**
      * @param iterable $values
+     *
      * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
      */
     public function setMultiple(iterable $values): SettingsManagerContract
@@ -216,6 +232,7 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
 
     /**
      * @param iterable $paths
+     *
      * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
      */
     public function deleteMultiple(iterable $paths): SettingsManagerContract
@@ -231,7 +248,8 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
     }
 
     /**
-     * @param  array  $settings
+     * @param array $settings
+     *
      * @throws \Illuminate\Validation\ValidationException
      */
     protected function validate(array $settings)

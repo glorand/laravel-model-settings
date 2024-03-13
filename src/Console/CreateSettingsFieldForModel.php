@@ -16,9 +16,11 @@ class CreateSettingsFieldForModel extends Command
     protected $description = 'Create migration for the (update) selected table, adding settings field';
 
     /**
-     * @param  \Illuminate\Filesystem\Filesystem  $file
-     * @return int
+     * @param \Illuminate\Filesystem\Filesystem $file
+     *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     *
+     * @return int
      */
     public function handle(Filesystem $file): int
     {
@@ -30,7 +32,7 @@ class CreateSettingsFieldForModel extends Command
             return 1;
         }
         if (!Schema::hasTable($table)) {
-            $this->error('Unable to find table "' . $table . '" on the current DB!');
+            $this->error('Unable to find table "'.$table.'" on the current DB!');
 
             return 2;
         }
@@ -43,17 +45,16 @@ class CreateSettingsFieldForModel extends Command
         $fieldName = strtolower(Str::snake(trim($fieldName)));
 
         if (Schema::hasColumn($table, $fieldName)) {
-            $this->error('Field "' . $fieldName . '" already exists on table "' . $table . '"');
+            $this->error('Field "'.$fieldName.'" already exists on table "'.$table.'"');
 
             return 3;
         }
 
-        $fileName = date('Y_m_d_His') . '_update_' . $table . '_table_add_' . $fieldName . '.php';
-        $path = database_path('migrations') . '/' . $fileName;
-        $className = 'Update' . ucfirst($table) . 'TableAdd' . ucfirst(Str::camel($fieldName));
+        $fileName = date('Y_m_d_His').'_update_'.$table.'_table_add_'.$fieldName.'.php';
+        $path = database_path('migrations').'/'.$fileName;
+        $className = 'Update'.ucfirst($table).'TableAdd'.ucfirst(Str::camel($fieldName));
 
-
-        $stub = $file->get(__DIR__ . '/../../stubs/create_settings_field.stub');
+        $stub = $file->get(__DIR__.'/../../stubs/create_settings_field.stub');
         $stub = str_replace('DummyClass', $className, $stub);
         $stub = str_replace('DummyTable', $table, $stub);
         $stub = str_replace('settingsFieldName', $fieldName, $stub);

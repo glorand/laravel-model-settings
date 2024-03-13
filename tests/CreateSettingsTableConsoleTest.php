@@ -10,6 +10,7 @@ final class CreateSettingsTableConsoleTest extends TestCase
     {
         if (version_compare(PHP_VERSION, '8.0', '>=')) {
             $this->markTestAsPassed();
+
             return;
         }
         config()->set('model_settings.settings_table_name', null);
@@ -22,6 +23,7 @@ final class CreateSettingsTableConsoleTest extends TestCase
     {
         if (version_compare(PHP_VERSION, '8.0', '>=')) {
             $this->markTestAsPassed();
+
             return;
         }
         config()->set('model_settings.settings_table_name', 'model_settings');
@@ -33,6 +35,7 @@ final class CreateSettingsTableConsoleTest extends TestCase
     {
         if (version_compare(PHP_VERSION, '8.0', '>=')) {
             $this->markTestAsPassed();
+
             return;
         }
         config()->set('model_settings.settings_table_name', 'model_settings');
@@ -45,6 +48,7 @@ final class CreateSettingsTableConsoleTest extends TestCase
     {
         if (version_compare(PHP_VERSION, '8.0', '>=')) {
             $this->markTestAsPassed();
+
             return;
         }
         $this->assertEquals('model_settings', config('model_settings.settings_table_name'));

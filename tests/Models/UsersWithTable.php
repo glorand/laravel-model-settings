@@ -7,9 +7,9 @@ use Glorand\Model\Settings\Traits\HasSettingsTable;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class UsersWithTable
- * @package Glorand\Model\Settings\Tests\Models
- * @method static first()
+ * Class UsersWithTable.
+ *
+ * @method static                  first()
  * @method SettingsManagerContract config()
  */
 class UsersWithTable extends Model

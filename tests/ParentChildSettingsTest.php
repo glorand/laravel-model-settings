@@ -3,7 +3,6 @@
 namespace Glorand\Model\Settings\Tests;
 
 use Glorand\Model\Settings\Tests\Models\UsersWithParentModelWithField;
-use Glorand\Model\Settings\Tests\Models\UserWithField as User;
 
 final class ParentChildSettingsTest extends TestCase
 {

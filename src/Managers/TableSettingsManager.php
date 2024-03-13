@@ -6,16 +6,19 @@ use Glorand\Model\Settings\Contracts\SettingsManagerContract;
 use Glorand\Model\Settings\Models\ModelSettings;
 
 /**
- * Class TableSettingsManager
- * @package Glorand\Model\Settings\Managers
- * @property  \Illuminate\Database\Eloquent\Model|\Glorand\Model\Settings\Traits\HasSettingsTable $model
+ * Class TableSettingsManager.
+ *
+ * @property \Illuminate\Database\Eloquent\Model|\Glorand\Model\Settings\Traits\HasSettingsTable $model
  */
 class TableSettingsManager extends AbstractSettingsManager
 {
     /**
-     * @param  array  $settings
-     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
+     * @param array $settings
+     *
      * @throws \Exception
+     *
+     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
+     *
      * @SuppressWarnings(PHPMD.ElseExpression)
      */
     public function apply(array $settings = []): SettingsManagerContract

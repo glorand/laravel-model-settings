@@ -8,6 +8,7 @@ use Illuminate\Support\Arr;
 /**
  * @property array $settingsRules
  * @property array $defaultSettings
+ *
  * @SuppressWarnings(PHPMD.StaticAccess)
  */
 trait HasSettings
@@ -26,7 +27,7 @@ trait HasSettings
         if (property_exists($this, 'defaultSettings')
             && is_array($this->defaultSettings)) {
             return Arr::wrap($this->defaultSettings);
-        } elseif (($defaultSettings = config('model_settings.defaultSettings.' . $this->getTable()))
+        } elseif (($defaultSettings = config('model_settings.defaultSettings.'.$this->getTable()))
             && is_array($defaultSettings)) {
             return Arr::wrap($defaultSettings);
         }
@@ -40,7 +41,7 @@ trait HasSettings
             return $this->settings();
         }
 
-        return call_user_func(parent::class . '::__call', $name, $args);
+        return call_user_func(parent::class.'::__call', $name, $args);
     }
 
     abstract public function getSettingsValue(): array;
