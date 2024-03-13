@@ -23,25 +23,12 @@
  <a href="LICENSE.md">
  <img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat" alt="Software License">
  </a>
-<a href="https://codeclimate.com/github/glorand/laravel-model-settings/maintainability">
-<img src="https://api.codeclimate.com/v1/badges/ea0941afe155dd14f5d8/maintainability" alt="maintainability" />
-</a>
-<br />
-<a href="https://github.styleci.io/repos/163381474">
- <img src="https://github.styleci.io/repos/163381474/shield?branch=master&style=flat" alt="StyleCI">
- </a>
-<a href="https://scrutinizer-ci.com/g/glorand/laravel-model-settings/">
- <img src="https://scrutinizer-ci.com/g/glorand/laravel-model-settings/badges/quality-score.png?b=master" alt="Scrutinizer Code Quality">
- </a>
- <a href="https://scrutinizer-ci.com/g/glorand/laravel-model-settings/?branch=master">
- <img src="https://scrutinizer-ci.com/g/glorand/laravel-model-settings/badges/coverage.png?b=master" alt="Scrutinizer Code Coverage"/>
- </a>
  <br />
  <a title="MadeWithLaravel.com Shield" href="https://madewithlaravel.com/p/laravel-model-settings/shield-link"> <img src="https://madewithlaravel.com/storage/repo-shields/1716-shield.svg"/></a>
 <a title="PHP Version" href="#"><img src="https://img.shields.io/packagist/php-v/glorand/laravel-model-settings" alt="PHP Version" /></a>
 </p>
 
-The package requires PHP 7.3+ and follows the FIG standards PSR-1, PSR-2, PSR-4 and PSR-12
+The package requires PHP 8.1+ and follows the FIG standards PSR-1, PSR-2, PSR-4 and PSR-12
 to ensure a high level of interoperability between shared PHP.
 
 Bug reports, feature requests, and pull requests can be submitted by following our [Contribution Guide](CONTRIBUTING.md).
