@@ -2,6 +2,7 @@
 
 namespace Glorand\Model\Settings\Tests;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Glorand\Model\Settings\Traits\HasSettingsField;
 use Glorand\Model\Settings\Traits\HasSettingsRedis;
 use Glorand\Model\Settings\Traits\HasSettingsTable;
@@ -9,17 +10,17 @@ use Illuminate\Support\Facades\Redis;
 use Illuminate\Validation\ValidationException;
 use Lunaweb\RedisMock\MockPredisConnection;
 
-class CommonFunctionalityTest extends TestCase
+final class CommonFunctionalityTest extends TestCase
 {
     /** @var string[] */
-    protected $modelTypes = [
+    protected static array $modelTypes = [
         'field',
         'text_field',
         'table',
         'redis',
     ];
     /** @var \string[][] */
-    protected $testArray = [
+    protected static array $testArray = [
         'user' => [
             'first_name' => "John",
             'last_name' => "Doe",
@@ -52,22 +53,22 @@ class CommonFunctionalityTest extends TestCase
         'user.age' => 'integer',
     ];
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
     }
 
-    public function modelTypesProvider(): array
+    public static function modelTypesProvider(): array
     {
         $modelTypes = [];
-        foreach ($this->modelTypes as $modelType) {
+        foreach (self::$modelTypes as $modelType) {
             $modelTypes[$modelType] = [$modelType];
         }
 
         return $modelTypes;
     }
 
-    public function testInit()
+    public function testInit(): void
     {
         $traits = class_uses($this->getModelByType('redis'));
         $this->assertTrue(array_key_exists(HasSettingsRedis::class, $traits));
@@ -84,48 +85,40 @@ class CommonFunctionalityTest extends TestCase
         $this->assertInstanceOf(MockPredisConnection::class, Redis::connection());
     }
 
-    /**
-     * @dataProvider  modelTypesProvider
-     */
+    #[DataProvider('modelTypesProvider')]
     public function testEmpty(string $modelType): void
     {
         $model = $this->getModelByType($modelType);
 
         $this->assertTrue($model->settings()->clear()->empty());
-        $this->assertFalse($model->settings()->apply($this->testArray)->empty());
+        $this->assertFalse($model->settings()->apply(self::$testArray)->empty());
     }
 
-    /**
-     * @dataProvider  modelTypesProvider
-     */
-    public function testExist(string $modelType)
+    #[DataProvider('modelTypesProvider')]
+    public function testExist(string $modelType): void
     {
         $model = $this->getModelByType($modelType);
 
         $this->assertFalse($model->settings()->clear()->exist());
-        $this->assertTrue($model->settings()->apply($this->testArray)->exist());
+        $this->assertTrue($model->settings()->apply(self::$testArray)->exist());
     }
 
-    /**
-     * @dataProvider  modelTypesProvider
-     */
-    public function testHas(string $modelType)
+    #[DataProvider('modelTypesProvider')]
+    public function testHas(string $modelType): void
     {
         $model = $this->getModelByType($modelType);
 
         $this->assertEquals(
-            $this->testArray,
-            $model->settings()->apply($this->testArray)->all()
+            self::$testArray,
+            $model->settings()->apply(self::$testArray)->all()
         );
 
         $this->assertTrue($model->settings()->has('user.first_name'));
         $this->assertFalse($model->settings()->has('user.role'));
     }
 
-    /**
-     * @dataProvider  modelTypesProvider
-     */
-    public function testAll(string $modelType)
+    #[DataProvider('modelTypesProvider')]
+    public function testAll(string $modelType): void
     {
         $model = $this->getModelByType($modelType);
 
@@ -135,28 +128,24 @@ class CommonFunctionalityTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->testArray,
-            $model->settings()->apply($this->testArray)->all()
+            self::$testArray,
+            $model->settings()->apply(self::$testArray)->all()
         );
     }
 
-    /**
-     * @dataProvider  modelTypesProvider
-     */
-    public function testGet(string $modelType)
+    #[DataProvider('modelTypesProvider')]
+    public function testGet(string $modelType): void
     {
         $model = $this->getModelByType($modelType);
         $model->settings()->clear();
         $this->assertEquals([], $model->settings()->all());
         $this->assertEquals(null, $model->settings()->get('user'));
-        $model->settings()->apply($this->testArray);
+        $model->settings()->apply(self::$testArray);
         $this->assertEquals('John', $model->settings()->get('user.first_name'));
     }
 
-    /**
-     * @dataProvider  modelTypesProvider
-     */
-    public function testGetMultiple(string $modelType)
+    #[DataProvider('modelTypesProvider')]
+    public function testGetMultiple(string $modelType): void
     {
         $model = $this->getModelByType($modelType);
 
@@ -173,7 +162,7 @@ class CommonFunctionalityTest extends TestCase
             $values
         );
 
-        $model->settings()->apply($this->testArray);
+        $model->settings()->apply(self::$testArray);
         $values = $model->settings()->getMultiple(
             ['user', 'project.name', 'date'],
             'def_val'
@@ -195,20 +184,16 @@ class CommonFunctionalityTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider  modelTypesProvider
-     */
-    public function testApply(string $modelType)
+    #[DataProvider('modelTypesProvider')]
+    public function testApply(string $modelType): void
     {
         $model = $this->getModelByType($modelType);
-        $model->settings()->apply($this->testArray);
-        $this->assertEquals($this->testArray, $model->fresh()->settings()->all());
+        $model->settings()->apply(self::$testArray);
+        $this->assertEquals(self::$testArray, $model->fresh()->settings()->all());
     }
 
-    /**
-     * @dataProvider  modelTypesProvider
-     */
-    public function testUpdate(string $modelType)
+    #[DataProvider('modelTypesProvider')]
+    public function testUpdate(string $modelType): void
     {
         $model = $this->getModelByType($modelType);
 
@@ -222,10 +207,8 @@ class CommonFunctionalityTest extends TestCase
         $this->assertEquals(['user' => ['age' => 19]], $model->settings()->all());
     }
 
-    /**
-     * @dataProvider  modelTypesProvider
-     */
-    public function testSet(string $modelType)
+    #[DataProvider('modelTypesProvider')]
+    public function testSet(string $modelType): void
     {
         $model = $this->getModelByType($modelType);
 
@@ -236,10 +219,8 @@ class CommonFunctionalityTest extends TestCase
         $this->assertEquals(['user' => ['age' => 18]], $model->settings()->all());
     }
 
-    /**
-     * @dataProvider  modelTypesProvider
-     */
-    public function testSetMultiple(string $modelType)
+    #[DataProvider('modelTypesProvider')]
+    public function testSetMultiple(string $modelType): void
     {
         $model = $this->getModelByType($modelType);
 
@@ -252,36 +233,32 @@ class CommonFunctionalityTest extends TestCase
         $model->settings()->setMultiple($testData);
         $this->assertEquals($model->settings()->all(), $testData);
 
-        $model->settings()->setMultiple($this->testArray);
+        $model->settings()->setMultiple(self::$testArray);
         $this->assertEquals(
-            array_merge($testData, $this->testArray),
+            array_merge($testData, self::$testArray),
             $model->settings()->all()
         );
     }
 
-    /**
-     * @dataProvider  modelTypesProvider
-     */
-    public function testClear(string $modelType)
+    #[DataProvider('modelTypesProvider')]
+    public function testClear(string $modelType): void
     {
         $model = $this->getModelByType($modelType);
 
-        $model->settings()->clear()->apply($this->testArray);
-        $this->assertEquals($this->testArray, $model->settings()->all());
+        $model->settings()->clear()->apply(self::$testArray);
+        $this->assertEquals(self::$testArray, $model->settings()->all());
 
         $model->settings()->clear();
         $this->assertEquals([], $model->settings()->all());
     }
 
-    /**
-     * @dataProvider  modelTypesProvider
-     */
-    public function testDelete(string $modelType)
+    #[DataProvider('modelTypesProvider')]
+    public function testDelete(string $modelType): void
     {
         $model = $this->getModelByType($modelType);
-        $model->settings()->apply($this->testArray);
+        $model->settings()->apply(self::$testArray);
 
-        $this->assertEquals($this->testArray, $model->settings()->all());
+        $this->assertEquals(self::$testArray, $model->settings()->all());
         $this->assertEquals('John', $model->settings()->get('user.first_name'));
 
         $model->settings()->delete('user.first_name');
@@ -291,14 +268,12 @@ class CommonFunctionalityTest extends TestCase
         $this->assertEquals([], $model->settings()->all());
     }
 
-    /**
-     * @dataProvider  modelTypesProvider
-     */
-    public function testDeleteMultiple(string $modelType)
+    #[DataProvider('modelTypesProvider')]
+    public function testDeleteMultiple(string $modelType): void
     {
         $model = $this->getModelByType($modelType);
-        $model->settings()->apply($this->testArray);
-        $this->assertEquals($this->testArray, $model->settings()->all());
+        $model->settings()->apply(self::$testArray);
+        $this->assertEquals(self::$testArray, $model->settings()->all());
 
         $model->settings()->deleteMultiple(['user.first_name', 'user.last_name']);
         $testData = $model->settings()->get('user');
@@ -307,19 +282,17 @@ class CommonFunctionalityTest extends TestCase
         $this->assertArrayHasKey('email', $testData);
     }
 
-    /**
-     * @dataProvider  modelTypesProvider
-     */
-    public function testDefaultValue(string $modelType)
+    #[DataProvider('modelTypesProvider')]
+    public function testDefaultValue(string $modelType): void
     {
         $model = $this->getModelByType($modelType);
         $model->settings()->clear();
         $model->defaultSettings = $this->defaultSettingsTestArray;
         $this->assertEquals($this->defaultSettingsTestArray, $model->settings()->all());
 
-        $model->settings()->apply($this->testArray);
+        $model->settings()->apply(self::$testArray);
         $this->assertEquals(
-            array_merge($this->defaultSettingsTestArray, $this->testArray),
+            array_merge($this->defaultSettingsTestArray, self::$testArray),
             $model->settings()->all()
         );
 
@@ -356,10 +329,8 @@ class CommonFunctionalityTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider  modelTypesProvider
-     */
-    public function testDefaultValueFromConfig(string $modelType)
+    #[DataProvider('modelTypesProvider')]
+    public function testDefaultValueFromConfig(string $modelType): void
     {
         $model = $this->getModelByType($modelType);
 
@@ -370,17 +341,15 @@ class CommonFunctionalityTest extends TestCase
         config()->set('model_settings.defaultSettings.' . $model->getTable(), $this->defaultSettingsTestArray);
 
         $this->assertEquals($this->defaultSettingsTestArray, $model->settings()->all());
-        $model->settings()->apply($this->testArray);
+        $model->settings()->apply(self::$testArray);
         $this->assertEquals(
-            array_merge($this->defaultSettingsTestArray, $this->testArray),
+            array_merge($this->defaultSettingsTestArray, self::$testArray),
             $model->settings()->all()
         );
     }
 
-    /**
-     * @dataProvider  modelTypesProvider
-     */
-    public function testValidateData(string $modelType)
+    #[DataProvider('modelTypesProvider')]
+    public function testValidateData(string $modelType): void
     {
         $model = $this->getModelByType($modelType);
         $model->settingsRules = $this->rules;
@@ -388,7 +357,7 @@ class CommonFunctionalityTest extends TestCase
         $model->settings()->clear();
         $this->assertEquals([], $model->settings()->all());
 
-        $model->settings()->apply($this->testArray);
+        $model->settings()->apply(self::$testArray);
 
         $model->settings()->clear();
         $this->assertEquals([], $model->settings()->all());
@@ -399,7 +368,7 @@ class CommonFunctionalityTest extends TestCase
             $this->assertArrayHasKey('user.age', $e->errors());
         }
 
-        $testArray = $this->testArray;
+        $testArray = self::$testArray;
         $testArray['user']['age'] = 'string';
         $this->expectException(ValidationException::class);
         $model->settings()->apply($testArray);

@@ -5,15 +5,15 @@ namespace Glorand\Model\Settings\Tests;
 use Glorand\Model\Settings\Tests\Models\UsersWithParentModelWithField;
 use Glorand\Model\Settings\Tests\Models\UserWithField as User;
 
-class ParentChildSettingsTest extends TestCase
+final class ParentChildSettingsTest extends TestCase
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->model = UsersWithParentModelWithField::first();
     }
 
-    public function testSettingsForChild()
+    public function testSettingsForChild(): void
     {
         $testArray = ['a' => 'b'];
         $this->model->settings = $testArray;

@@ -2,6 +2,11 @@
 
 All notable changes to `glorand/laravel-model-settings` will be documented in this file
 
+## 7.0.0 - 2024-03-13
+### Added
+- Add support for Laravel 11
+- 8.1 min. php version
+
 ## 5.0.0 - 2022-02-10
 ### Added
 - Add support for Laravel 9 by @belzaaron
