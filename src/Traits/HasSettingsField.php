@@ -76,14 +76,6 @@ trait HasSettingsField
     }
 
     /**
-     * @return string
-     */
-    public function getConnectionName(): string
-    {
-        return $this->connection ?? config('database.default');
-    }
-
-    /**
      * @return bool
      */
     public function isPersistSettings(): bool
@@ -109,7 +101,7 @@ trait HasSettingsField
             config('model_settings.settings_table_cache_prefix') . '::has_field',
             now()->addDays(1),
             function () {
-                return Schema::connection($this->getConnectionName())
+                return Schema::connection($this->getConnectionName() ?? config('database.default'))
                     ->hasColumn(
                         $this->getTable(),
                         $this->getSettingsFieldName()
