@@ -12,7 +12,7 @@ use Illuminate\Support\Arr;
  */
 trait HasSettings
 {
-    public function getRules(): array
+    public function getSettingsRules(): array
     {
         if (property_exists($this, 'settingsRules') && is_array($this->settingsRules)) {
             return $this->settingsRules;

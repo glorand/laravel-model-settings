@@ -236,6 +236,6 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
      */
     protected function validate(array $settings)
     {
-        Validator::make(Arr::wrap($settings), Arr::wrap($this->model->getRules()))->validate();
+        Validator::make(Arr::wrap($settings), Arr::wrap($this->model->getSettingsRules()))->validate();
     }
 }
