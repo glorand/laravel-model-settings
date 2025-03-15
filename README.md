@@ -17,14 +17,11 @@
 <a href="https://github.com/glorand/laravel-model-settings/actions">
 <img src="https://github.com/glorand/laravel-model-settings/workflows/Test/badge.svg" alt="'Github Actions" />
 </a>
- <a href="https://travis-ci.com/glorand/laravel-model-settings">
- <img src="https://travis-ci.com/glorand/laravel-model-settings.svg?branch=master" alt="Build Status">
- </a>
- <a href="LICENSE.md">
+ <a href="LICENSE">
  <img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat" alt="Software License">
  </a>
  <br />
- <a title="MadeWithLaravel.com Shield" href="https://madewithlaravel.com/p/laravel-model-settings/shield-link"> <img src="https://madewithlaravel.com/storage/repo-shields/1716-shield.svg"/></a>
+ <a title="MadeWithLaravel.com Shield" href="https://madewithlaravel.com/p/laravel-model-settings/shield-link"> <img src="https://madewithlaravel.com/storage/repo-shields/1716-shield.svg" alt="Sheald"/></a>
 <a title="PHP Version" href="#"><img src="https://img.shields.io/packagist/php-v/glorand/laravel-model-settings" alt="PHP Version" /></a>
 </p>
 

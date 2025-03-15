@@ -2,6 +2,14 @@
 
 All notable changes to `glorand/laravel-model-settings` will be documented in this file
 
+## 8.0.1 - 2025-03-15
+### Added
+- Rename HasSettings::getRules to HasSettings::getSettingsRules
+
+## 8.0.0 - 2025-02-28
+### Added
+- Add support for Laravel 12
+
 ## 7.0.0 - 2024-03-13
 ### Added
 - Add support for Laravel 11
