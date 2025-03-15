@@ -250,7 +250,7 @@ If you prefer to use another name other than `settings` ,
 you can do so by defining a `$invokeSettingsBy` property. 
 This forward calls (such as `configurations()`) to the `settings()` method.
 
-### Validation system for settings data <a name="validation></a>
+### Validation system for settings data <a name="validation"></a>
 When you're using the set() or apply()|update() methods thrown an exception when you break a rule.
 You can define rules on model using `$settingsRules` public property, and the rules array definition is identical with
 the Laravel default validation rules. ([see Laravel rules](https://laravel.com/docs/8.x/validation#available-validation-rules))
