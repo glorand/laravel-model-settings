@@ -33,7 +33,7 @@ interface SettingsManagerContract
      * @return iterable A list of key => value pairs.
      * Paths that do not exist will have $default as value.
      */
-    public function getMultiple(?iterable $paths = null, $default = null): iterable;
+    public function getMultiple(iterable $paths, $default = null): iterable;
 
     public function has(string $path): bool;
 
