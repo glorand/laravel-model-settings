@@ -122,7 +122,7 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
      * @param null $default
      * @return array|\ArrayAccess|mixed
      */
-    public function get(string $path = null, $default = null)
+    public function get(?string $path = null, $default = null)
     {
         return $path ? Arr::get($this->all(), $path, $default) : $this->all();
     }
@@ -132,7 +132,7 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
      * @param null $default
      * @return array
      */
-    public function getMultiple(iterable $paths = null, $default = null): array
+    public function getMultiple(?iterable $paths = null, $default = null): array
     {
         $array = [];
         $allFlattened = $this->allFlattened();
@@ -178,7 +178,7 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
      * @param string|null $path
      * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
      */
-    public function delete(string $path = null): SettingsManagerContract
+    public function delete(?string $path = null): SettingsManagerContract
     {
         if (!$path) {
             $settings = [];
