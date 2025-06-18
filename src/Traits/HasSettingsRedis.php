@@ -32,7 +32,7 @@ trait HasSettingsRedis
         return is_array($value) ? $value : [];
     }
 
-    public function cacheKey(string $key = null): string
+    public function cacheKey(?string $key = null): string
     {
         return sprintf(
             "r-k-%s:%s",

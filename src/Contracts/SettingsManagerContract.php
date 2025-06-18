@@ -23,7 +23,7 @@ interface SettingsManagerContract
      * @param mixed $default default value to return if the path does not exist
      * @return mixed
      */
-    public function get(string $path = null, $default = null);
+    public function get(?string $path = null, $default = null);
 
     /**
      * Obtains multiple items by their paths.
@@ -55,7 +55,7 @@ interface SettingsManagerContract
      * @param string|null $path
      * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
      */
-    public function delete(string $path = null): self;
+    public function delete(?string $path = null): self;
 
     /**
      * Deletes multiple setting items in a single operation.
