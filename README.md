@@ -283,6 +283,18 @@ class User extends Model
 }
 
 ```
+## Counting redis requests
+```
+docker compose exec redis redis-cli monitor | grep -E '"(GET|SET|DEL)"' | grep "model_settings" | awk '{
+    if ($0 ~ /"GET"/) get++;
+    else if ($0 ~ /"SET"/) set++;
+    else if ($0 ~ /"DEL"/) del++;
+    total++;
+    printf "\rGET: %d, SET: %d, DEL: %d, TOTAL: %d", get, set, del, total;
+}' 
+```
+
+
 
 ## Changelog <a name="changelog"></a>
 Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
