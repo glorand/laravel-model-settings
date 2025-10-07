@@ -8,121 +8,124 @@ use Glorand\Model\Settings\Models\ModelSettings;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\Cache;
 
+/**
+ * Trait HasSettingsTable
+ * @package Glorand\Model\Settings\Traits
+ *
+ * @property ModelSettings $modelSettings
+ * @property array $settings
+ * @method morphOne(string $related, string $name, string $type = null, string $id = null, string $localKey = null)
+ */
 trait HasSettingsTable
 {
     use HasSettings;
 
-    protected $settingsRuntimeCache = null;
-    protected $settingsManagerInstance = null;
-    protected static $configCache = [];
+    /** @var SettingsManagerContract|null */
+    private ?SettingsManagerContract $_settingsManager = null;
 
-    /**
-     * Returns a settings manager instance for the model, creating one if necessary.
-     * @return SettingsManagerContract
-     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+    /** @var array|null In-memory copy */
+    private ?array $_settingsCache = null;
+
+    /* -----------------------------------------------------------------
+     |  Boot – register model event listeners
+     | -----------------------------------------------------------------
+     */
+    public static function bootHasSettingsTable(): void
+    {
+        // When the polymorphic row changes, flush our caches
+        static::saved(function ($model) {
+            $model->flushSettingsCache();
+            Cache::forget($model->getSettingsCacheKey());
+        });
+
+        static::deleted(function ($model) {
+            $model->flushSettingsCache();
+            Cache::forget($model->getSettingsCacheKey());
+        });
+    }
+
+    /* -----------------------------------------------------------------
+     |  Settings Manager
+     | -----------------------------------------------------------------
      */
     public function settings(): SettingsManagerContract
     {
-        if ($this->settingsManagerInstance === null) {
-            $this->settingsManagerInstance = new TableSettingsManager($this);
-        }
-
-        return $this->settingsManagerInstance;
+        return $this->_settingsManager ??= new TableSettingsManager($this);
     }
 
-    /**
-     * Retrieves the settings value for the model, optionally using a cache.
-     * @return array
+    /* -----------------------------------------------------------------
+     |  Settings Value (lazy + in-memory)
+     | -----------------------------------------------------------------
      */
     public function getSettingsValue(): array
     {
-        // Runtime cache = ZERO Redis calls after first access
-        if ($this->settingsRuntimeCache !== null) {
-            return $this->settingsRuntimeCache;
+        if ($this->_settingsCache !== null) {
+            return $this->_settingsCache;
         }
 
-        // Cache config lookup once per class (not per instance)
-        if (!isset(static::$configCache['use_cache'])) {
-            static::$configCache['use_cache'] = config('model_settings.settings_table_use_cache');
+        if (! config('model_settings.settings_table_use_cache')) {
+            return $this->_settingsCache = $this->loadSettingsFromDatabase();
         }
 
-        if (static::$configCache['use_cache']) {
-            // Only 1 Redis call per request
-            $this->settingsRuntimeCache = Cache::rememberForever(
-                $this->getSettingsCacheKey(),
-                fn() => $this->__getSettingsValue()
-            );
-        } else {
-            $this->settingsRuntimeCache = $this->__getSettingsValue();
-        }
-
-        return $this->settingsRuntimeCache;
+        return $this->_settingsCache = Cache::rememberForever(
+            $this->getSettingsCacheKey(),
+            fn () => $this->loadSettingsFromDatabase()
+        );
     }
 
     /**
-     * Retrieves the settings value for the model.
-     * @return array
+     * Reload settings and refresh all caches.
      */
-    private function __getSettingsValue(): array
+    public function refreshSettings(): array
     {
-        // Eager loading support (prevents N+1)
-        if ($this->relationLoaded('modelSettings')) {
-            $modelSettings = $this->getRelation('modelSettings');
-            return $modelSettings ? $modelSettings->settings : [];
-        }
+        $this->flushSettingsCache();
+        Cache::forget($this->getSettingsCacheKey());
 
-        $modelSettings = $this->modelSettings()
-            ->select('settings', 'model_id', 'model_type')
-            ->first();
-
-        return $modelSettings ? $modelSettings->settings : [];
+        return $this->getSettingsValue();
     }
 
     /**
-     * Define an inverse one-to-one or many relationship.
-     * @return MorphOne
+     * Flush only the in-RAM copy.
+     */
+    public function flushSettingsCache(): void
+    {
+        $this->_settingsCache = null;
+    }
+
+    /**
+     * Raw DB hit (no caching layer).
+     */
+    private function loadSettingsFromDatabase(): array
+    {
+        /** @var ModelSettings|null $row */
+        $row = $this->modelSettings()->first(['settings']);
+
+        return $row?->settings ?? [];
+    }
+
+    /* -----------------------------------------------------------------
+     |  Relations
+     | -----------------------------------------------------------------
      */
     public function modelSettings(): MorphOne
     {
         return $this->morphOne(ModelSettings::class, 'model');
     }
 
-    /**
-     * Retrieves the cache key for settings associated with the model.
-     *
-     * This method ensures that a consistent cache key is generated for
-     * the model's settings by utilizing a shared static configuration
-     * for the cache prefix and combining it with the table name and
-     * primary key of the current model instance.
-     *
-     * @return string The generated cache key for the model's settings.
+
+    /* -----------------------------------------------------------------
+     |  Helpers
+     | -----------------------------------------------------------------
      */
     public function getSettingsCacheKey(): string
     {
-        // Static config cache shared across all instances
-        if (!isset(static::$configCache['cache_prefix'])) {
-            static::$configCache['cache_prefix'] = config('model_settings.settings_table_cache_prefix');
-        }
-
-        return static::$configCache['cache_prefix'] . $this->getTable() . '::' . $this->getKey();
+        return config('model_settings.settings_table_cache_prefix')
+            . $this->getTable() . '::' . $this->getKey();
     }
 
-    /**
-     * Clears the runtime cache and optionally the cache for the model's settings.'
-     * @return void
-     */
-    public function clearSettingsCache(): void
-    {
-        $this->settingsRuntimeCache = null;
-
-        if (static::$configCache['use_cache'] ?? config('model_settings.settings_table_use_cache')) {
-            Cache::forget($this->getSettingsCacheKey());
-        }
-    }
-
-    /**
-     * Retrieves the name of the database table associated with the model.
-     * @return string
+    /* -----------------------------------------------------------------
+     |  Abstract requirements
+     | -----------------------------------------------------------------
      */
     abstract public function getTable();
 }
