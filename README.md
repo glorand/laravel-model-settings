@@ -79,7 +79,10 @@ Default name for the settings table - when you use the `HasSettingsTable`
 Your models should use the `HasSettingsField` or `HasSettingsTable` trait.
 
 #### Option 1 - `HasSettingsField` trait <a name="update_models_1"></a>
-Run the `php artisan model-settings:model-settings-field` in order to create a migration file for a table.\
+Run the command below in order to create a migration file for a table.\
+
+> php artisan model-settings:model-settings-field
+
 This command will create a json field (default name `settings`, from config) for the mentioned table.
 
 You can choose another than default, in this case you have to specify it in you model.
@@ -104,7 +107,11 @@ class User extends Model
 }
 ```
 #### Option 2 - `HasSettingsTable` trait <a name="update_models_2"></a>
-Run before the command `php artisan model-settings:model-settings-table`.\
+Run the command below to create the settings table.
+
+> php artisan model-settings:model-settings-table
+
+
 The command will copy for you the migration class to create the table where the setting values will be stored.\
 The default name of the table is `model_settings`; change the config or env value `MODEL_SETTINGS_TABLE_NAME` if you want to rewrite the default name (**before you run the command!**)
 ```php
