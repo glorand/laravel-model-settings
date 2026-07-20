@@ -2,6 +2,7 @@
 
 namespace Glorand\Model\Settings\Tests;
 
+use Glorand\Model\Settings\Exceptions\ModelSettingsException;
 use Glorand\Model\Settings\Models\ModelSettings;
 use Glorand\Model\Settings\Tests\Models\UsersWithTable as User;
 
@@ -26,6 +27,14 @@ final class TableSettingsManagerTest extends TestCase
     {
         parent::setUp();
         $this->model = User::first();
+    }
+
+    public function testUnsavedModelThrows(): void
+    {
+        $this->expectException(ModelSettingsException::class);
+        $this->expectExceptionMessage('must be saved');
+
+        (new User())->settings()->all();
     }
 
     /**

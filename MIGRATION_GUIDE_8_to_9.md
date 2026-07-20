@@ -157,6 +157,19 @@ The whole runtime API is preserved. No call-site changes are needed for:
 
 ## 5. Behavioral changes to be aware of
 
+- **Mutations no longer persist defaults.** In v8, `set()`, `update()`, `delete()`,
+  `setMultiple()` and `deleteMultiple()` started from the default-merged settings, so a single
+  `set()` silently copied every default value into storage - freezing them there even if the
+  configured defaults changed later. In v9 these methods start from the stored value and
+  persist only the overrides; defaults stay in config/model and are merged at read time.
+  Validation still runs against the effective result (defaults + proposed values).
+  `apply()` is unchanged: it persists exactly the array you pass it.
+- **The `table` and `redis` drivers require a saved model.** Reading or writing settings on a
+  model without a primary key throws a `ModelSettingsException` instead of silently producing
+  rows or Redis keys with a `null` key. Save the model first.
+- **Clearing Redis settings deletes the key.** The `redis` driver removes the storage key when
+  the settings become empty instead of storing `[]`, matching the `table` driver's
+  delete-the-row behavior.
 - **Unknown driver throws.** An unregistered driver name (typo in `$settingsDriver` or
   `MODEL_SETTINGS_DRIVER`) throws a `ModelSettingsException` instead of silently misbehaving.
 - **Field schema-check cache fix.** The internal cache key that remembers whether the settings

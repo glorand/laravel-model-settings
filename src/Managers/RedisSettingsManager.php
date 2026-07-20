@@ -17,6 +17,8 @@ class RedisSettingsManager extends AbstractSettingsManager
      */
     public function getStoredValue(): array
     {
+        $this->ensureModelIsPersisted();
+
         $redisValue = $this->connection()->get($this->model->cacheKey());
         $value = json_decode($redisValue, true);
 
@@ -25,9 +27,14 @@ class RedisSettingsManager extends AbstractSettingsManager
 
     public function apply(array $settings = []): SettingsManagerContract
     {
+        $this->ensureModelIsPersisted();
         $this->validate($settings);
 
-        $this->connection()->set($this->model->cacheKey(), json_encode($settings));
+        if ([] === $settings) {
+            $this->connection()->del($this->model->cacheKey());
+        } else {
+            $this->connection()->set($this->model->cacheKey(), json_encode($settings));
+        }
 
         return $this;
     }

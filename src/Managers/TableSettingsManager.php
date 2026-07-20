@@ -18,6 +18,8 @@ class TableSettingsManager extends AbstractSettingsManager
      */
     public function getStoredValue(): array
     {
+        $this->ensureModelIsPersisted();
+
         if (config('model_settings.drivers.table.use_cache', true)) {
             return Cache::rememberForever($this->model->getSettingsCacheKey(), function () {
                 return $this->fetchStoredValue();
@@ -35,6 +37,7 @@ class TableSettingsManager extends AbstractSettingsManager
      */
     public function apply(array $settings = []): SettingsManagerContract
     {
+        $this->ensureModelIsPersisted();
         $this->validate($settings);
 
         $modelSettings = $this->model->modelSettings()->first();

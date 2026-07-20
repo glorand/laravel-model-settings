@@ -321,6 +321,27 @@ final class CommonFunctionalityTest extends TestCase
     }
 
     #[DataProvider('modelTypesProvider')]
+    public function testMutationsDoNotPersistDefaults(string $modelType): void
+    {
+        $model = $this->getModelByType($modelType);
+        $model->settings()->clear();
+        $model->defaultSettings = $this->defaultSettingsTestArray;
+
+        $model->settings()->set('user.age', 18);
+
+        $this->assertEquals(['user' => ['age' => 18]], $model->settings()->getStoredValue());
+        $this->assertEquals(
+            array_merge($this->defaultSettingsTestArray, ['user' => ['age' => 18]]),
+            $model->settings()->all()
+        );
+
+        $model->settings()->delete('user');
+
+        $this->assertEquals([], $model->settings()->getStoredValue());
+        $this->assertEquals($this->defaultSettingsTestArray, $model->settings()->all());
+    }
+
+    #[DataProvider('modelTypesProvider')]
     public function testDefaultValueFromConfig(string $modelType): void
     {
         $model = $this->getModelByType($modelType);

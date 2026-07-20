@@ -43,6 +43,18 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
     abstract public function getStoredValue(): array;
 
     /**
+     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     */
+    protected function ensureModelIsPersisted(): void
+    {
+        if (null === $this->model->getKey()) {
+            throw new ModelSettingsException(
+                sprintf('Model [%s] must be saved before accessing its settings.', get_class($this->model))
+            );
+        }
+    }
+
+    /**
      * Check if array is associative and not sequential
      * @param array $arr
      * @return bool
@@ -165,7 +177,7 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
      */
     public function set(string $path, $value): SettingsManagerContract
     {
-        $settings = $this->all();
+        $settings = $this->getStoredValue();
         Arr::set($settings, $path, $value);
 
         return $this->apply($settings);
@@ -190,7 +202,7 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
         if (!$path) {
             $settings = [];
         } else {
-            $settings = $this->all();
+            $settings = $this->getStoredValue();
             Arr::forget($settings, $path);
         }
 
@@ -213,7 +225,7 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
      */
     public function setMultiple(iterable $values): SettingsManagerContract
     {
-        $settings = $this->all();
+        $settings = $this->getStoredValue();
         foreach ($values as $path => $value) {
             Arr::set($settings, $path, $value);
         }
@@ -227,7 +239,7 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
      */
     public function deleteMultiple(iterable $paths): SettingsManagerContract
     {
-        $settings = $this->all();
+        $settings = $this->getStoredValue();
         foreach ($paths as $path) {
             Arr::forget($settings, $path);
         }
@@ -238,11 +250,23 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
     }
 
     /**
+     * Validates the candidate effective result (defaults merged with the
+     * proposed settings), while only the proposed settings get persisted.
+     *
      * @param  array  $settings
      * @throws \Illuminate\Validation\ValidationException
      */
     protected function validate(array $settings)
     {
-        Validator::make(Arr::wrap($settings), Arr::wrap($this->model->getSettingsRules()))->validate();
+        $flattened = array_merge(
+            static::dotFlatten($this->model->getDefaultSettings()),
+            static::dotFlatten($settings)
+        );
+        $effective = [];
+        foreach ($flattened as $key => $value) {
+            Arr::set($effective, $key, $value);
+        }
+
+        Validator::make($effective, Arr::wrap($this->model->getSettingsRules()))->validate();
     }
 }
