@@ -4,6 +4,7 @@ namespace Glorand\Model\Settings\Managers;
 
 use Glorand\Model\Settings\Contracts\SettingsManagerContract;
 use Glorand\Model\Settings\Models\ModelSettings;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * Class TableSettingsManager
@@ -12,6 +13,20 @@ use Glorand\Model\Settings\Models\ModelSettings;
  */
 class TableSettingsManager extends AbstractSettingsManager
 {
+    /**
+     * @return array
+     */
+    public function getStoredValue(): array
+    {
+        if (config('model_settings.drivers.table.use_cache', true)) {
+            return Cache::rememberForever($this->model->getSettingsCacheKey(), function () {
+                return $this->fetchStoredValue();
+            });
+        }
+
+        return $this->fetchStoredValue();
+    }
+
     /**
      * @param  array  $settings
      * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
@@ -40,5 +55,17 @@ class TableSettingsManager extends AbstractSettingsManager
         cache()->forget($this->model->getSettingsCacheKey());
 
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    private function fetchStoredValue(): array
+    {
+        if ($modelSettings = $this->model->modelSettings()->first()) {
+            return $modelSettings->settings;
+        }
+
+        return [];
     }
 }

@@ -36,6 +36,13 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
     }
 
     /**
+     * Raw persisted settings for this model (defaults NOT merged).
+     *
+     * @return array
+     */
+    abstract public function getStoredValue(): array;
+
+    /**
      * Check if array is associative and not sequential
      * @param array $arr
      * @return bool
@@ -87,7 +94,7 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
     public function allFlattened(): array
     {
         $flattenedDefaultSettings = static::dotFlatten($this->model->getDefaultSettings());
-        $flattenedSettingsValue = static::dotFlatten($this->model->getSettingsValue());
+        $flattenedSettingsValue = static::dotFlatten($this->getStoredValue());
 
         return array_merge($flattenedDefaultSettings, $flattenedSettingsValue);
     }

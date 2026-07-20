@@ -10,6 +10,13 @@ interface SettingsManagerContract
 
     public function all(): array;
 
+    /**
+     * Raw persisted settings for this model (defaults NOT merged).
+     *
+     * @return array
+     */
+    public function getStoredValue(): array;
+
     public function empty(): bool;
 
     public function exist(): bool;
