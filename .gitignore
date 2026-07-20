@@ -1,5 +1,6 @@
 composer.phar
 vendor/
+.plans/
 /.idea
 .php_cs.cache
 composer.lock
