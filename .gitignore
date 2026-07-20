@@ -1,6 +1,7 @@
 composer.phar
 vendor/
 .plans/
+CLAUDE.local.md
 /.idea
 .php_cs.cache
 composer.lock
