@@ -25,5 +25,6 @@ class ModelSettingsServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/model_settings.php', 'model_settings');
+        $this->app->singleton(SettingsManagerFactory::class);
     }
 }
