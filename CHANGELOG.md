@@ -2,6 +2,19 @@
 
 All notable changes to `glorand/laravel-model-settings` will be documented in this file
 
+## 9.0.0 - 2026-07-20
+### Added
+- Single `HasSettings` trait with configuration-driven driver selection (`MODEL_SETTINGS_DRIVER` env / `driver` config / per-model `$settingsDriver` property)
+- `SettingsManagerFactory` singleton with `extend()` for registering custom drivers at runtime
+- Driver-scoped config: driver-specific keys live under `drivers.<name>.*`
+- Optional Redis driver options: `drivers.redis.connection` (named connection) and `drivers.redis.key_prefix`
+### Changed (BREAKING)
+- Removed the `HasSettingsField`, `HasSettingsTable` and `HasSettingsRedis` traits - see [MIGRATION_GUIDE_8_to_9.md](MIGRATION_GUIDE_8_to_9.md)
+- Removed the flat `settings_*` config keys (env variable names are unchanged)
+- Requires PHP ^8.2 and Laravel 12/13 (drop Laravel 10/11, PHP 8.1)
+### Fix
+- The field driver's internal schema-check cache key now includes the table name (two models on different tables no longer share one cached result)
+
 ## 8.0.1 - 2025-03-15
 ### Added
 - Rename HasSettings::getRules to HasSettings::getSettingsRules
