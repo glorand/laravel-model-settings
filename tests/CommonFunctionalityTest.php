@@ -3,9 +3,7 @@
 namespace Glorand\Model\Settings\Tests;
 
 use PHPUnit\Framework\Attributes\DataProvider;
-use Glorand\Model\Settings\Traits\HasSettingsField;
-use Glorand\Model\Settings\Traits\HasSettingsRedis;
-use Glorand\Model\Settings\Traits\HasSettingsTable;
+use Glorand\Model\Settings\Traits\HasSettings;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Validation\ValidationException;
 use Lunaweb\RedisMock\MockPredisConnection;
@@ -70,17 +68,10 @@ final class CommonFunctionalityTest extends TestCase
 
     public function testInit(): void
     {
-        $traits = class_uses($this->getModelByType('redis'));
-        $this->assertTrue(array_key_exists(HasSettingsRedis::class, $traits));
-
-        $traits = class_uses($this->getModelByType('field'));
-        $this->assertArrayHasKey(HasSettingsField::class, $traits);
-
-        $traits = class_uses($this->getModelByType('text_field'));
-        $this->assertArrayHasKey(HasSettingsField::class, $traits);
-
-        $traits = class_uses($this->getModelByType('table'));
-        $this->assertTrue(array_key_exists(HasSettingsTable::class, $traits));
+        foreach (self::$modelTypes as $modelType) {
+            $traits = class_uses($this->getModelByType($modelType));
+            $this->assertArrayHasKey(HasSettings::class, $traits);
+        }
 
         $this->assertInstanceOf(MockPredisConnection::class, Redis::connection());
     }

@@ -3,7 +3,7 @@
 namespace Glorand\Model\Settings\Tests\Models;
 
 use Glorand\Model\Settings\Contracts\SettingsManagerContract;
-use Glorand\Model\Settings\Traits\HasSettingsTable;
+use Glorand\Model\Settings\Traits\HasSettings;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -14,7 +14,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class UsersWithTable extends Model
 {
-    use HasSettingsTable;
+    use HasSettings;
+
+    protected $settingsDriver = 'table';
 
     public $invokeSettingsBy = 'config';
 

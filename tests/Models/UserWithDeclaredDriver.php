@@ -8,8 +8,5 @@ namespace Glorand\Model\Settings\Tests\Models;
  */
 class UserWithDeclaredDriver extends UserWithField
 {
-    public function getSettingsDriver(): string
-    {
-        return 'redis';
-    }
+    protected $settingsDriver = 'redis';
 }

@@ -8,7 +8,7 @@ use Glorand\Model\Settings\Managers\RedisSettingsManager;
 use Glorand\Model\Settings\Managers\TableSettingsManager;
 use Glorand\Model\Settings\SettingsManagerFactory;
 use Glorand\Model\Settings\Tests\Models\UserWithDeclaredDriver;
-use Glorand\Model\Settings\Tests\Models\UserWithField;
+use Glorand\Model\Settings\Tests\Models\UserWithConfigDriver;
 
 final class SettingsManagerFactoryTest extends TestCase
 {
@@ -22,7 +22,7 @@ final class SettingsManagerFactoryTest extends TestCase
 
     public function testMakeResolvesDefaultDriverFromConfig(): void
     {
-        $manager = app(SettingsManagerFactory::class)->make(UserWithField::first());
+        $manager = app(SettingsManagerFactory::class)->make(UserWithConfigDriver::first());
 
         $this->assertInstanceOf(FieldSettingsManager::class, $manager);
     }
@@ -32,10 +32,10 @@ final class SettingsManagerFactoryTest extends TestCase
         $factory = app(SettingsManagerFactory::class);
 
         config()->set('model_settings.driver', 'table');
-        $this->assertInstanceOf(TableSettingsManager::class, $factory->make(UserWithField::first()));
+        $this->assertInstanceOf(TableSettingsManager::class, $factory->make(UserWithConfigDriver::first()));
 
         config()->set('model_settings.driver', 'redis');
-        $this->assertInstanceOf(RedisSettingsManager::class, $factory->make(UserWithField::first()));
+        $this->assertInstanceOf(RedisSettingsManager::class, $factory->make(UserWithConfigDriver::first()));
     }
 
     public function testModelDriverOverridesConfig(): void
@@ -54,7 +54,7 @@ final class SettingsManagerFactoryTest extends TestCase
         });
         config()->set('model_settings.driver', 'custom');
 
-        $manager = app(SettingsManagerFactory::class)->make(UserWithField::first());
+        $manager = app(SettingsManagerFactory::class)->make(UserWithConfigDriver::first());
 
         $this->assertInstanceOf(CustomSettingsManager::class, $manager);
     }
@@ -66,7 +66,7 @@ final class SettingsManagerFactoryTest extends TestCase
         $this->expectException(ModelSettingsException::class);
         $this->expectExceptionMessage('Unsupported settings driver [missing]');
 
-        app(SettingsManagerFactory::class)->make(UserWithField::first());
+        app(SettingsManagerFactory::class)->make(UserWithConfigDriver::first());
     }
 
     public function testCustomCreatorMustReturnContract(): void
@@ -79,6 +79,6 @@ final class SettingsManagerFactoryTest extends TestCase
         $this->expectException(ModelSettingsException::class);
         $this->expectExceptionMessage('Custom driver [broken] must return a');
 
-        app(SettingsManagerFactory::class)->make(UserWithField::first());
+        app(SettingsManagerFactory::class)->make(UserWithConfigDriver::first());
     }
 }

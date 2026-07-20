@@ -6,19 +6,22 @@ use Glorand\Model\Settings\Traits\HasSettings;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class WrongUserWithField
+ * Class UserWithConfigDriver
+ * No $settingsDriver declared - the driver always comes from the config.
  * @package Glorand\Model\Settings\Tests\Models
  * @method static first()
  */
-class WrongUserWithField extends Model
+class UserWithConfigDriver extends Model
 {
     use HasSettings;
 
-    protected $settingsDriver = 'field';
-
-    protected $table = 'wrong_users';
+    protected $table = 'users_with_field';
 
     protected $guarded = [];
 
     protected $fillable = ['id', 'name'];
+
+    public $defaultSettings = [];
+
+    public $settingsRules = [];
 }

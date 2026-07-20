@@ -20,7 +20,7 @@ class ModelSettings extends Model
     {
         parent::__construct($attributes);
 
-        $this->setTable(config('model_settings.settings_table_name', 'model_settings'));
+        $this->setTable(config('model_settings.drivers.table.table_name', 'model_settings'));
     }
 
     protected $casts = [

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Cache;
 /**
  * Class TableSettingsManager
  * @package Glorand\Model\Settings\Managers
- * @property  \Illuminate\Database\Eloquent\Model|\Glorand\Model\Settings\Traits\HasSettingsTable $model
+ * @property  \Illuminate\Database\Eloquent\Model|\Glorand\Model\Settings\Traits\HasSettings $model
  */
 class TableSettingsManager extends AbstractSettingsManager
 {

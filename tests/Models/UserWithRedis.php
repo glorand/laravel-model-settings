@@ -2,7 +2,7 @@
 
 namespace Glorand\Model\Settings\Tests\Models;
 
-use Glorand\Model\Settings\Traits\HasSettingsRedis;
+use Glorand\Model\Settings\Traits\HasSettings;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -12,7 +12,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class UserWithRedis extends Model
 {
-    use HasSettingsRedis;
+    use HasSettings;
+
+    protected $settingsDriver = 'redis';
 
     protected $table = 'users';
 

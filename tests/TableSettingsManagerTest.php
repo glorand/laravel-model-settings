@@ -59,9 +59,9 @@ final class TableSettingsManagerTest extends TestCase
             cache()->get($this->model->getSettingsCacheKey())
         );
 
-        $this->assertTrue(config('model_settings.settings_table_use_cache'));
-        config()->set('model_settings.settings_table_use_cache', false);
-        $this->assertFalse(config('model_settings.settings_table_use_cache'));
+        $this->assertTrue(config('model_settings.drivers.table.use_cache'));
+        config()->set('model_settings.drivers.table.use_cache', false);
+        $this->assertFalse(config('model_settings.drivers.table.use_cache'));
         $this->assertEquals(
             array_merge($this->defaultSettingsTestArray, $this->testArray),
             $this->model->settings()->all()

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Redis;
 /**
  * Class RedisSettingsManager
  * @package Glorand\Model\Settings\Managers
- * @property \Illuminate\Database\Eloquent\Model|\Glorand\Model\Settings\Traits\HasSettingsRedis $model
+ * @property \Illuminate\Database\Eloquent\Model|\Glorand\Model\Settings\Traits\HasSettings $model
  */
 class RedisSettingsManager extends AbstractSettingsManager
 {

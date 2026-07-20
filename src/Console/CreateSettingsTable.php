@@ -22,7 +22,7 @@ class CreateSettingsTable extends Command
      */
     public function handle(Filesystem $file)
     {
-        $table = strtolower(config('model_settings.settings_table_name'));
+        $table = strtolower(config('model_settings.drivers.table.table_name'));
         $table = Str::snake(trim($table));
         if (empty($table)) {
             $this->error('The name of the table is required!');

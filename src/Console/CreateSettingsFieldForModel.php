@@ -35,7 +35,7 @@ class CreateSettingsFieldForModel extends Command
             return 2;
         }
 
-        $defaultFieldName = config('model_settings.settings_field_name');
+        $defaultFieldName = config('model_settings.drivers.field.field_name');
         $fieldName = $this->ask(
             'What is the name of the settings field name?',
             $defaultFieldName

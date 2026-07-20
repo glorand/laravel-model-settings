@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Schema;
 /**
  * Class FieldSettingsManager
  * @package Glorand\Model\Settings\Managers
- * @property \Illuminate\Database\Eloquent\Model|\Glorand\Model\Settings\Traits\HasSettingsField $model
+ * @property \Illuminate\Database\Eloquent\Model|\Glorand\Model\Settings\Traits\HasSettings $model
  */
 class FieldSettingsManager extends AbstractSettingsManager
 {
