@@ -2,16 +2,17 @@
 
 namespace Glorand\Model\Settings;
 
+use Closure;
 use Glorand\Model\Settings\Contracts\SettingsManagerContract;
 use Glorand\Model\Settings\Exceptions\ModelSettingsException;
 use Illuminate\Database\Eloquent\Model;
 
 final class SettingsManagerFactory
 {
-    /** @var array<string, \Closure> */
+    /** @var array<string, Closure> */
     protected array $customCreators = [];
 
-    public function extend(string $driver, \Closure $callback): self
+    public function extend(string $driver, Closure $callback): self
     {
         $this->customCreators[$driver] = $callback;
 
@@ -19,7 +20,7 @@ final class SettingsManagerFactory
     }
 
     /**
-     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     * @throws ModelSettingsException
      */
     public function make(Model $model): SettingsManagerContract
     {
@@ -31,15 +32,15 @@ final class SettingsManagerFactory
             return $this->callCustomCreator($driver, $model);
         }
 
-        $class = config("model_settings.drivers.{$driver}.class");
+        $class = config("model_settings.drivers.$driver.class");
         if (!$class || !class_exists($class)) {
-            throw new ModelSettingsException("Unsupported settings driver [{$driver}].");
+            throw new ModelSettingsException("Unsupported settings driver [$driver].");
         }
 
         $manager = new $class($model);
         if (!$manager instanceof SettingsManagerContract) {
             throw new ModelSettingsException(
-                "Driver [{$driver}] must resolve to a " . SettingsManagerContract::class . '.'
+                "Driver [$driver] must resolve to a " . SettingsManagerContract::class . '.'
             );
         }
 
@@ -47,14 +48,14 @@ final class SettingsManagerFactory
     }
 
     /**
-     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     * @throws ModelSettingsException
      */
     protected function callCustomCreator(string $driver, Model $model): SettingsManagerContract
     {
         $manager = ($this->customCreators[$driver])($model);
         if (!$manager instanceof SettingsManagerContract) {
             throw new ModelSettingsException(
-                "Custom driver [{$driver}] must return a " . SettingsManagerContract::class . '.'
+                "Custom driver [$driver] must return a " . SettingsManagerContract::class . '.'
             );
         }
 
