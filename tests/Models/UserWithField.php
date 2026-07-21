@@ -2,7 +2,7 @@
 
 namespace Glorand\Model\Settings\Tests\Models;
 
-use Glorand\Model\Settings\Traits\HasSettingsField;
+use Glorand\Model\Settings\Traits\HasSettings;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -12,9 +12,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class UserWithField extends Model
 {
-    use HasSettingsField;
+    use HasSettings;
 
-    //protected $persistSettings = true;
+    protected $settingsDriver = 'field';
 
     protected $table = 'users_with_field';
 

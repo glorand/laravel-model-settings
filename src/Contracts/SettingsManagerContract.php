@@ -10,6 +10,13 @@ interface SettingsManagerContract
 
     public function all(): array;
 
+    /**
+     * Raw persisted settings for this model (defaults NOT merged).
+     *
+     * @return array
+     */
+    public function getStoredValue(): array;
+
     public function empty(): bool;
 
     public function exist(): bool;
@@ -23,7 +30,7 @@ interface SettingsManagerContract
      * @param mixed $default default value to return if the path does not exist
      * @return mixed
      */
-    public function get(?string $path = null, $default = null);
+    public function get(?string $path = null, mixed $default = null): mixed;
 
     /**
      * Obtains multiple items by their paths.
@@ -33,27 +40,25 @@ interface SettingsManagerContract
      * @return iterable A list of key => value pairs.
      * Paths that do not exist will have $default as value.
      */
-    public function getMultiple(iterable $paths, $default = null): iterable;
+    public function getMultiple(iterable $paths, mixed $default = null): iterable;
 
     public function has(string $path): bool;
 
-    public function set(string $path, $value): self;
+    public function set(string $path, mixed $value): self;
 
     /**
      * Persists a set of key => value pairs in settings.
      *
      * @param iterable $values
-     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
      */
     public function setMultiple(iterable $values): self;
 
-    public function update(string $path, $value): self;
+    public function update(string $path, mixed $value): self;
 
     /**
      * Delete an item by its unique path.
      *
      * @param string|null $path
-     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
      */
     public function delete(?string $path = null): self;
 
@@ -61,14 +66,11 @@ interface SettingsManagerContract
      * Deletes multiple setting items in a single operation.
      *
      * @param iterable $paths a list of string-based paths to be deleted
-     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
      */
     public function deleteMultiple(iterable $paths): self;
 
     /**
      * Wipes clean the entire settings for the model.
-     *
-     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
      */
     public function clear(): self;
 }

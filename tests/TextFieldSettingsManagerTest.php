@@ -4,21 +4,19 @@ namespace Glorand\Model\Settings\Tests;
 
 use Glorand\Model\Settings\Exceptions\ModelSettingsException;
 use Glorand\Model\Settings\Tests\Models\UserWithTextField as User;
+use Illuminate\Contracts\Container\BindingResolutionException;
 
 final class TextFieldSettingsManagerTest extends TestCase
 {
-    /** @var \Glorand\Model\Settings\Tests\Models\UserWithTextField */
-    protected $model;
-    /** @var array */
-    protected $testArray = [
+    protected User $model;
+    protected array $testArray = [
         'user' => [
             'first_name' => "John",
             'last_name'  => "Doe",
             'email'      => "john@doe.com",
         ],
     ];
-    /** @var array */
-    protected $defaultSettingsTestArray = [
+    protected array $defaultSettingsTestArray = [
         'project' => 'Main Project',
     ];
 
@@ -29,7 +27,8 @@ final class TextFieldSettingsManagerTest extends TestCase
     }
 
     /**
-     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
      */
     public function testIfSettingsIsNotValidJson(): void
     {
@@ -40,7 +39,8 @@ final class TextFieldSettingsManagerTest extends TestCase
     }
 
     /**
-     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
      */
     public function testModelArraySettings(): void
     {
@@ -50,6 +50,9 @@ final class TextFieldSettingsManagerTest extends TestCase
         $this->assertEquals($testArray, $this->model->settings()->all());
     }
 
+    /**
+     * @throws BindingResolutionException
+     */
     public function testSettingsMissingSettingsField(): void
     {
         $this->expectException(ModelSettingsException::class);
@@ -59,7 +62,8 @@ final class TextFieldSettingsManagerTest extends TestCase
     }
 
     /**
-     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
      */
     public function testPersistence(): void
     {
@@ -80,7 +84,7 @@ final class TextFieldSettingsManagerTest extends TestCase
         $this->model->settings()->delete();
 
         $this->model->fresh();
-        $this->model->setPersistSettings(true);
+        $this->model->setPersistSettings();
         $this->model->settings()->apply($this->testArray);
         $this->assertEquals($this->testArray, $this->model->fresh()->settings()->all());
     }

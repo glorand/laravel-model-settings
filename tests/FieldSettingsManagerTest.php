@@ -4,13 +4,12 @@ namespace Glorand\Model\Settings\Tests;
 
 use Glorand\Model\Settings\Exceptions\ModelSettingsException;
 use Glorand\Model\Settings\Tests\Models\UserWithField as User;
+use Illuminate\Contracts\Container\BindingResolutionException;
 
 final class FieldSettingsManagerTest extends TestCase
 {
-    /** @var \Glorand\Model\Settings\Tests\Models\UserWithField */
-    protected $model;
-    /** @var array */
-    protected $testArray = [
+    protected User $model;
+    protected array $testArray = [
         'user'    => [
             'first_name' => "John",
             'last_name'  => "Doe",
@@ -29,7 +28,8 @@ final class FieldSettingsManagerTest extends TestCase
     }
 
     /**
-     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
      */
     public function testModelArraySettings(): void
     {
@@ -39,6 +39,9 @@ final class FieldSettingsManagerTest extends TestCase
         $this->assertEquals($this->model->settings()->all(), $testArray);
     }
 
+    /**
+     * @throws BindingResolutionException
+     */
     public function testSettingsMissingSettingsField(): void
     {
         $this->expectException(ModelSettingsException::class);
@@ -48,7 +51,8 @@ final class FieldSettingsManagerTest extends TestCase
     }
 
     /**
-     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
      */
     public function testPersistence(): void
     {
@@ -69,7 +73,7 @@ final class FieldSettingsManagerTest extends TestCase
         $this->model->settings()->delete();
 
         $this->model->fresh();
-        $this->model->setPersistSettings(true);
+        $this->model->setPersistSettings();
         $this->model->settings()->apply($this->testArray);
         $this->assertEquals($this->model->fresh()->settings()->all(), $this->testArray);
     }

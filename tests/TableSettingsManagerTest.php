@@ -2,23 +2,26 @@
 
 namespace Glorand\Model\Settings\Tests;
 
+use Glorand\Model\Settings\Exceptions\ModelSettingsException;
 use Glorand\Model\Settings\Models\ModelSettings;
 use Glorand\Model\Settings\Tests\Models\UsersWithTable as User;
+use Illuminate\Container\EntryNotFoundException;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Contracts\Container\CircularDependencyException;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 final class TableSettingsManagerTest extends TestCase
 {
-    /** @var \Glorand\Model\Settings\Tests\Models\UsersWithTable */
-    private $model;
-    /** @var array */
-    protected $testArray = [
+    private User $model;
+    protected array $testArray = [
         'user' => [
             'first_name' => "John",
             'last_name'  => "Doe",
             'email'      => "john@doe.com",
         ],
     ];
-    /** @var array */
-    protected $defaultSettingsTestArray = [
+    protected array $defaultSettingsTestArray = [
         'project' => 'Main Project',
     ];
 
@@ -29,9 +32,23 @@ final class TableSettingsManagerTest extends TestCase
     }
 
     /**
-     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
-     * @throws \Exception
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws BindingResolutionException
+     */
+    public function testUnsavedModelThrows(): void
+    {
+        $this->expectException(ModelSettingsException::class);
+        $this->expectExceptionMessage('must be saved');
+
+        (new User())->settings()->all();
+    }
+
+    /**
+     * @throws NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
+     * @throws CircularDependencyException
+     * @throws EntryNotFoundException
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
      */
     public function testSpecificDefaultValue(): void
     {
@@ -59,15 +76,19 @@ final class TableSettingsManagerTest extends TestCase
             cache()->get($this->model->getSettingsCacheKey())
         );
 
-        $this->assertTrue(config('model_settings.settings_table_use_cache'));
-        config()->set('model_settings.settings_table_use_cache', false);
-        $this->assertFalse(config('model_settings.settings_table_use_cache'));
+        $this->assertTrue(config('model_settings.drivers.table.use_cache'));
+        config()->set('model_settings.drivers.table.use_cache', false);
+        $this->assertFalse(config('model_settings.drivers.table.use_cache'));
         $this->assertEquals(
             array_merge($this->defaultSettingsTestArray, $this->testArray),
             $this->model->settings()->all()
         );
     }
 
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
     public function testSettingsTableCount(): void
     {
         $this->model->settings()->apply($this->testArray);
@@ -91,6 +112,10 @@ final class TableSettingsManagerTest extends TestCase
         $this->assertEquals(0, $this->model->modelSettings()->count());
     }
 
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
     public function testAddEagerConstraints(): void
     {
         $this->model->settings()->apply($this->testArray);

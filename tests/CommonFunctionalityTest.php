@@ -2,10 +2,10 @@
 
 namespace Glorand\Model\Settings\Tests;
 
+use Glorand\Model\Settings\Exceptions\ModelSettingsException;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use PHPUnit\Framework\Attributes\DataProvider;
-use Glorand\Model\Settings\Traits\HasSettingsField;
-use Glorand\Model\Settings\Traits\HasSettingsRedis;
-use Glorand\Model\Settings\Traits\HasSettingsTable;
+use Glorand\Model\Settings\Traits\HasSettings;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Validation\ValidationException;
 use Lunaweb\RedisMock\MockPredisConnection;
@@ -19,7 +19,7 @@ final class CommonFunctionalityTest extends TestCase
         'table',
         'redis',
     ];
-    /** @var \string[][] */
+    /** @var array<string, array<string, string|int>> */
     protected static array $testArray = [
         'user' => [
             'first_name' => "John",
@@ -33,16 +33,14 @@ final class CommonFunctionalityTest extends TestCase
         ],
     ];
 
-    /** @var array */
-    protected $defaultSettingsTestArray = [
+    protected array $defaultSettingsTestArray = [
         'config' => [
             'email' => 'gmail',
             'file' => 'aws',
         ],
     ];
 
-    /** @var string[] */
-    protected $rules = [
+    protected array $rules = [
         'user' => [
             'array',
         ],
@@ -70,21 +68,18 @@ final class CommonFunctionalityTest extends TestCase
 
     public function testInit(): void
     {
-        $traits = class_uses($this->getModelByType('redis'));
-        $this->assertTrue(array_key_exists(HasSettingsRedis::class, $traits));
-
-        $traits = class_uses($this->getModelByType('field'));
-        $this->assertArrayHasKey(HasSettingsField::class, $traits);
-
-        $traits = class_uses($this->getModelByType('text_field'));
-        $this->assertArrayHasKey(HasSettingsField::class, $traits);
-
-        $traits = class_uses($this->getModelByType('table'));
-        $this->assertTrue(array_key_exists(HasSettingsTable::class, $traits));
+        foreach (self::$modelTypes as $modelType) {
+            $traits = class_uses($this->getModelByType($modelType));
+            $this->assertArrayHasKey(HasSettings::class, $traits);
+        }
 
         $this->assertInstanceOf(MockPredisConnection::class, Redis::connection());
     }
 
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
     #[DataProvider('modelTypesProvider')]
     public function testEmpty(string $modelType): void
     {
@@ -94,6 +89,10 @@ final class CommonFunctionalityTest extends TestCase
         $this->assertFalse($model->settings()->apply(self::$testArray)->empty());
     }
 
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
     #[DataProvider('modelTypesProvider')]
     public function testExist(string $modelType): void
     {
@@ -103,6 +102,10 @@ final class CommonFunctionalityTest extends TestCase
         $this->assertTrue($model->settings()->apply(self::$testArray)->exist());
     }
 
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
     #[DataProvider('modelTypesProvider')]
     public function testHas(string $modelType): void
     {
@@ -117,6 +120,10 @@ final class CommonFunctionalityTest extends TestCase
         $this->assertFalse($model->settings()->has('user.role'));
     }
 
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
     #[DataProvider('modelTypesProvider')]
     public function testAll(string $modelType): void
     {
@@ -133,6 +140,10 @@ final class CommonFunctionalityTest extends TestCase
         );
     }
 
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
     #[DataProvider('modelTypesProvider')]
     public function testGet(string $modelType): void
     {
@@ -144,6 +155,10 @@ final class CommonFunctionalityTest extends TestCase
         $this->assertEquals('John', $model->settings()->get('user.first_name'));
     }
 
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
     #[DataProvider('modelTypesProvider')]
     public function testGetMultiple(string $modelType): void
     {
@@ -184,6 +199,10 @@ final class CommonFunctionalityTest extends TestCase
         );
     }
 
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
     #[DataProvider('modelTypesProvider')]
     public function testApply(string $modelType): void
     {
@@ -192,6 +211,10 @@ final class CommonFunctionalityTest extends TestCase
         $this->assertEquals(self::$testArray, $model->fresh()->settings()->all());
     }
 
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
     #[DataProvider('modelTypesProvider')]
     public function testUpdate(string $modelType): void
     {
@@ -207,6 +230,10 @@ final class CommonFunctionalityTest extends TestCase
         $this->assertEquals(['user' => ['age' => 19]], $model->settings()->all());
     }
 
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
     #[DataProvider('modelTypesProvider')]
     public function testSet(string $modelType): void
     {
@@ -219,6 +246,10 @@ final class CommonFunctionalityTest extends TestCase
         $this->assertEquals(['user' => ['age' => 18]], $model->settings()->all());
     }
 
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
     #[DataProvider('modelTypesProvider')]
     public function testSetMultiple(string $modelType): void
     {
@@ -240,6 +271,10 @@ final class CommonFunctionalityTest extends TestCase
         );
     }
 
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
     #[DataProvider('modelTypesProvider')]
     public function testClear(string $modelType): void
     {
@@ -252,6 +287,10 @@ final class CommonFunctionalityTest extends TestCase
         $this->assertEquals([], $model->settings()->all());
     }
 
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
     #[DataProvider('modelTypesProvider')]
     public function testDelete(string $modelType): void
     {
@@ -268,6 +307,10 @@ final class CommonFunctionalityTest extends TestCase
         $this->assertEquals([], $model->settings()->all());
     }
 
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
     #[DataProvider('modelTypesProvider')]
     public function testDeleteMultiple(string $modelType): void
     {
@@ -282,6 +325,10 @@ final class CommonFunctionalityTest extends TestCase
         $this->assertArrayHasKey('email', $testData);
     }
 
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
     #[DataProvider('modelTypesProvider')]
     public function testDefaultValue(string $modelType): void
     {
@@ -329,6 +376,35 @@ final class CommonFunctionalityTest extends TestCase
         );
     }
 
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
+    #[DataProvider('modelTypesProvider')]
+    public function testMutationsDoNotPersistDefaults(string $modelType): void
+    {
+        $model = $this->getModelByType($modelType);
+        $model->settings()->clear();
+        $model->defaultSettings = $this->defaultSettingsTestArray;
+
+        $model->settings()->set('user.age', 18);
+
+        $this->assertEquals(['user' => ['age' => 18]], $model->settings()->getStoredValue());
+        $this->assertEquals(
+            array_merge($this->defaultSettingsTestArray, ['user' => ['age' => 18]]),
+            $model->settings()->all()
+        );
+
+        $model->settings()->delete('user');
+
+        $this->assertEquals([], $model->settings()->getStoredValue());
+        $this->assertEquals($this->defaultSettingsTestArray, $model->settings()->all());
+    }
+
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
     #[DataProvider('modelTypesProvider')]
     public function testDefaultValueFromConfig(string $modelType): void
     {
@@ -348,6 +424,10 @@ final class CommonFunctionalityTest extends TestCase
         );
     }
 
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
     #[DataProvider('modelTypesProvider')]
     public function testValidateData(string $modelType): void
     {

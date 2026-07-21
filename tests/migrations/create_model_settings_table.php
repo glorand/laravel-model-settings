@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateModelSettingsTable extends Migration
 {
-    public function up()
+    public function up(): void
     {
         if (!Schema::hasTable('model_settings')) {
             Schema::create('model_settings', function (Blueprint $table) {
@@ -21,7 +21,7 @@ class CreateModelSettingsTable extends Migration
         }
     }
 
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('model_settings');
     }

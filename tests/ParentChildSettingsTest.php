@@ -2,8 +2,9 @@
 
 namespace Glorand\Model\Settings\Tests;
 
+use Glorand\Model\Settings\Exceptions\ModelSettingsException;
 use Glorand\Model\Settings\Tests\Models\UsersWithParentModelWithField;
-use Glorand\Model\Settings\Tests\Models\UserWithField as User;
+use Illuminate\Contracts\Container\BindingResolutionException;
 
 final class ParentChildSettingsTest extends TestCase
 {
@@ -13,6 +14,10 @@ final class ParentChildSettingsTest extends TestCase
         $this->model = UsersWithParentModelWithField::first();
     }
 
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
     public function testSettingsForChild(): void
     {
         $testArray = ['a' => 'b'];

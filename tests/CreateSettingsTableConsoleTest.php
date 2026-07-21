@@ -12,8 +12,8 @@ final class CreateSettingsTableConsoleTest extends TestCase
             $this->markTestAsPassed();
             return;
         }
-        config()->set('model_settings.settings_table_name', null);
-        $this->assertEquals(null, config('model_settings.settings_table_name'));
+        config()->set('model_settings.drivers.table.table_name');
+        $this->assertEquals(null, config('model_settings.drivers.table.table_name'));
         $this->artisan('model-settings:model-settings-table')
             ->assertExitCode(1);
     }
@@ -24,7 +24,7 @@ final class CreateSettingsTableConsoleTest extends TestCase
             $this->markTestAsPassed();
             return;
         }
-        config()->set('model_settings.settings_table_name', 'model_settings');
+        config()->set('model_settings.drivers.table.table_name', 'model_settings');
         $this->artisan('model-settings:model-settings-table')
             ->assertExitCode(2);
     }
@@ -35,8 +35,8 @@ final class CreateSettingsTableConsoleTest extends TestCase
             $this->markTestAsPassed();
             return;
         }
-        config()->set('model_settings.settings_table_name', 'model_settings');
-        Schema::dropIfExists(config('model_settings.settings_table_name'));
+        config()->set('model_settings.drivers.table.table_name', 'model_settings');
+        Schema::dropIfExists(config('model_settings.drivers.table.table_name'));
         $this->artisan('model-settings:model-settings-table')
             ->assertExitCode(0);
     }
@@ -47,10 +47,10 @@ final class CreateSettingsTableConsoleTest extends TestCase
             $this->markTestAsPassed();
             return;
         }
-        $this->assertEquals('model_settings', config('model_settings.settings_table_name'));
+        $this->assertEquals('model_settings', config('model_settings.drivers.table.table_name'));
         $newTableName = 'custom_table_settings';
-        config()->set('model_settings.settings_table_name', $newTableName);
-        $this->assertEquals($newTableName, config('model_settings.settings_table_name'));
+        config()->set('model_settings.drivers.table.table_name', $newTableName);
+        $this->assertEquals($newTableName, config('model_settings.drivers.table.table_name'));
         Schema::dropIfExists($newTableName);
         $this->artisan('model-settings:model-settings-table')
             ->assertExitCode(0);

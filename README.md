@@ -25,17 +25,20 @@
 <a title="PHP Version" href="#"><img src="https://img.shields.io/packagist/php-v/glorand/laravel-model-settings" alt="PHP Version" /></a>
 </p>
 
-The package requires PHP 8.1+ and follows the FIG standards PSR-1, PSR-2, PSR-4 and PSR-12
+The package requires PHP 8.2+ and Laravel 12+, and follows the FIG standards PSR-1, PSR-2, PSR-4 and PSR-12
 to ensure a high level of interoperability between shared PHP.
 
 Bug reports, feature requests, and pull requests can be submitted by following our [Contribution Guide](CONTRIBUTING.md).
 
 ## Table of contents
 - [Installation](#installation)
+- [Upgrading from v8](#upgrade)
 - [Updating your Eloquent Models](#update_models)
-    - [Option 1 - `HasSettingsField` trait](#update_models_1)
-    - [Option 2 - `HasSettingsTable` trait](#update_models_2)
-    - [Option 3 - `HasSettingsRedis` trait](#update_models_3)
+    - [Choosing the driver](#choose_driver)
+    - [The `field` driver](#driver_field)
+    - [The `table` driver](#driver_table)
+    - [The `redis` driver](#driver_redis)
+    - [Custom drivers](#custom_drivers)
 - [Default Settings](#default_settings)
 - [Usage](#usage)
     - [Check if the settings for the entity is empty (exist)](#empty)
@@ -60,26 +63,67 @@ $ composer require glorand/laravel-model-settings
 ```
 {
     "require": {
-        "glorand/laravel-model-settings": "^4.0"
+        "glorand/laravel-model-settings": "^9.0"
     }
 }
 ```
 
+## Upgrading from v8 <a name="upgrade"></a>
+
+Version 9 replaces the three storage-specific traits with a single `HasSettings` trait and a
+configuration-driven driver system. See the [migration guide](MIGRATION_GUIDE_8_to_9.md) for
+the full checklist.
+
 ## Env (config) variables **(.env file)**
 
-Default name for the settings field - when you use the `HasSettingsField`
+The storage driver used by every model that does not declare its own (`field` | `table` | `redis`)
+
+`MODEL_SETTINGS_DRIVER=field`
+
+Default name for the settings field - when you use the `field` driver
 
 `MODEL_SETTINGS_FIELD_NAME=settings`
 
-Default name for the settings table - when you use the `HasSettingsTable`
+Default name for the settings table - when you use the `table` driver
 
 `MODEL_SETTINGS_TABLE_NAME=model_settings`
 
-## Updating your Eloquent Models <a name="update_models"></a>
-Your models should use the `HasSettingsField` or `HasSettingsTable` trait.
+Optional, for the `redis` driver (named connection, empty = default; storage key prefix)
 
-#### Option 1 - `HasSettingsField` trait <a name="update_models_1"></a>
-Run the command below in order to create a migration file for a table.\
+`MODEL_SETTINGS_REDIS_CONNECTION=`\
+`MODEL_SETTINGS_REDIS_PREFIX=r-k-`
+
+## Updating your Eloquent Models <a name="update_models"></a>
+
+Your models should use the `HasSettings` trait.
+
+```php
+use Glorand\Model\Settings\Traits\HasSettings;
+
+class User extends Model
+{
+    use HasSettings;
+}
+```
+
+#### Choosing the driver <a name="choose_driver"></a>
+
+The storage backend is picked by a driver, not by the trait. The default driver is `field`;
+set it app-wide via the `MODEL_SETTINGS_DRIVER` env variable (or the `driver` config key),
+and per model via the `$settingsDriver` property - the model property always wins:
+
+```php
+class User extends Model
+{
+    use HasSettings;
+
+    protected $settingsDriver = 'table'; // 'field' (default) | 'table' | 'redis'
+}
+```
+
+#### The `field` driver <a name="driver_field"></a>
+Stores settings in a JSON column on the model's own table.
+Run the command below in order to create a migration file for a table.
 
 ````bash
 php artisan model-settings:model-settings-field
@@ -94,11 +138,11 @@ public $settingsFieldName = 'user_settings';
 
 Complete example:
 ```php
-use Glorand\Model\Settings\Traits\HasSettingsField;
+use Glorand\Model\Settings\Traits\HasSettings;
 
 class User extends Model
 {
-    use HasSettingsField;
+    use HasSettings;
 
     //define only if you select a different name from the default
     public $settingsFieldName = 'user_settings';
@@ -108,7 +152,8 @@ class User extends Model
 
 }
 ```
-#### Option 2 - `HasSettingsTable` trait <a name="update_models_2"></a>
+#### The `table` driver <a name="driver_table"></a>
+Stores settings in a separate table, one row per model.
 Run the command below to create the settings table.
 ````bash
  php artisan model-settings:model-settings-table
@@ -117,23 +162,55 @@ Run the command below to create the settings table.
 The command will copy for you the migration class to create the table where the setting values will be stored.\
 The default name of the table is `model_settings`; change the config or env value `MODEL_SETTINGS_TABLE_NAME` if you want to rewrite the default name (**before you run the command!**)
 ```php
-use Glorand\Model\Settings\Traits\HasSettingsTable;
+use Glorand\Model\Settings\Traits\HasSettings;
 
 class User extends Model
 {
-    use HasSettingsTable;
+    use HasSettings;
+
+    protected $settingsDriver = 'table';
 }
 ```
 
-#### Option 3 - `HasSettingsRedis` trait <a name="update_models_3"></a>
+#### The `redis` driver <a name="driver_redis"></a>
+Stores settings in Redis.
 ```php
-use Glorand\Model\Settings\Traits\HasSettingsRedis;
+use Glorand\Model\Settings\Traits\HasSettings;
 
 class User extends Model
 {
-    use HasSettingsRedis;
+    use HasSettings;
+
+    protected $settingsDriver = 'redis';
 }
 ```
+
+#### Custom drivers <a name="custom_drivers"></a>
+
+You can add your own storage backend without touching the package. Either register the
+manager class statically in the config:
+
+```php
+'drivers' => [
+    // ...
+    'dynamodb' => [
+        'class' => \App\Settings\DynamoDbSettingsManager::class, // extends AbstractSettingsManager
+    ],
+],
+```
+
+…or at runtime, e.g. in a service provider:
+
+```php
+use Glorand\Model\Settings\SettingsManagerFactory;
+
+app(SettingsManagerFactory::class)->extend('dynamodb', function ($model) {
+    return new DynamoDbSettingsManager($model);
+});
+```
+
+Then point any model at it: `protected $settingsDriver = 'dynamodb';`. A custom driver reads
+its own `drivers.<name>.*` config namespace.
 
 ## Default settings <a name="default_settings"></a>
 
@@ -157,10 +234,12 @@ return [
 Or in your model itself:
 
 ```php
-use Glorand\Model\Settings\Traits\HasSettingsTable;
+use Glorand\Model\Settings\Traits\HasSettings;
 
 class User extends Model
 {
+    use HasSettings;
+
     public $defaultSettings = [
         'key_1' => 'val_1',
     ];
@@ -236,7 +315,7 @@ $user->settings()->clear();
 ```
 
 #### Persistence for settings field <a name="persistence"></a>
-In case of field settings the auto-save is configurable.
+In case of the `field` driver the auto-save is configurable.
 
 **The ``default`` value is ``true``**
 
@@ -250,7 +329,12 @@ MODEL_SETTINGS_PERSISTENT=true
 ```
 - Config value - model settings config file
  ```php
-'settings_persistent' => env('MODEL_SETTINGS_PERSISTENT', true),
+'drivers' => [
+    'field' => [
+        // ...
+        'persistent' => env('MODEL_SETTINGS_PERSISTENT', true),
+    ],
+],
 ```
 If the persistence is `false` you have to save the model after the operation.
 
@@ -266,7 +350,7 @@ the Laravel default validation rules. ([see Laravel rules](https://laravel.com/d
 ```php
 class User extends Model
 {
-    use HasSettingsTable;
+    use HasSettings;
 
     public array $defaultSettings = [
         'user' => [

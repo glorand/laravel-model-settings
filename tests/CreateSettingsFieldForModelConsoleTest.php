@@ -4,9 +4,9 @@ namespace Glorand\Model\Settings\Tests;
 
 final class CreateSettingsFieldForModelConsoleTest extends TestCase
 {
-    private $table = 'users_with_field';
-    private $fieldName = 'custom_settings_field';
-    private $alreadyExistsFieldName = 'settings';
+    private string $table = 'users_with_field';
+    private string $fieldName = 'custom_settings_field';
+    private string $alreadyExistsFieldName = 'settings';
 
     public function testEmptyTable(): void
     {
