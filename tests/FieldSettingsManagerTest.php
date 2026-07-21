@@ -4,6 +4,7 @@ namespace Glorand\Model\Settings\Tests;
 
 use Glorand\Model\Settings\Exceptions\ModelSettingsException;
 use Glorand\Model\Settings\Tests\Models\UserWithField as User;
+use Illuminate\Contracts\Container\BindingResolutionException;
 
 final class FieldSettingsManagerTest extends TestCase
 {
@@ -28,6 +29,7 @@ final class FieldSettingsManagerTest extends TestCase
 
     /**
      * @throws ModelSettingsException
+     * @throws BindingResolutionException
      */
     public function testModelArraySettings(): void
     {
@@ -37,6 +39,9 @@ final class FieldSettingsManagerTest extends TestCase
         $this->assertEquals($this->model->settings()->all(), $testArray);
     }
 
+    /**
+     * @throws BindingResolutionException
+     */
     public function testSettingsMissingSettingsField(): void
     {
         $this->expectException(ModelSettingsException::class);
@@ -47,6 +52,7 @@ final class FieldSettingsManagerTest extends TestCase
 
     /**
      * @throws ModelSettingsException
+     * @throws BindingResolutionException
      */
     public function testPersistence(): void
     {

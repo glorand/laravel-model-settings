@@ -12,7 +12,7 @@ final class CreateSettingsTableConsoleTest extends TestCase
             $this->markTestAsPassed();
             return;
         }
-        config()->set('model_settings.drivers.table.table_name', null);
+        config()->set('model_settings.drivers.table.table_name');
         $this->assertEquals(null, config('model_settings.drivers.table.table_name'));
         $this->artisan('model-settings:model-settings-table')
             ->assertExitCode(1);

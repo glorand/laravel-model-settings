@@ -9,6 +9,7 @@ use Glorand\Model\Settings\Tests\Models\UserWithField;
 use Glorand\Model\Settings\Tests\Models\UserWithRedis;
 use Glorand\Model\Settings\Tests\Models\UserWithTextField;
 use Glorand\Model\Settings\Tests\Models\WrongUser;
+use Glorand\Model\Settings\Traits\HasSettings;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -99,6 +100,10 @@ abstract class TestCase extends OrchestraTestCase
         $this->assertTrue(true);
     }
 
+    /**
+     * @param string $type
+     * @return Model|HasSettings
+     */
     protected function getModelByType(string $type): Model
     {
         return match ($type) {

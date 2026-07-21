@@ -5,6 +5,11 @@ namespace Glorand\Model\Settings\Tests;
 use Glorand\Model\Settings\Exceptions\ModelSettingsException;
 use Glorand\Model\Settings\Models\ModelSettings;
 use Glorand\Model\Settings\Tests\Models\UsersWithTable as User;
+use Illuminate\Container\EntryNotFoundException;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Contracts\Container\CircularDependencyException;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 final class TableSettingsManagerTest extends TestCase
 {
@@ -26,6 +31,9 @@ final class TableSettingsManagerTest extends TestCase
         $this->model = User::first();
     }
 
+    /**
+     * @throws BindingResolutionException
+     */
     public function testUnsavedModelThrows(): void
     {
         $this->expectException(ModelSettingsException::class);
@@ -35,7 +43,12 @@ final class TableSettingsManagerTest extends TestCase
     }
 
     /**
+     * @throws NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
+     * @throws CircularDependencyException
+     * @throws EntryNotFoundException
      * @throws ModelSettingsException
+     * @throws BindingResolutionException
      */
     public function testSpecificDefaultValue(): void
     {
@@ -72,6 +85,10 @@ final class TableSettingsManagerTest extends TestCase
         );
     }
 
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
     public function testSettingsTableCount(): void
     {
         $this->model->settings()->apply($this->testArray);
@@ -95,6 +112,10 @@ final class TableSettingsManagerTest extends TestCase
         $this->assertEquals(0, $this->model->modelSettings()->count());
     }
 
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
     public function testAddEagerConstraints(): void
     {
         $this->model->settings()->apply($this->testArray);

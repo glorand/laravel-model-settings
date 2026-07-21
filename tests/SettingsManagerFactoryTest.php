@@ -9,6 +9,8 @@ use Glorand\Model\Settings\Managers\TableSettingsManager;
 use Glorand\Model\Settings\SettingsManagerFactory;
 use Glorand\Model\Settings\Tests\Models\UserWithDeclaredDriver;
 use Glorand\Model\Settings\Tests\Models\UserWithConfigDriver;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use stdClass;
 
 final class SettingsManagerFactoryTest extends TestCase
 {
@@ -20,6 +22,10 @@ final class SettingsManagerFactoryTest extends TestCase
         );
     }
 
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
     public function testMakeResolvesDefaultDriverFromConfig(): void
     {
         $manager = app(SettingsManagerFactory::class)->make(UserWithConfigDriver::first());
@@ -27,6 +33,10 @@ final class SettingsManagerFactoryTest extends TestCase
         $this->assertInstanceOf(FieldSettingsManager::class, $manager);
     }
 
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
     public function testMakeResolvesConfiguredDriver(): void
     {
         $factory = app(SettingsManagerFactory::class);
@@ -38,6 +48,10 @@ final class SettingsManagerFactoryTest extends TestCase
         $this->assertInstanceOf(RedisSettingsManager::class, $factory->make(UserWithConfigDriver::first()));
     }
 
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
     public function testModelDriverOverridesConfig(): void
     {
         config()->set('model_settings.driver', 'field');
@@ -47,6 +61,10 @@ final class SettingsManagerFactoryTest extends TestCase
         $this->assertInstanceOf(RedisSettingsManager::class, $manager);
     }
 
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
     public function testExtendRegistersCustomDriver(): void
     {
         app(SettingsManagerFactory::class)->extend('custom', function ($model) {
@@ -59,6 +77,9 @@ final class SettingsManagerFactoryTest extends TestCase
         $this->assertInstanceOf(CustomSettingsManager::class, $manager);
     }
 
+    /**
+     * @throws BindingResolutionException
+     */
     public function testUnknownDriverThrows(): void
     {
         config()->set('model_settings.driver', 'missing');
@@ -69,10 +90,13 @@ final class SettingsManagerFactoryTest extends TestCase
         app(SettingsManagerFactory::class)->make(UserWithConfigDriver::first());
     }
 
+    /**
+     * @throws BindingResolutionException
+     */
     public function testCustomCreatorMustReturnContract(): void
     {
         app(SettingsManagerFactory::class)->extend('broken', function () {
-            return new \stdClass();
+            return new stdClass();
         });
         config()->set('model_settings.driver', 'broken');
 

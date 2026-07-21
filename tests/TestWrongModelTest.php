@@ -6,6 +6,7 @@ use Glorand\Model\Settings\Exceptions\ModelSettingsException;
 use Glorand\Model\Settings\Managers\FieldSettingsManager;
 use Glorand\Model\Settings\Tests\Models\WrongUser;
 use Glorand\Model\Settings\Tests\Models\WrongUserWithField;
+use Illuminate\Contracts\Container\BindingResolutionException;
 
 final class TestWrongModelTest extends TestCase
 {
@@ -19,6 +20,10 @@ final class TestWrongModelTest extends TestCase
         new FieldSettingsManager(WrongUser::first());
     }
 
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
     public function testSettingsMissingSettingsField(): void
     {
         $this->expectException(ModelSettingsException::class);

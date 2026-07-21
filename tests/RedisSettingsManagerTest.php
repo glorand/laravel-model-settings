@@ -4,6 +4,7 @@ namespace Glorand\Model\Settings\Tests;
 
 use Glorand\Model\Settings\Exceptions\ModelSettingsException;
 use Glorand\Model\Settings\Tests\Models\UserWithRedis as User;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Redis;
 
 final class RedisSettingsManagerTest extends TestCase
@@ -21,6 +22,10 @@ final class RedisSettingsManagerTest extends TestCase
         $this->assertTrue(true);
     }
 
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
     public function testClearRemovesRedisKey(): void
     {
         $this->model->settings()->apply(['a' => 'b']);
@@ -31,6 +36,9 @@ final class RedisSettingsManagerTest extends TestCase
         $this->assertEquals([], $this->model->settings()->getStoredValue());
     }
 
+    /**
+     * @throws BindingResolutionException
+     */
     public function testUnsavedModelThrows(): void
     {
         $this->expectException(ModelSettingsException::class);

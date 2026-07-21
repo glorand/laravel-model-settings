@@ -4,6 +4,7 @@ namespace Glorand\Model\Settings\Tests;
 
 use Glorand\Model\Settings\Exceptions\ModelSettingsException;
 use Glorand\Model\Settings\Tests\Models\UserWithTextField as User;
+use Illuminate\Contracts\Container\BindingResolutionException;
 
 final class TextFieldSettingsManagerTest extends TestCase
 {
@@ -27,6 +28,7 @@ final class TextFieldSettingsManagerTest extends TestCase
 
     /**
      * @throws ModelSettingsException
+     * @throws BindingResolutionException
      */
     public function testIfSettingsIsNotValidJson(): void
     {
@@ -38,6 +40,7 @@ final class TextFieldSettingsManagerTest extends TestCase
 
     /**
      * @throws ModelSettingsException
+     * @throws BindingResolutionException
      */
     public function testModelArraySettings(): void
     {
@@ -47,6 +50,9 @@ final class TextFieldSettingsManagerTest extends TestCase
         $this->assertEquals($testArray, $this->model->settings()->all());
     }
 
+    /**
+     * @throws BindingResolutionException
+     */
     public function testSettingsMissingSettingsField(): void
     {
         $this->expectException(ModelSettingsException::class);
@@ -57,6 +63,7 @@ final class TextFieldSettingsManagerTest extends TestCase
 
     /**
      * @throws ModelSettingsException
+     * @throws BindingResolutionException
      */
     public function testPersistence(): void
     {
