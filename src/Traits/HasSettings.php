@@ -3,8 +3,10 @@
 namespace Glorand\Model\Settings\Traits;
 
 use Glorand\Model\Settings\Contracts\SettingsManagerContract;
+use Glorand\Model\Settings\Exceptions\ModelSettingsException;
 use Glorand\Model\Settings\Models\ModelSettings;
 use Glorand\Model\Settings\SettingsManagerFactory;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Arr;
 
@@ -20,9 +22,9 @@ trait HasSettings
 {
     private ?SettingsManagerContract $settingsManagerInstance = null;
 
-    private $persistSettings = null;
+    private ?bool $persistSettings = null;
 
-    protected static function bootHasSettings()
+    protected static function bootHasSettings(): void
     {
         static::saving(function ($model) {
             /** @var self $model */
@@ -33,8 +35,8 @@ trait HasSettings
     }
 
     /**
-     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
-     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
      */
     public function settings(): SettingsManagerContract
     {
@@ -50,6 +52,10 @@ trait HasSettings
         return $this->settingsDriver ?? config('model_settings.driver');
     }
 
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
     public function getSettingsValue(): array
     {
         return $this->settings()->getStoredValue();
@@ -98,15 +104,14 @@ trait HasSettings
         return boolval($this->persistSettings ?? $this->driverConfig('persistent', true));
     }
 
-    /**
-     * @param bool $val
-     */
-    public function setPersistSettings(bool $val = true)
+    public function setPersistSettings(bool $val = true): self
     {
         $this->persistSettings = $val;
+
+        return $this;
     }
 
-    public function fixSettingsValue()
+    public function fixSettingsValue(): void
     {
         $settingsFieldName = $this->getSettingsFieldName();
         $attributes = $this->getAttributes();
@@ -117,9 +122,6 @@ trait HasSettings
         }
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
-     */
     public function modelSettings(): MorphOne
     {
         return $this->morphOne(ModelSettings::class, 'model');
@@ -140,17 +142,22 @@ trait HasSettings
         ) . $key;
     }
 
+    /**
+     * @return mixed
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
     public function __call($name, $args)
     {
         if (isset($this->invokeSettingsBy) && $name === $this->invokeSettingsBy) {
             return $this->settings();
         }
 
-        return call_user_func(parent::class . '::__call', $name, $args);
+        return parent::__call($name, $args);
     }
 
     private function driverConfig(string $key, mixed $default = null): mixed
     {
-        return config("model_settings.drivers.{$this->getSettingsDriver()}.{$key}", $default);
+        return config("model_settings.drivers." . $this->getSettingsDriver() . ".$key", $default);
     }
 }
