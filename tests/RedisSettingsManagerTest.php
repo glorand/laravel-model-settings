@@ -8,8 +8,7 @@ use Illuminate\Support\Facades\Redis;
 
 final class RedisSettingsManagerTest extends TestCase
 {
-    /** @var \Glorand\Model\Settings\Tests\Models\UserWithRedis */
-    protected $model;
+    protected User $model;
 
     protected function setUp(): void
     {

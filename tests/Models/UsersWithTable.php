@@ -7,8 +7,6 @@ use Glorand\Model\Settings\Traits\HasSettings;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class UsersWithTable
- * @package Glorand\Model\Settings\Tests\Models
  * @method static first()
  * @method SettingsManagerContract config()
  */
@@ -18,7 +16,7 @@ class UsersWithTable extends Model
 
     protected $settingsDriver = 'table';
 
-    public $invokeSettingsBy = 'config';
+    public string $invokeSettingsBy = 'config';
 
     protected $table = 'users_with_table';
 

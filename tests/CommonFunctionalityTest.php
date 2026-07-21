@@ -17,7 +17,7 @@ final class CommonFunctionalityTest extends TestCase
         'table',
         'redis',
     ];
-    /** @var \string[][] */
+    /** @var array<string, array<string, string|int>> */
     protected static array $testArray = [
         'user' => [
             'first_name' => "John",
@@ -31,16 +31,14 @@ final class CommonFunctionalityTest extends TestCase
         ],
     ];
 
-    /** @var array */
-    protected $defaultSettingsTestArray = [
+    protected array $defaultSettingsTestArray = [
         'config' => [
             'email' => 'gmail',
             'file' => 'aws',
         ],
     ];
 
-    /** @var string[] */
-    protected $rules = [
+    protected array $rules = [
         'user' => [
             'array',
         ],

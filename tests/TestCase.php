@@ -4,8 +4,6 @@ namespace Glorand\Model\Settings\Tests;
 
 use CreateModelSettingsTable;
 use Glorand\Model\Settings\ModelSettingsServiceProvider;
-use Glorand\Model\Settings\Tests\Models\Article;
-use Glorand\Model\Settings\Tests\Models\User;
 use Glorand\Model\Settings\Tests\Models\UsersWithTable;
 use Glorand\Model\Settings\Tests\Models\UserWithField;
 use Glorand\Model\Settings\Tests\Models\UserWithRedis;
@@ -13,7 +11,6 @@ use Glorand\Model\Settings\Tests\Models\UserWithTextField;
 use Glorand\Model\Settings\Tests\Models\WrongUser;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Schema;
 use Lunaweb\RedisMock\Providers\RedisMockServiceProvider;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
@@ -33,14 +30,20 @@ abstract class TestCase extends OrchestraTestCase
         //
     }
 
-    protected function getPackageProviders($app)
+    /**
+     * @return array<int, string>
+     */
+    protected function getPackageProviders($app): array
     {
         return [
             ModelSettingsServiceProvider::class,
         ];
     }
 
-    public function getEnvironmentSetUp($app)
+    /**
+     * @param mixed $app
+     */
+    public function getEnvironmentSetUp($app): void
     {
         $app['config']->set('auth.providers.users.model', UserWithField::class);
         $app['config']->set('database.redis.client', 'mock');
@@ -48,7 +51,7 @@ abstract class TestCase extends OrchestraTestCase
         $app->register(RedisMockServiceProvider::class);
     }
 
-    protected function setUpDatabase()
+    protected function setUpDatabase(): void
     {
         $this->createSettingsTable();
 
@@ -56,14 +59,14 @@ abstract class TestCase extends OrchestraTestCase
         $this->seedModels(UserWithField::class, UserWithTextField::class, UsersWithTable::class, WrongUser::class, UserWithRedis::class);
     }
 
-    protected function createSettingsTable()
+    protected function createSettingsTable(): void
     {
         include_once __DIR__ . '/migrations/create_model_settings_table.php';
 
         (new CreateModelSettingsTable())->up();
     }
 
-    protected function createTables(...$tableNames)
+    protected function createTables(...$tableNames): void
     {
         collect($tableNames)->each(function (string $tableName) {
             Schema::create($tableName, function (Blueprint $table) use ($tableName) {
@@ -82,41 +85,27 @@ abstract class TestCase extends OrchestraTestCase
         });
     }
 
-    protected function seedModels(...$modelClasses)
+    protected function seedModels(...$modelClasses): void
     {
         collect($modelClasses)->each(function (string $modelClass) {
             foreach (range(1, 2) as $index) {
-                $modelClass::create(['name' => "name {$index}"]);
+                $modelClass::create(['name' => "name $index"]);
             }
         });
     }
 
-    public function markTestAsPassed()
+    public function markTestAsPassed(): void
     {
         $this->assertTrue(true);
     }
 
-    /**
-     * @param string $type
-     * @return \Illuminate\Database\Eloquent\Model|\Glorand\Model\Settings\Traits\HasSettings
-     */
     protected function getModelByType(string $type): Model
     {
-        switch ($type) {
-            case 'table':
-                $model = UsersWithTable::first();
-                break;
-            case 'text_field':
-                $model = UserWithTextField::first();
-                break;
-            case 'redis':
-                $model = UserWithRedis::first();
-                break;
-            default:
-                $model = UserWithField::first();
-                break;
-        }
-
-        return $model;
+        return match ($type) {
+            'table' => UsersWithTable::first(),
+            'text_field' => UserWithTextField::first(),
+            'redis' => UserWithRedis::first(),
+            default => UserWithField::first(),
+        };
     }
 }

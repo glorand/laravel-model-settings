@@ -8,18 +8,15 @@ use Glorand\Model\Settings\Tests\Models\UsersWithTable as User;
 
 final class TableSettingsManagerTest extends TestCase
 {
-    /** @var \Glorand\Model\Settings\Tests\Models\UsersWithTable */
-    private $model;
-    /** @var array */
-    protected $testArray = [
+    private User $model;
+    protected array $testArray = [
         'user' => [
             'first_name' => "John",
             'last_name'  => "Doe",
             'email'      => "john@doe.com",
         ],
     ];
-    /** @var array */
-    protected $defaultSettingsTestArray = [
+    protected array $defaultSettingsTestArray = [
         'project' => 'Main Project',
     ];
 
@@ -38,9 +35,7 @@ final class TableSettingsManagerTest extends TestCase
     }
 
     /**
-     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
-     * @throws \Exception
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws ModelSettingsException
      */
     public function testSpecificDefaultValue(): void
     {

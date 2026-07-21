@@ -10,7 +10,7 @@ use Glorand\Model\Settings\Tests\Models\WrongUserWithField;
 final class TestWrongModelTest extends TestCase
 {
     /**
-     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     * @throws ModelSettingsException
      */
     public function testSettingsFieldUndefined(): void
     {
