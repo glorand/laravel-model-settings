@@ -3,24 +3,23 @@
 namespace Glorand\Model\Settings\Console;
 
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 class CreateSettingsTable extends Command
 {
-    /** @var string */
     protected $signature = 'model-settings:model-settings-table';
 
-    /** @var string */
     protected $description = 'Create migration for the settings table';
 
     /**
-     * @param \Illuminate\Filesystem\Filesystem $file
-     * @return bool
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @param Filesystem $file
+     * @return int
+     * @throws FileNotFoundException
      */
-    public function handle(Filesystem $file)
+    public function handle(Filesystem $file): int
     {
         $table = strtolower(config('model_settings.drivers.table.table_name'));
         $table = Str::snake(trim($table));
@@ -46,7 +45,7 @@ class CreateSettingsTable extends Command
         $stub = str_replace('DummyTable', $table, $stub);
 
         $file->replace($path, $stub);
-        $this->line("<info>Created Migration:</info> {$fileName}");
+        $this->line("<info>Created Migration:</info> $fileName");
 
         return 0;
     }

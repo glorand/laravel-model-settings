@@ -3,22 +3,21 @@
 namespace Glorand\Model\Settings\Console;
 
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 class CreateSettingsFieldForModel extends Command
 {
-    /** @var string */
     protected $signature = 'model-settings:model-settings-field';
 
-    /** @var string */
     protected $description = 'Create migration for the (update) selected table, adding settings field';
 
     /**
-     * @param  \Illuminate\Filesystem\Filesystem  $file
+     * @param  Filesystem  $file
      * @return int
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws FileNotFoundException
      */
     public function handle(Filesystem $file): int
     {
@@ -60,7 +59,7 @@ class CreateSettingsFieldForModel extends Command
 
         $file->replace($path, $stub);
 
-        $this->line("<info>Created Migration:</info> {$fileName}");
+        $this->line("<info>Created Migration:</info> $fileName");
 
         return 0;
     }
