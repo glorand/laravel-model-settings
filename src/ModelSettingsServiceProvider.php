@@ -19,7 +19,7 @@ class ModelSettingsServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__ . '/../config/model_settings.php' => config_path('model_settings.php'),
-        ]);
+        ], 'model-settings-config');
     }
 
     public function register(): void
