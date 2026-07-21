@@ -4,19 +4,18 @@ namespace Glorand\Model\Settings\Managers;
 
 use Glorand\Model\Settings\Contracts\SettingsManagerContract;
 use Glorand\Model\Settings\Exceptions\ModelSettingsException;
+use Glorand\Model\Settings\Traits\HasSettings;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
 
 /**
- * Class FieldSettingsManager
- * @package Glorand\Model\Settings\Managers
- * @property \Illuminate\Database\Eloquent\Model|\Glorand\Model\Settings\Traits\HasSettings $model
+ * @property Model|HasSettings $model
  */
 class FieldSettingsManager extends AbstractSettingsManager
 {
     /**
-     * @return array
-     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     * @throws ModelSettingsException
      */
     public function getStoredValue(): array
     {
@@ -33,8 +32,8 @@ class FieldSettingsManager extends AbstractSettingsManager
     }
 
     /**
-     * @param  array  $settings
-     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
+     * @param array $settings
+     * @return SettingsManagerContract
      */
     public function apply(array $settings = []): SettingsManagerContract
     {
@@ -48,15 +47,12 @@ class FieldSettingsManager extends AbstractSettingsManager
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     private function hasSettingsField(): bool
     {
         return Cache::remember(
             config('model_settings.drivers.field.cache_prefix', 'model_settings:')
                 . $this->model->getTable() . '::has_field',
-            now()->addDays(1),
+            now()->addDays(),
             function () {
                 return Schema::connection($this->model->getConnectionName() ?? config('database.default'))
                     ->hasColumn(

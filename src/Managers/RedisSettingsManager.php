@@ -3,17 +3,19 @@
 namespace Glorand\Model\Settings\Managers;
 
 use Glorand\Model\Settings\Contracts\SettingsManagerContract;
+use Glorand\Model\Settings\Exceptions\ModelSettingsException;
+use Glorand\Model\Settings\Traits\HasSettings;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Redis\Connections\Connection;
 use Illuminate\Support\Facades\Redis;
 
 /**
- * Class RedisSettingsManager
- * @package Glorand\Model\Settings\Managers
- * @property \Illuminate\Database\Eloquent\Model|\Glorand\Model\Settings\Traits\HasSettings $model
+ * @property Model|HasSettings $model
  */
 class RedisSettingsManager extends AbstractSettingsManager
 {
     /**
-     * @return array
+     * @throws ModelSettingsException
      */
     public function getStoredValue(): array
     {
@@ -25,6 +27,9 @@ class RedisSettingsManager extends AbstractSettingsManager
         return is_array($value) ? $value : [];
     }
 
+    /**
+     * @throws ModelSettingsException
+     */
     public function apply(array $settings = []): SettingsManagerContract
     {
         $this->ensureModelIsPersisted();
@@ -39,10 +44,7 @@ class RedisSettingsManager extends AbstractSettingsManager
         return $this;
     }
 
-    /**
-     * @return \Illuminate\Redis\Connections\Connection
-     */
-    private function connection()
+    private function connection(): Connection
     {
         return Redis::connection(config('model_settings.drivers.redis.connection'));
     }

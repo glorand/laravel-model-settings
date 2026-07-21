@@ -8,24 +8,30 @@ use Glorand\Model\Settings\Traits\HasSettings;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Illuminate\Validation\ValidationException;
 
 /**
  * Class AbstractSettingsManager
  * @package Glorand\Model\Settings\Managers
+ *
+ * Requires the model to use HasSettings trait and provide these methods:
+ * @method array getDefaultSettings()
+ * @method array getSettingsRules()
+ *
  * @SuppressWarnings(PHPMD.StaticAccess)
  */
 abstract class AbstractSettingsManager implements SettingsManagerContract
 {
-    /** @var \Illuminate\Database\Eloquent\Model */
-    protected $model;
+    /**
+     * @var Model&HasSettings Model instance must use HasSettings trait
+     */
+    protected Model $model;
 
-    /** @var array */
-    protected $defaultSettings = [];
+    protected array $defaultSettings = [];
 
     /**
-     * AbstractSettingsManager constructor.
-     * @param \Illuminate\Database\Eloquent\Model|HasSettings $model
-     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     * @param Model $model
+     * @throws ModelSettingsException
      */
     public function __construct(Model $model)
     {
@@ -43,7 +49,7 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
     abstract public function getStoredValue(): array;
 
     /**
-     * @throws \Glorand\Model\Settings\Exceptions\ModelSettingsException
+     * @throws ModelSettingsException
      */
     protected function ensureModelIsPersisted(): void
     {
@@ -138,10 +144,10 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
 
     /**
      * @param string|null $path
-     * @param null $default
-     * @return array|\ArrayAccess|mixed
+     * @param mixed $default
+     * @return mixed
      */
-    public function get(?string $path = null, $default = null)
+    public function get(?string $path = null, mixed $default = null): mixed
     {
         return $path ? Arr::get($this->all(), $path, $default) : $this->all();
     }
@@ -172,10 +178,10 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
 
     /**
      * @param string $path
-     * @param $value
-     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
+     * @param mixed $value
+     * @return SettingsManagerContract
      */
-    public function set(string $path, $value): SettingsManagerContract
+    public function set(string $path, mixed $value): SettingsManagerContract
     {
         $settings = $this->getStoredValue();
         Arr::set($settings, $path, $value);
@@ -186,16 +192,16 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
     /**
      * @param string $path
      * @param mixed $value
-     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
+     * @return SettingsManagerContract
      */
-    public function update(string $path, $value): SettingsManagerContract
+    public function update(string $path, mixed $value): SettingsManagerContract
     {
         return $this->set($path, $value);
     }
 
     /**
      * @param string|null $path
-     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
+     * @return SettingsManagerContract
      */
     public function delete(?string $path = null): SettingsManagerContract
     {
@@ -211,9 +217,6 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
         return $this;
     }
 
-    /**
-     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
-     */
     public function clear(): SettingsManagerContract
     {
         return $this->delete();
@@ -221,7 +224,7 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
 
     /**
      * @param iterable $values
-     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
+     * @return SettingsManagerContract
      */
     public function setMultiple(iterable $values): SettingsManagerContract
     {
@@ -235,7 +238,7 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
 
     /**
      * @param iterable $paths
-     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
+     * @return SettingsManagerContract
      */
     public function deleteMultiple(iterable $paths): SettingsManagerContract
     {
@@ -253,10 +256,10 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
      * Validates the candidate effective result (defaults merged with the
      * proposed settings), while only the proposed settings get persisted.
      *
-     * @param  array  $settings
-     * @throws \Illuminate\Validation\ValidationException
+     * @param array $settings
+     * @throws ValidationException
      */
-    protected function validate(array $settings)
+    protected function validate(array $settings): void
     {
         $flattened = array_merge(
             static::dotFlatten($this->model->getDefaultSettings()),

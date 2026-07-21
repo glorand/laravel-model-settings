@@ -3,18 +3,19 @@
 namespace Glorand\Model\Settings\Managers;
 
 use Glorand\Model\Settings\Contracts\SettingsManagerContract;
+use Glorand\Model\Settings\Exceptions\ModelSettingsException;
 use Glorand\Model\Settings\Models\ModelSettings;
+use Glorand\Model\Settings\Traits\HasSettings;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
 /**
- * Class TableSettingsManager
- * @package Glorand\Model\Settings\Managers
- * @property  \Illuminate\Database\Eloquent\Model|\Glorand\Model\Settings\Traits\HasSettings $model
+ * @property Model|HasSettings $model
  */
 class TableSettingsManager extends AbstractSettingsManager
 {
     /**
-     * @return array
+     * @throws ModelSettingsException
      */
     public function getStoredValue(): array
     {
@@ -30,9 +31,9 @@ class TableSettingsManager extends AbstractSettingsManager
     }
 
     /**
-     * @param  array  $settings
-     * @return \Glorand\Model\Settings\Contracts\SettingsManagerContract
-     * @throws \Exception
+     * @param array $settings
+     * @return SettingsManagerContract
+     * @throws ModelSettingsException
      * @SuppressWarnings(PHPMD.ElseExpression)
      */
     public function apply(array $settings = []): SettingsManagerContract
@@ -60,9 +61,6 @@ class TableSettingsManager extends AbstractSettingsManager
         return $this;
     }
 
-    /**
-     * @return array
-     */
     private function fetchStoredValue(): array
     {
         if ($modelSettings = $this->model->modelSettings()->first()) {
