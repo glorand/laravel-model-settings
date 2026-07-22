@@ -49,7 +49,7 @@ class TableSettingsManager extends AbstractSettingsManager
         } else {
             if (!$modelSettings) {
                 $modelSettings = new ModelSettings();
-                $modelSettings->setConnection($this->model->getConnectionName() ?? config('database.default'));
+                $modelSettings->setConnection($this->getModelConnection());
                 $modelSettings->model()->associate($this->model);
             }
             $modelSettings->settings = $settings;

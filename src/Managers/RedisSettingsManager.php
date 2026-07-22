@@ -22,9 +22,8 @@ class RedisSettingsManager extends AbstractSettingsManager
         $this->ensureModelIsPersisted();
 
         $redisValue = $this->connection()->get($this->model->cacheKey());
-        $value = json_decode($redisValue ?? '[]', true);
 
-        return is_array($value) ? $value : [];
+        return $this->decodeJsonValue($redisValue);
     }
 
     /**

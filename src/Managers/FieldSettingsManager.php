@@ -53,9 +53,7 @@ class FieldSettingsManager extends AbstractSettingsManager
             return (array) $rawValue;
         }
 
-        $value = json_decode($rawValue ?? '[]', true);
-
-        return is_array($value) ? $value : [];
+        return $this->decodeJsonValue($rawValue);
     }
 
     /**
@@ -105,7 +103,7 @@ class FieldSettingsManager extends AbstractSettingsManager
 
     private function hasSettingsField(): bool
     {
-        $connection = $this->model->getConnectionName() ?? config('database.default');
+        $connection = $this->getModelConnection();
         $fieldName = $this->model->getSettingsFieldName();
 
         return Cache::remember(

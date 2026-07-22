@@ -61,6 +61,26 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
     }
 
     /**
+     * Decode a stored JSON string, falling back to an empty array on null or invalid JSON.
+     * @param string|null $value
+     * @return array
+     */
+    protected function decodeJsonValue(?string $value): array
+    {
+        $decoded = json_decode($value ?? '[]', true);
+
+        return is_array($decoded) ? $decoded : [];
+    }
+
+    /**
+     * @return string
+     */
+    protected function getModelConnection(): string
+    {
+        return $this->model->getConnectionName() ?? config('database.default');
+    }
+
+    /**
      * Check if array is associative and not sequential
      * @param array $arr
      * @return bool
