@@ -114,6 +114,10 @@ trait HasSettings
     public function fixSettingsValue(): void
     {
         $settingsFieldName = $this->getSettingsFieldName();
+        if ($this->hasCast($settingsFieldName, ['array', 'json', 'object', 'collection'])) {
+            return;
+        }
+
         $attributes = $this->getAttributes();
         if (Arr::has($attributes, $settingsFieldName)) {
             if (is_array($this->$settingsFieldName)) {

@@ -26,7 +26,13 @@ class FieldSettingsManager extends AbstractSettingsManager
             );
         }
 
-        $value = json_decode($this->model->getAttributeValue($settingsFieldName) ?? '[]', true);
+        $rawValue = $this->model->getAttributeValue($settingsFieldName);
+
+        if (is_array($rawValue)) {
+            return $rawValue;
+        }
+
+        $value = json_decode($rawValue ?? '[]', true);
 
         return is_array($value) ? $value : [];
     }
@@ -39,7 +45,11 @@ class FieldSettingsManager extends AbstractSettingsManager
     {
         $this->validate($settings);
 
-        $this->model->{$this->model->getSettingsFieldName()} = json_encode($settings);
+        $settingsFieldName = $this->model->getSettingsFieldName();
+        $this->model->{$settingsFieldName} = $this->model->hasCast($settingsFieldName, ['array', 'json', 'object', 'collection'])
+            ? $settings
+            : json_encode($settings);
+
         if ($this->model->isPersistSettings()) {
             $this->model->save();
         }
