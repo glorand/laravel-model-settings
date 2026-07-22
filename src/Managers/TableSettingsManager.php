@@ -42,7 +42,7 @@ class TableSettingsManager extends AbstractSettingsManager
         $this->validate($settings);
 
         $modelSettings = $this->model->modelSettings()->first();
-        if (!count($settings)) {
+        if (empty($settings)) {
             if ($modelSettings) {
                 $modelSettings->delete();
             }
