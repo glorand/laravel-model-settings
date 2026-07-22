@@ -106,6 +106,9 @@ class FieldSettingsManager extends AbstractSettingsManager
         $connection = $this->getModelConnection();
         $fieldName = $this->model->getSettingsFieldName();
 
+        // A finite TTL instead of rememberForever: nothing invalidates this key when the
+        // column is added or dropped, and schema changes are rare enough that a daily
+        // re-check is a fair trade against a permanently stale result.
         return Cache::remember(
             config('model_settings.drivers.field.cache_prefix', 'model_settings:')
                 . $connection . '::' . $this->model->getTable() . '::' . $fieldName . '::has_field',

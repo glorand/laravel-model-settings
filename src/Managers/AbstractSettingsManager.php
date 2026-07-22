@@ -36,6 +36,9 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
     public function __construct(Model $model)
     {
         $this->model = $model;
+        // Checked at construction rather than on first settings access: every manager
+        // method relies on HasSettings (defaults, rules, cache keys), so a model missing
+        // the trait should fail immediately instead of on some later call.
         if (!in_array(HasSettings::class, class_uses_recursive($this->model))) {
             throw new ModelSettingsException('Wrong model, missing HasSettings trait.');
         }
@@ -95,7 +98,13 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
     }
 
     /**
-     * Flatten array with dots for settings package
+     * Flatten a nested array into dot-notation keys.
+     *
+     * Unlike Arr::dot(), only associative arrays are recursed into; sequential lists are
+     * kept intact as leaf values so their items are never merged element-by-element
+     * (see mergeFlattenedWithDefaults()). Public static on purpose: it is usable as a
+     * standalone utility by package consumers, so treat its behavior as stable API.
+     *
      * @param array $array
      * @param string $prepend
      * @return array

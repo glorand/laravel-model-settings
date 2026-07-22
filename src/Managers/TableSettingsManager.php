@@ -21,6 +21,8 @@ class TableSettingsManager extends AbstractSettingsManager
     {
         $this->ensureModelIsPersisted();
 
+        // Cached forever on purpose: invalidation is explicit rather than TTL based,
+        // since apply() forgets this key after every write.
         if (config('model_settings.drivers.table.use_cache', true)) {
             return Cache::rememberForever($this->model->getSettingsCacheKey(), function () {
                 return $this->fetchStoredValue();
