@@ -131,21 +131,44 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
      */
     public function allFlattened(): array
     {
-        $flattenedStoredValue = static::dotFlatten($this->getStoredValue());
+        return $this->mergeFlattenedWithDefaults(static::dotFlatten($this->getStoredValue()));
+    }
 
-        if (!empty($flattenedStoredValue) && !static::isAssoc($flattenedStoredValue)) {
-            // The stored value is itself a plain sequential list at the top level. A list has
-            // no per-item identity to merge against the defaults by index, so treat it as a
+    /**
+     * Merge a flat dot-notation settings array over the flattened default settings.
+     * @param array $flattenedSettings
+     * @return array
+     */
+    protected function mergeFlattenedWithDefaults(array $flattenedSettings): array
+    {
+        if (!empty($flattenedSettings) && !static::isAssoc($flattenedSettings)) {
+            // The settings are a plain sequential list at the top level. A list has no
+            // per-item identity to merge against the defaults by index, so treat it as a
             // full replacement instead of letting index-keyed leaves collide with the defaults'.
-            return $flattenedStoredValue;
+            return $flattenedSettings;
         }
 
         $result = static::dotFlatten($this->model->getDefaultSettings());
-        foreach ($flattenedStoredValue as $key => $value) {
+        foreach ($flattenedSettings as $key => $value) {
             $result[$key] = $value;
         }
 
         return $result;
+    }
+
+    /**
+     * Rebuild a nested array from a flat dot-notation keyed array.
+     * @param array $flat
+     * @return array
+     */
+    protected function reconstructNestedFromFlat(array $flat): array
+    {
+        $nested = [];
+        foreach ($flat as $key => $value) {
+            Arr::set($nested, $key, $value);
+        }
+
+        return $nested;
     }
 
     /**
@@ -190,16 +213,12 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
      */
     public function getMultiple(?iterable $paths = null, $default = null): array
     {
-        $array = [];
-        $allFlattened = $this->allFlattened();
-        $settingsArray = [];
-        foreach ($allFlattened as $key => $value) {
-            Arr::set($settingsArray, $key, $value);
-        }
+        $settingsArray = $this->reconstructNestedFromFlat($this->allFlattened());
         if (is_null($paths)) {
             return $settingsArray;
         }
 
+        $array = [];
         foreach ($paths as $path) {
             Arr::set($array, $path, Arr::get($settingsArray, $path, $default));
         }
@@ -292,20 +311,9 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
      */
     protected function validate(array $settings): void
     {
-        $flattenedSettings = static::dotFlatten($settings);
-
-        if (!empty($flattenedSettings) && !static::isAssoc($flattenedSettings)) {
-            $flattened = $flattenedSettings;
-        } else {
-            $flattened = static::dotFlatten($this->model->getDefaultSettings());
-            foreach ($flattenedSettings as $key => $value) {
-                $flattened[$key] = $value;
-            }
-        }
-        $effective = [];
-        foreach ($flattened as $key => $value) {
-            Arr::set($effective, $key, $value);
-        }
+        $effective = $this->reconstructNestedFromFlat(
+            $this->mergeFlattenedWithDefaults(static::dotFlatten($settings))
+        );
 
         Validator::make($effective, Arr::wrap($this->model->getSettingsRules()))->validate();
     }
