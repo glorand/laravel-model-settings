@@ -46,4 +46,23 @@ final class RedisSettingsManagerTest extends TestCase
 
         (new User())->settings()->all();
     }
+
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
+    public function testReadingAMissingKeyDoesNotEmitADeprecationNotice(): void
+    {
+        $this->assertNull(Redis::connection()->get($this->model->cacheKey()));
+
+        set_error_handler(function ($errno, $errstr) {
+            throw new \RuntimeException($errstr);
+        }, E_DEPRECATED);
+
+        try {
+            $this->assertEquals([], $this->model->settings()->getStoredValue());
+        } finally {
+            restore_error_handler();
+        }
+    }
 }
