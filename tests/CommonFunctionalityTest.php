@@ -66,6 +66,19 @@ final class CommonFunctionalityTest extends TestCase
         return $modelTypes;
     }
 
+    public function testCacheAndStorageKeysIncludeTheConnectionName(): void
+    {
+        $model = $this->getModelByType('table');
+        $defaultKey = $model->getSettingsCacheKey();
+        $model->setConnection('other');
+        $this->assertNotEquals($defaultKey, $model->getSettingsCacheKey());
+
+        $model = $this->getModelByType('redis');
+        $defaultKey = $model->cacheKey();
+        $model->setConnection('other');
+        $this->assertNotEquals($defaultKey, $model->cacheKey());
+    }
+
     public function testInit(): void
     {
         foreach (self::$modelTypes as $modelType) {
@@ -374,6 +387,22 @@ final class CommonFunctionalityTest extends TestCase
             ],
             $model->settings()->all()
         );
+    }
+
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
+    #[DataProvider('modelTypesProvider')]
+    public function testTopLevelSequentialListOverridesDefaultInsteadOfAppending(string $modelType): void
+    {
+        $model = $this->getModelByType($modelType);
+        $model->settings()->clear();
+        $model->defaultSettings = [1, 2, 3];
+
+        $model->settings()->apply([4, 5]);
+
+        $this->assertEquals([4, 5], $model->settings()->all());
     }
 
     /**

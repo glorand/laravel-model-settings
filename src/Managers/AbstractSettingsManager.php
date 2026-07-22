@@ -111,10 +111,21 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
      */
     public function allFlattened(): array
     {
-        $flattenedDefaultSettings = static::dotFlatten($this->model->getDefaultSettings());
-        $flattenedSettingsValue = static::dotFlatten($this->getStoredValue());
+        $flattenedStoredValue = static::dotFlatten($this->getStoredValue());
 
-        return array_merge($flattenedDefaultSettings, $flattenedSettingsValue);
+        if (!empty($flattenedStoredValue) && !static::isAssoc($flattenedStoredValue)) {
+            // The stored value is itself a plain sequential list at the top level. A list has
+            // no per-item identity to merge against the defaults by index, so treat it as a
+            // full replacement instead of letting index-keyed leaves collide with the defaults'.
+            return $flattenedStoredValue;
+        }
+
+        $result = static::dotFlatten($this->model->getDefaultSettings());
+        foreach ($flattenedStoredValue as $key => $value) {
+            $result[$key] = $value;
+        }
+
+        return $result;
     }
 
     /**
@@ -261,10 +272,16 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
      */
     protected function validate(array $settings): void
     {
-        $flattened = array_merge(
-            static::dotFlatten($this->model->getDefaultSettings()),
-            static::dotFlatten($settings)
-        );
+        $flattenedSettings = static::dotFlatten($settings);
+
+        if (!empty($flattenedSettings) && !static::isAssoc($flattenedSettings)) {
+            $flattened = $flattenedSettings;
+        } else {
+            $flattened = static::dotFlatten($this->model->getDefaultSettings());
+            foreach ($flattenedSettings as $key => $value) {
+                $flattened[$key] = $value;
+            }
+        }
         $effective = [];
         foreach ($flattened as $key => $value) {
             Arr::set($effective, $key, $value);
