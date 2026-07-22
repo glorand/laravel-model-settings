@@ -77,4 +77,38 @@ final class FieldSettingsManagerTest extends TestCase
         $this->model->settings()->apply($this->testArray);
         $this->assertEquals($this->model->fresh()->settings()->all(), $this->testArray);
     }
+
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
+    public function testPartialSelectThrowsInsteadOfSilentlyWipingSettings(): void
+    {
+        $this->model->settings()->apply($this->testArray);
+
+        $partial = User::select('id')->find($this->model->getKey());
+
+        $this->expectException(ModelSettingsException::class);
+        $this->expectExceptionMessage('was not selected');
+        $partial->settings()->set('user.age', 18);
+    }
+
+    /**
+     * @throws ModelSettingsException
+     * @throws BindingResolutionException
+     */
+    public function testSchemaCheckCacheIsScopedPerFieldName(): void
+    {
+        // Warm the "has_field" cache for the real field name on this table.
+        $this->model->settings()->all();
+
+        // A fresh instance, not a clone: settings() memoizes its manager per-instance,
+        // so a clone would keep reusing the original's manager and field name.
+        $other = User::find($this->model->getKey());
+        $other->settingsFieldName = 'nonexistent_field';
+
+        $this->expectException(ModelSettingsException::class);
+        $this->expectExceptionMessage('Unknown field');
+        $other->settings()->all();
+    }
 }

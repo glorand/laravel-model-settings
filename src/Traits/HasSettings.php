@@ -4,6 +4,7 @@ namespace Glorand\Model\Settings\Traits;
 
 use Glorand\Model\Settings\Contracts\SettingsManagerContract;
 use Glorand\Model\Settings\Exceptions\ModelSettingsException;
+use Glorand\Model\Settings\Managers\FieldSettingsManager;
 use Glorand\Model\Settings\Models\ModelSettings;
 use Glorand\Model\Settings\SettingsManagerFactory;
 use Illuminate\Contracts\Container\BindingResolutionException;
@@ -22,7 +23,7 @@ trait HasSettings
 {
     private ?SettingsManagerContract $settingsManagerInstance = null;
 
-    private ?bool $persistSettings = null;
+    private ?bool $persistSettingsOverride = null;
 
     protected static function bootHasSettings(): void
     {
@@ -101,12 +102,20 @@ trait HasSettings
 
     public function isPersistSettings(): bool
     {
-        return boolval($this->persistSettings ?? $this->driverConfig('persistent', true));
+        if (null !== $this->persistSettingsOverride) {
+            return $this->persistSettingsOverride;
+        }
+
+        if (property_exists($this, 'persistSettings') && null !== $this->persistSettings) {
+            return boolval($this->persistSettings);
+        }
+
+        return boolval($this->driverConfig('persistent', true));
     }
 
     public function setPersistSettings(bool $val = true): self
     {
-        $this->persistSettings = $val;
+        $this->persistSettingsOverride = $val;
 
         return $this;
     }
@@ -114,7 +123,7 @@ trait HasSettings
     public function fixSettingsValue(): void
     {
         $settingsFieldName = $this->getSettingsFieldName();
-        if ($this->hasCast($settingsFieldName, ['array', 'json', 'object', 'collection'])) {
+        if (FieldSettingsManager::castsToNativeArray($this, $settingsFieldName)) {
             return;
         }
 
@@ -133,14 +142,17 @@ trait HasSettings
 
     public function getSettingsCacheKey(): string
     {
-        return $this->driverConfig('cache_prefix', 'model_settings:') . $this->getTable() . '::' . $this->getKey();
+        return $this->driverConfig('cache_prefix', 'model_settings:')
+            . ($this->getConnectionName() ?? config('database.default')) . '::'
+            . $this->getTable() . '::' . $this->getKey();
     }
 
     public function cacheKey(?string $key = null): string
     {
         return sprintf(
-            '%s%s:%s',
+            '%s%s:%s:%s',
             $this->driverConfig('key_prefix', 'r-k-'),
+            $this->getConnectionName() ?? config('database.default'),
             $this->getTable(),
             $this->getKey()
         ) . $key;
