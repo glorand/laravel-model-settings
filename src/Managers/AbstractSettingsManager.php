@@ -56,7 +56,7 @@ abstract class AbstractSettingsManager implements SettingsManagerContract
      */
     protected function ensureModelIsPersisted(): void
     {
-        if (null === $this->model->getKey()) {
+        if (!$this->model->exists || null === $this->model->getKey()) {
             throw new ModelSettingsException(
                 sprintf('Model [%s] must be saved before accessing its settings.', get_class($this->model))
             );

@@ -43,6 +43,19 @@ final class TableSettingsManagerTest extends TestCase
     }
 
     /**
+     * @throws BindingResolutionException
+     */
+    public function testUnsavedModelWithAssignedKeyThrows(): void
+    {
+        $this->expectException(ModelSettingsException::class);
+        $this->expectExceptionMessage('must be saved');
+
+        $user = new User();
+        $user->id = 12345;
+        $user->settings()->all();
+    }
+
+    /**
      * @throws NotFoundExceptionInterface
      * @throws ContainerExceptionInterface
      * @throws CircularDependencyException

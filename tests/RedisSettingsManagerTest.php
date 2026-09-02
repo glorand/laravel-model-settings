@@ -6,6 +6,7 @@ use Glorand\Model\Settings\Exceptions\ModelSettingsException;
 use Glorand\Model\Settings\Tests\Models\UserWithRedis as User;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Redis;
+use RuntimeException;
 
 final class RedisSettingsManagerTest extends TestCase
 {
@@ -48,6 +49,19 @@ final class RedisSettingsManagerTest extends TestCase
     }
 
     /**
+     * @throws BindingResolutionException
+     */
+    public function testUnsavedModelWithAssignedKeyThrows(): void
+    {
+        $this->expectException(ModelSettingsException::class);
+        $this->expectExceptionMessage('must be saved');
+
+        $user = new User();
+        $user->id = 12345;
+        $user->settings()->all();
+    }
+
+    /**
      * @throws ModelSettingsException
      * @throws BindingResolutionException
      */
@@ -55,8 +69,8 @@ final class RedisSettingsManagerTest extends TestCase
     {
         $this->assertNull(Redis::connection()->get($this->model->cacheKey()));
 
-        set_error_handler(function ($errno, $errstr) {
-            throw new \RuntimeException($errstr);
+        set_error_handler(function ($errNo, $errStr) {
+            throw new RuntimeException($errStr);
         }, E_DEPRECATED);
 
         try {

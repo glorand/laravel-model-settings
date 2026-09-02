@@ -2,6 +2,30 @@
 
 All notable changes to `glorand/laravel-model-settings` will be documented in this file
 
+## 9.1.0 - 2026-09-03
+### Added
+- New `cache` driver (`CacheSettingsManager`) storing settings through Laravel's `Cache` facade, so any store configured in `config/cache.php` (Memcached, DynamoDB, database, file, ...) can back them
+- Driver options `drivers.cache.store` (named store, empty = default), `drivers.cache.ttl` (lifetime in minutes, empty = forever) and `drivers.cache.key_prefix`, driven by `MODEL_SETTINGS_CACHE_STORE`, `MODEL_SETTINGS_CACHE_TTL` and `MODEL_SETTINGS_CACHE_PREFIX`
+- The `cache` driver stores settings forever unless a TTL is configured, because for this driver the cache is the only copy of the data; a non-positive or non-numeric `ttl` throws `ModelSettingsException` instead of being passed to `Cache::put()`, which would treat it as a delete
+### Changed
+- The `table`, `redis` and `cache` drivers now require the model to exist in storage rather than merely to have a primary key assigned: `ModelSettingsException` is thrown for an unsaved model even when its key was set manually (refines the 9.0.0 behavior below)
+
+## 9.0.2 - 2026-07-22
+### Added
+- `FieldSettingsManager::castsToNativeArray()` - a public static helper that recognises the `array`, `json`, `object` and `collection` casts plus the `AsArrayObject`, `AsCollection`, `AsEnumArrayObject` and `AsEnumCollection` cast classes; both the `field` driver and `fixSettingsValue()` resolve casts through it
+- The `field` driver reads `Arrayable` column values (`AsCollection`, `AsArrayObject`, ...) and `stdClass` values (the `object` cast), not only arrays and JSON strings
+- Models can declare their own `$persistSettings` property; `isPersistSettings()` now resolves `setPersistSettings()` override, then the model property, then the `drivers.<driver>.persistent` config. The trait's internal flag was renamed to `$persistSettingsOverride` so a model is free to declare `$persistSettings` without a trait-property conflict
+### Fix
+- The `field` driver throws `ModelSettingsException` when the settings column was not selected on an existing model instance (a partial `select()`) instead of silently reading and writing empty settings
+- Stored settings that are a sequential list at the top level replace the default settings wholesale instead of being merged into them element by element
+- Reading a missing key with the `redis` driver no longer emits a deprecation notice
+- `getSettingsCacheKey()`, `cacheKey()` and the field driver's schema-check cache key now include the connection name (and the field name, for the schema check), so same-named tables or fields on different database connections no longer share a cached entry
+
+## 9.0.1 - 2026-07-22
+### Fix
+- The `field` driver honours an Eloquent `array`, `json`, `object` or `collection` cast on the settings column: the value is handed to the cast as an array instead of being double-encoded to a JSON string, and an already-decoded array is read back as-is
+- `fixSettingsValue()` (the `saving` hook) skips its own `json_encode` for a cast column, so the cast is no longer applied on top of an encoded string
+
 ## 9.0.0 - 2026-07-20
 ### Added
 - Single `HasSettings` trait with configuration-driven driver selection (`MODEL_SETTINGS_DRIVER` env / `driver` config / per-model `$settingsDriver` property)

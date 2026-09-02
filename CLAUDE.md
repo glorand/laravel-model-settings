@@ -21,9 +21,9 @@ Targets PHP 8.1+ and Laravel 10–13. CI (`.github/workflows/test.yml`) runs a m
 
 ## Architecture
 
-A single trait, `HasSettings` (`src/Traits/HasSettings.php`), is the public entry point a model `use`s. It picks one of three backends via the model's `$settingsDriver` property (or `model_settings.driver` config): `field`, `table`, or `redis`. There are no separate per-backend traits.
+A single trait, `HasSettings` (`src/Traits/HasSettings.php`), is the public entry point a model `use`s. It picks one of four backends via the model's `$settingsDriver` property (or `model_settings.driver` config): `field`, `table`, `redis`, or `cache`. There are no separate per-backend traits.
 
-- **Managers** (`src/Managers/`) hold all the read/query logic in `AbstractSettingsManager` (`get`, `set`, `has`, `all`, `getMultiple`, `delete`, `clear`, dot-flattening, validation). Each concrete manager (`FieldSettingsManager`, `TableSettingsManager`, `RedisSettingsManager`) only implements `getStoredValue()` + `apply(array $settings)` — the persistence strategy. `set/update/delete/clear/setMultiple/deleteMultiple` all funnel through `apply()`, so changing how data is saved means touching only `apply()`. `SettingsManagerFactory` resolves the right manager class from `model_settings.drivers.<driver>.class`.
+- **Managers** (`src/Managers/`) hold all the read/query logic in `AbstractSettingsManager` (`get`, `set`, `has`, `all`, `getMultiple`, `delete`, `clear`, dot-flattening, validation). Each concrete manager (`FieldSettingsManager`, `TableSettingsManager`, `RedisSettingsManager`, `CacheSettingsManager`) only implements `getStoredValue()` + `apply(array $settings)` — the persistence strategy. `set/update/delete/clear/setMultiple/deleteMultiple` all funnel through `apply()`, so changing how data is saved means touching only `apply()`. `SettingsManagerFactory` resolves the right manager class from `model_settings.drivers.<driver>.class`.
 
 - **`HasSettings` trait** supplies cross-backend behavior: `getDefaultSettings()` (model property → config fallback), `getSettingsRules()`, `getSettingsDriver()`, `getSettingsFieldName()`, `isPersistSettings()`/`setPersistSettings()`, cache-key helpers (`getSettingsCacheKey()`, `cacheKey()`), and the `__call` override that forwards a custom method name (`$invokeSettingsBy`) to `settings()`.
 
@@ -33,6 +33,7 @@ A single trait, `HasSettings` (`src/Traits/HasSettings.php`), is the public entr
 - **Validation** runs inside `apply()` (`validate()` → Laravel `Validator`) against the model's `$settingsRules` before persisting; rule syntax matches standard Laravel validation rules.
 - **Persistence toggle** applies to the `field` driver only: `isPersistSettings()` (`setPersistSettings()` override → model `$persistSettings` property → `MODEL_SETTINGS_PERSISTENT` env / config) decides whether `apply()` auto-saves the model. When false, the caller must `save()` manually. The trait itself does not declare a `$persistSettings` property, so a model is free to declare its own without a trait-property conflict.
 - **Table backend caching**: `TableSettingsManager::getStoredValue()` uses `Cache::rememberForever` keyed by `HasSettings::getSettingsCacheKey()` when `drivers.table.use_cache` is on; `apply()` must call `cache()->forget(...)` after writes. Preserve this invalidation when editing table writes.
+- **Cache driver stores forever by default**: `CacheSettingsManager` is a storage backend, not a cache in front of one, so `apply()` uses `Cache::forever()` unless `drivers.cache.ttl` is set. A non-positive TTL throws instead of being passed to `Cache::put()`, which would treat it as a delete.
 - **Cache/storage keys include the connection name** (`getSettingsCacheKey()`, `cacheKey()`, and the field driver's schema-check cache in `FieldSettingsManager::hasSettingsField()`) to avoid collisions between same-named tables/fields on different database connections.
 
 ### Config & artisan

@@ -38,6 +38,7 @@ Bug reports, feature requests, and pull requests can be submitted by following o
     - [The `field` driver](#driver_field)
     - [The `table` driver](#driver_table)
     - [The `redis` driver](#driver_redis)
+    - [The `cache` driver](#driver_cache)
     - [Custom drivers](#custom_drivers)
 - [Default Settings](#default_settings)
 - [Usage](#usage)
@@ -76,7 +77,7 @@ the full checklist.
 
 ## Env (config) variables **(.env file)**
 
-The storage driver used by every model that does not declare its own (`field` | `table` | `redis`)
+The storage driver used by every model that does not declare its own (`field` | `table` | `redis` | `cache`)
 
 `MODEL_SETTINGS_DRIVER=field`
 
@@ -92,6 +93,12 @@ Optional, for the `redis` driver (named connection, empty = default; storage key
 
 `MODEL_SETTINGS_REDIS_CONNECTION=`\
 `MODEL_SETTINGS_REDIS_PREFIX=r-k-`
+
+Optional, for the `cache` driver (named store, empty = default; lifetime in minutes, empty = forever; storage key prefix)
+
+`MODEL_SETTINGS_CACHE_STORE=`\
+`MODEL_SETTINGS_CACHE_TTL=`\
+`MODEL_SETTINGS_CACHE_PREFIX=c-k-`
 
 ## Updating your Eloquent Models <a name="update_models"></a>
 
@@ -117,7 +124,7 @@ class User extends Model
 {
     use HasSettings;
 
-    protected $settingsDriver = 'table'; // 'field' (default) | 'table' | 'redis'
+    protected $settingsDriver = 'table'; // 'field' (default) | 'table' | 'redis' | 'cache'
 }
 ```
 
@@ -184,6 +191,33 @@ class User extends Model
     protected $settingsDriver = 'redis';
 }
 ```
+
+#### The `cache` driver <a name="driver_cache"></a>
+Stores settings through Laravel's `Cache` facade, so any store configured in `config/cache.php`
+(Memcached, DynamoDB, database, file, ...) can back them. Use `MODEL_SETTINGS_CACHE_STORE` to
+pick a named store; leave it empty to use the application's default store.
+
+```php
+use Glorand\Model\Settings\Traits\HasSettings;
+
+class User extends Model
+{
+    use HasSettings;
+
+    protected $settingsDriver = 'cache';
+}
+```
+
+Settings are stored **forever** by default, because for this driver the cache is the only copy
+of the data. `MODEL_SETTINGS_CACHE_TTL` sets an expiry in minutes if you want one - note that
+the lifetime is only refreshed when the settings are written, never when they are read, so an
+expiring value will disappear even from a model whose settings are read constantly. A `0` or
+negative TTL throws a `ModelSettingsException` rather than silently discarding every write.
+
+Two things to keep in mind before choosing this driver: anything that flushes the store
+(`php artisan cache:clear`, `Cache::flush()`) erases the settings of every model using it, and
+stores that evict under memory pressure can drop them at any time. If the settings must
+survive that, use the `field` or `table` driver.
 
 #### Custom drivers <a name="custom_drivers"></a>
 

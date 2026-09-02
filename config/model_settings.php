@@ -22,6 +22,12 @@ return [
             'connection' => env('MODEL_SETTINGS_REDIS_CONNECTION'), // null = default connection
             'key_prefix' => env('MODEL_SETTINGS_REDIS_PREFIX', 'r-k-'),
         ],
+        'cache' => [
+            'class' => \Glorand\Model\Settings\Managers\CacheSettingsManager::class,
+            'store' => env('MODEL_SETTINGS_CACHE_STORE'), // null = default store
+            'ttl' => env('MODEL_SETTINGS_CACHE_TTL'), // in minutes, null = forever
+            'key_prefix' => env('MODEL_SETTINGS_CACHE_PREFIX', 'c-k-'),
+        ],
     ],
 
     'defaultSettings' => [

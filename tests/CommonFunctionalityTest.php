@@ -18,6 +18,7 @@ final class CommonFunctionalityTest extends TestCase
         'text_field',
         'table',
         'redis',
+        'cache',
     ];
     /** @var array<string, array<string, string|int>> */
     protected static array $testArray = [

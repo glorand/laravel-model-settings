@@ -6,6 +6,7 @@ use CreateModelSettingsTable;
 use Glorand\Model\Settings\ModelSettingsServiceProvider;
 use Glorand\Model\Settings\Tests\Models\UsersWithTable;
 use Glorand\Model\Settings\Tests\Models\UserWithField;
+use Glorand\Model\Settings\Tests\Models\UserWithCache;
 use Glorand\Model\Settings\Tests\Models\UserWithRedis;
 use Glorand\Model\Settings\Tests\Models\UserWithTextField;
 use Glorand\Model\Settings\Tests\Models\WrongUser;
@@ -57,7 +58,14 @@ abstract class TestCase extends OrchestraTestCase
         $this->createSettingsTable();
 
         $this->createTables('users', 'users_with_table', 'users_with_field', 'users_with_text_field', 'wrong_users');
-        $this->seedModels(UserWithField::class, UserWithTextField::class, UsersWithTable::class, WrongUser::class, UserWithRedis::class);
+        $this->seedModels(
+            UserWithField::class,
+            UserWithTextField::class,
+            UsersWithTable::class,
+            WrongUser::class,
+            UserWithRedis::class,
+            UserWithCache::class
+        );
     }
 
     protected function createSettingsTable(): void
@@ -110,6 +118,7 @@ abstract class TestCase extends OrchestraTestCase
             'table' => UsersWithTable::first(),
             'text_field' => UserWithTextField::first(),
             'redis' => UserWithRedis::first(),
+            'cache' => UserWithCache::first(),
             default => UserWithField::first(),
         };
     }
